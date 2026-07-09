@@ -4,7 +4,7 @@ import References from "../../components/References.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
-  const cases = await getCollection("cases");
+  const cases = await getCollection("cases", ({ data }) => data.status === "published");
 
   return cases.map((caseEntry) => ({
     params: { slug: caseEntry.id },
