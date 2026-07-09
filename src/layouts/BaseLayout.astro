@@ -17,14 +17,14 @@ const { title, description = "V1 Astro foundation build." } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
   </head>
-  <body class="bg-slate-50 text-slate-900 antialiased">
-    <header class="border-b border-slate-200 bg-white">
-      <nav class="mx-auto flex max-w-4xl items-center justify-between px-5 py-4">
-        <a class="font-semibold text-slate-950" href="/">V1 Foundation</a>
-        <a class="text-sm text-slate-600 hover:text-slate-950" href="/cases/sample-foundation-case/">Sample Case</a>
+  <body class="antialiased">
+    <header class="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+      <nav class="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
+        <a class="font-semibold tracking-tight text-[var(--color-text)]" href="/">V1 Foundation</a>
+        <a class="text-sm text-[var(--color-text-secondary)] underline-offset-4 hover:text-[var(--color-text)] hover:underline" href="/cases/sample-foundation-case/">Sample Case</a>
       </nav>
     </header>
-    <main class="mx-auto max-w-4xl px-5 py-10">
+    <main class="mx-auto max-w-5xl px-5 py-8 sm:py-12">
       <slot />
     </main>
   </body>

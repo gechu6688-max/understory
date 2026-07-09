@@ -22,53 +22,47 @@ const publishedDate = new Intl.DateTimeFormat("en", {
 <article>
   {
     previewLabel && (
-      <aside class="mb-8 rounded border border-amber-300 bg-amber-50 px-5 py-4 text-amber-950">
-        <p class="text-sm font-semibold uppercase tracking-wide">{previewLabel}</p>
-        <p class="mt-1 text-sm">This route is for local content review. It is not a public production case route.</p>
+      <aside class="mb-8 max-w-[var(--measure-wide)] border-l-2 border-[var(--color-uncertainty)] bg-[#fff8ea] px-4 py-3 text-[var(--color-text)]">
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-uncertainty)]">{previewLabel}</p>
+        <p class="mt-1 text-sm text-[var(--color-text-secondary)]">This route is for local content review. It is not a public production case route.</p>
       </aside>
     )
   }
 
-  <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">Case status: {data.status}</p>
-  <h1 class="mt-3 text-4xl font-semibold tracking-normal text-slate-950">{data.title}</h1>
-  {data.subtitle && <p class="mt-3 text-xl text-slate-600">{data.subtitle}</p>}
-  <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-700">{data.summary}</p>
+  <header class="max-w-[var(--measure-wide)] border-b border-[var(--color-border)] pb-10">
+    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-text-muted)]">Case status: {data.status} · {data.caseType} · {publishedDate}</p>
+    <h1 class="mt-5 max-w-4xl font-serif text-[2.65rem] font-semibold leading-[1.04] tracking-normal text-[var(--color-text)] sm:text-[4.35rem]">{data.title}</h1>
+    {data.subtitle && <p class="mt-4 max-w-2xl text-lg text-[var(--color-text-secondary)] sm:text-xl">{data.subtitle}</p>}
+    <p class="mt-6 max-w-[var(--measure-article)] text-lg leading-8 text-[var(--color-text-secondary)]">{data.summary}</p>
 
-  <dl class="mt-8 grid gap-4 border-y border-slate-200 py-6 sm:grid-cols-2">
-    <div>
-      <dt class="text-sm font-semibold text-slate-500">Central Question</dt>
-      <dd class="mt-1 text-slate-900">{data.centralQuestion}</dd>
+    <div class="mt-9 grid gap-7 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+      <section class="border-t-2 border-[var(--color-accent)] pt-4">
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">Central Question</p>
+        <p class="mt-3 text-xl leading-8 text-[var(--color-text)] sm:text-2xl">{data.centralQuestion}</p>
+      </section>
+      <section class="border-l border-[var(--color-border)] pl-5 max-lg:border-l-0 max-lg:border-t max-lg:pl-0 max-lg:pt-5">
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-text-muted)]">Quick Thesis</p>
+        <p class="mt-3 text-lg leading-8 text-[var(--color-text)]">{data.quickThesis}</p>
+      </section>
     </div>
-    <div>
-      <dt class="text-sm font-semibold text-slate-500">Quick Thesis</dt>
-      <dd class="mt-1 text-slate-900">{data.quickThesis}</dd>
-    </div>
-    <div>
-      <dt class="text-sm font-semibold text-slate-500">Published</dt>
-      <dd class="mt-1 text-slate-900">{publishedDate}</dd>
-    </div>
-    <div>
-      <dt class="text-sm font-semibold text-slate-500">Case Type</dt>
-      <dd class="mt-1 text-slate-900">{data.caseType}</dd>
-    </div>
-  </dl>
 
-  <section class="mt-8 grid gap-4 sm:grid-cols-3">
-    <div>
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Entities</h2>
-      <p class="mt-2 text-slate-800">{data.entities.join(", ")}</p>
-    </div>
-    <div>
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Topics</h2>
-      <p class="mt-2 text-slate-800">{data.topics.join(", ")}</p>
-    </div>
-    <div>
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Concepts</h2>
-      <p class="mt-2 text-slate-800">{data.concepts.join(", ")}</p>
-    </div>
-  </section>
+    <dl class="mt-8 grid gap-4 text-sm sm:grid-cols-3">
+      <div>
+        <dt class="font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">Entities</dt>
+        <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]">{data.entities.join(", ")}</dd>
+      </div>
+      <div>
+        <dt class="font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">Topics</dt>
+        <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]">{data.topics.join(", ")}</dd>
+      </div>
+      <div>
+        <dt class="font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">Concepts</dt>
+        <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]">{data.concepts.join(", ")}</dd>
+      </div>
+    </dl>
+  </header>
 
-  <div class="mt-10 max-w-none space-y-5 leading-8 text-slate-800">
+  <div class="case-body mt-12 max-w-[var(--measure-article)]">
     <Content />
   </div>
 
