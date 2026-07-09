@@ -60,6 +60,7 @@ sources:
 
 import EvidenceBlock from "../../components/mdx/EvidenceBlock.astro";
 import KeyInsight from "../../components/mdx/KeyInsight.astro";
+import TradeoffBlock from "../../components/mdx/TradeoffBlock.astro";
 
 ## Problem
 
@@ -105,6 +106,8 @@ On the long-term side, convenience can become a source of dependence. If consume
 
 That does not automatically prove predatory pricing. Predatory pricing would require stronger evidence about below-cost pricing, the intent or strategy behind it, competitor exit, and later recoupment. The safer current claim is narrower: low prices and convenience can be consistent with consumer benefit, but they can also be consistent with a strategy that strengthens market power over time.
 
+<section class="case-counterargument">
+
 ## Competing Explanation / Counterargument
 
 The strongest counterargument is that Amazon's consumer benefits may come from efficiency rather than harmful market power.
@@ -113,31 +116,38 @@ Amazon may offer lower prices and better convenience because it has better logis
 
 This counterargument is important because low prices are not automatically suspicious. A serious case has to separate harmful exclusion from normal competition.
 
+</section>
+
 ## Trade-off
 
 The trade-off is between short-term consumer surplus and long-term competitive structure.
 
-Short-term benefits:
-
-- lower search costs;
-- fast delivery;
-- broad selection;
-- easy comparison;
-- convenience.
-
-Possible long-term risks:
-
-- weaker rivals;
-- more seller dependence;
-- higher fees passed through to consumers;
-- less meaningful choice;
-- lower quality search results or more paid placement.
+<TradeoffBlock
+  leftLabel="Short-term benefits"
+  rightLabel="Possible long-term risks"
+  leftItems={[
+    "lower search costs",
+    "fast delivery",
+    "broad selection",
+    "easy comparison",
+    "convenience",
+  ]}
+  rightItems={[
+    "weaker rivals",
+    "more seller dependence",
+    "higher fees passed through to consumers",
+    "less meaningful choice",
+    "lower quality search results or more paid placement",
+  ]}
+/>
 
 The key question is not "Is Amazon convenient?" It is "What conditions keep that convenience disciplined by competition?"
 
 <KeyInsight title="Draft Judgement">
   Amazon's convenience is a real consumer benefit, but it should not be treated as complete proof of long-term consumer welfare. The more Amazon becomes a gatekeeper for shoppers and sellers, the more important it becomes to ask whether competition can still discipline its prices, fees, and quality.
 </KeyInsight>
+
+<section class="case-uncertainty">
 
 ## What Would Change My Mind?
 
@@ -154,6 +164,8 @@ Evidence that would strengthen the concern:
 - evidence that sellers raise prices across the internet because of Amazon fees or rules;
 - evidence that consumers face worse search quality, fewer real choices, or higher prices because competition weakens;
 - court findings supporting the FTC's allegations.
+
+</section>
 
 ## Further Questions
 
