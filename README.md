@@ -25,6 +25,8 @@ Cases can use `draft`, `review`, `published`, or `archived`.
 
 Only `published` cases appear on the public homepage listing and generate normal public production routes by default. Draft, review, and archived cases validate as content but are not publicly routable unless a future approved preview system is added.
 
+During local development, preview non-published cases at `/preview/cases/[slug]/`. Preview routes are not generated in production builds.
+
 ## Editing Guidance
 
 Add or edit normal case content in `src/content/cases/`. Avoid changing `src/content.config.ts`, `astro.config.mjs`, or `package.json` casually; those files control the site foundation.

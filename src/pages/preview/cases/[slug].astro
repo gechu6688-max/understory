@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import CaseArticle from "../../../components/CaseArticle.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const previewCases = import.meta.env.PROD
+    ? []
+    : await getCollection("cases", ({ data }) => data.status !== "published");
+
+  return previewCases.map((caseEntry) => ({
+    params: { slug: caseEntry.id },
+    props: { caseEntry },
+  }));
+}
+
+const { caseEntry } = Astro.props;
+const previewLabel = `Local Preview · ${caseEntry.data.status}`;
+---
+
+<BaseLayout title={`Preview: ${caseEntry.data.title}`} description={caseEntry.data.summary}>
+  <CaseArticle caseEntry={caseEntry} previewLabel={previewLabel} />
+</BaseLayout>
