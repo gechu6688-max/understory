@@ -7,6 +7,17 @@ interface Props {
 }
 
 const { title, description = "V1 Astro foundation build." } = Astro.props;
+const pathname = Astro.url.pathname;
+const isPreview = !import.meta.env.PROD;
+const navItems = [
+  { label: "Cases", href: "/cases/", section: "/cases/" },
+  { label: "Topics", href: "/topics/", section: "/topics/" },
+  { label: "Concepts", href: "/concepts/", section: "/concepts/" },
+  { label: "Method", href: "/method/", section: "/method/" },
+  { label: "About", href: "/about/", section: "/about/" },
+];
+
+const isActive = (section: string) => pathname === section || pathname.startsWith(section);
 ---
 
 <!doctype html>
@@ -18,16 +29,32 @@ const { title, description = "V1 Astro foundation build." } = Astro.props;
     <title>{title}</title>
   </head>
   <body class="antialiased">
-    <header class="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
-      <nav class="mx-auto flex max-w-5xl flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-        <a class="font-semibold tracking-tight text-[var(--color-text)]" href="/">Structured Business Analysis</a>
-        <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm text-[var(--color-text-secondary)]">
-          <a class="underline-offset-4 hover:text-[var(--color-text)] hover:underline" href="/#cases">Cases</a>
-          <a class="underline-offset-4 hover:text-[var(--color-text)] hover:underline" href="/#topics">Topics</a>
-          <a class="underline-offset-4 hover:text-[var(--color-text)] hover:underline" href="/#concepts">Concepts</a>
-          <a class="underline-offset-4 hover:text-[var(--color-text)] hover:underline" href="/#method">Method</a>
-          <a class="underline-offset-4 hover:text-[var(--color-text)] hover:underline" href="/#about">About</a>
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="site-identity" href="/">Structured Business Analysis</a>
+        <div class="site-nav__links">
+          {
+            navItems.map((item) => (
+              <a class={isActive(item.section) ? "is-active" : undefined} href={item.href} aria-current={isActive(item.section) ? "page" : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+          {isPreview && <a class="site-nav__preview" href="/preview/">Local Preview</a>}
         </div>
+        <details class="site-menu">
+          <summary>Menu</summary>
+          <div class="site-menu__panel">
+            {
+              navItems.map((item) => (
+                <a class={isActive(item.section) ? "is-active" : undefined} href={item.href} aria-current={isActive(item.section) ? "page" : undefined}>
+                  {item.label}
+                </a>
+              ))
+            }
+            {isPreview && <a class="site-nav__preview" href="/preview/">Local Preview</a>}
+          </div>
+        </details>
       </nav>
     </header>
     <main class="mx-auto max-w-5xl px-5 py-8 sm:py-12">

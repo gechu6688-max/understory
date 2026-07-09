@@ -1,24 +1,14 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { formatDate, getTaxonomyItems, sortCasesByDate } from "../lib/cases";
 
-const publishedCases = (await getCollection("cases", ({ data }) => data.status === "published")).sort(
-  (a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf(),
-);
+const publishedCases = sortCasesByDate(await getCollection("cases", ({ data }) => data.status === "published"));
 
 const featuredCase = publishedCases.find((caseEntry) => caseEntry.data.featured) ?? publishedCases[0];
 
-const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat("en", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(date);
-
-const uniqueValues = (values: string[][]) => Array.from(new Set(values.flat())).sort();
-
-const topics = uniqueValues(publishedCases.map((caseEntry) => caseEntry.data.topics));
-const concepts = uniqueValues(publishedCases.map((caseEntry) => caseEntry.data.concepts));
+const topics = getTaxonomyItems(publishedCases, "topics");
+const concepts = getTaxonomyItems(publishedCases, "concepts");
 
 const methodSteps = [
   {
@@ -54,14 +44,21 @@ const methodSteps = [
         <p>
           An editorial case library for understanding how companies compete, grow, price, and build power over time.
         </p>
-        <a href="#cases">Explore published cases</a>
+        {
+          featuredCase && (
+            <p class="home-latest">
+              Latest case: <a href={`/cases/${featuredCase.id}/`}>{featuredCase.data.title}</a>
+            </p>
+          )
+        }
+        <a class="home-inline-link" href="/cases/">Explore published cases</a>
       </div>
     </section>
 
     {
       featuredCase && (
         <section class="home-featured" id="cases" aria-labelledby="featured-heading">
-          <div class="home-section-kicker">
+          <div class="home-section-kicker" id="cases">
             <span>Featured Case</span>
             <span>{formatDate(featuredCase.data.publishedDate)}</span>
           </div>
@@ -80,7 +77,7 @@ const methodSteps = [
                   <span>{item}</span>
                 ))}
               </div>
-              <a class="home-read-link" href={`/cases/${featuredCase.id}/`}>Read the case</a>
+              <a class="home-read-link" href={`/cases/${featuredCase.id}/`}>Read the case -></a>
             </div>
           </div>
         </section>
@@ -91,16 +88,20 @@ const methodSteps = [
       <div id="topics" class="home-explore__group">
         <p class="home-eyebrow">Explore by Topic</p>
         <h2>What the case is about</h2>
+        <p class="home-term-note">Current topics represented by published cases.</p>
         <div class="home-term-list">
-          {topics.map((topic) => <span>{topic}</span>)}
+          {topics.map((topic) => <a href={`/topics/${topic.slug}/`}>{topic.name}</a>)}
         </div>
+        <a class="home-section-link" href="/topics/">Explore all topics -></a>
       </div>
       <div id="concepts" class="home-explore__group">
         <p class="home-eyebrow">Explore by Business Concept</p>
         <h2>The ideas underneath the case</h2>
+        <p class="home-term-note">Current concepts represented by published cases.</p>
         <div class="home-term-list">
-          {concepts.map((concept) => <span>{concept}</span>)}
+          {concepts.map((concept) => <a href={`/concepts/${concept.slug}/`}>{concept.name}</a>)}
         </div>
+        <a class="home-section-link" href="/concepts/">Explore all concepts -></a>
       </div>
     </section>
 
@@ -122,6 +123,7 @@ const methodSteps = [
           ))
         }
       </ol>
+      <a class="home-method-link" href="/method/">Read the method -></a>
     </section>
 
     <section class="home-recent" aria-labelledby="recent-heading">
@@ -141,7 +143,7 @@ const methodSteps = [
                 </h3>
                 <p>{caseEntry.data.centralQuestion}</p>
               </div>
-              <a href={`/cases/${caseEntry.id}/`}>Read</a>
+              <a href={`/cases/${caseEntry.id}/`}>Read -></a>
             </li>
           ))
         }

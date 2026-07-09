@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getPublishedCases, getTaxonomyItems } from "../../lib/cases";
+
+const publishedCases = await getPublishedCases();
+const topics = getTaxonomyItems(publishedCases, "topics");
+---
+
+<BaseLayout title="Topics" description="Explore published cases by topic.">
+  <section class="page-shell" aria-labelledby="topics-heading">
+    <div class="page-hero">
+      <p class="home-eyebrow">Topics</p>
+      <h1 id="topics-heading">Explore by topic</h1>
+      <p>Topics are generated only from currently published cases. Empty categories are not shown.</p>
+    </div>
+
+    <ol class="taxonomy-index">
+      {
+        topics.map((topic) => (
+          <li>
+            <a href={`/topics/${topic.slug}/`}>
+              <span>{topic.name}</span>
+              <span>{topic.cases.length === 1 ? "1 published case" : `${topic.cases.length} published cases`}</span>
+            </a>
+            <p>{topic.cases.map((caseEntry) => caseEntry.data.title).join(", ")}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+</BaseLayout>

@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getPublishedCases, getTaxonomyItems } from "../../lib/cases";
+
+const publishedCases = await getPublishedCases();
+const concepts = getTaxonomyItems(publishedCases, "concepts");
+---
+
+<BaseLayout title="Concepts" description="Explore published cases by business concept.">
+  <section class="page-shell" aria-labelledby="concepts-heading">
+    <div class="page-hero">
+      <p class="home-eyebrow">Business Concepts</p>
+      <h1 id="concepts-heading">Explore by idea</h1>
+      <p>Concepts show the business ideas beneath each published case. Draft-only concepts remain private.</p>
+    </div>
+
+    <ol class="taxonomy-index">
+      {
+        concepts.map((concept) => (
+          <li>
+            <a href={`/concepts/${concept.slug}/`}>
+              <span>{concept.name}</span>
+              <span>{concept.cases.length === 1 ? "1 published case" : `${concept.cases.length} published cases`}</span>
+            </a>
+            <p>{concept.cases.map((caseEntry) => caseEntry.data.title).join(", ")}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+</BaseLayout>

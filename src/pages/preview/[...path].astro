@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getPreviewCases } from "../../lib/cases";
+
+export async function getStaticPaths() {
+  return import.meta.env.PROD ? [] : [{ params: { path: undefined } }];
+}
+
+const previewCases = await getPreviewCases();
+---
+
+<BaseLayout title="Local Preview" description="Development-only preview index for non-published cases.">
+  <section class="page-shell preview-page" aria-labelledby="preview-heading">
+    <div class="page-hero">
+      <p class="home-eyebrow">Local Preview</p>
+      <h1 id="preview-heading">Non-published cases</h1>
+      <p>This development-only index helps the site owner find drafts, review cases, and archived cases. It is not generated in production builds.</p>
+    </div>
+
+    <ol class="library-list library-list--compact preview-list">
+      {
+        previewCases.map((caseEntry) => (
+          <li>
+            <div class="library-list__meta">
+              <span>Status: {caseEntry.data.status}</span>
+              <span>{caseEntry.data.caseType} case</span>
+            </div>
+            <div class="library-list__body">
+              <h2>
+                <a href={`/preview/cases/${caseEntry.id}/`}>{caseEntry.data.title}</a>
+              </h2>
+              <p class="library-question">{caseEntry.data.centralQuestion}</p>
+            </div>
+            <a class="library-read" href={`/preview/cases/${caseEntry.id}/`}>Open Preview -></a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+</BaseLayout>
