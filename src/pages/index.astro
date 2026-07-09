@@ -2,32 +2,168 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const publishedCases = await getCollection("cases", ({ data }) => data.status === "published");
+const publishedCases = (await getCollection("cases", ({ data }) => data.status === "published")).sort(
+  (a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf(),
+);
+
+const featuredCase = publishedCases.find((caseEntry) => caseEntry.data.featured) ?? publishedCases[0];
+
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("en", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(date);
+
+const uniqueValues = (values: string[][]) => Array.from(new Set(values.flat())).sort();
+
+const topics = uniqueValues(publishedCases.map((caseEntry) => caseEntry.data.topics));
+const concepts = uniqueValues(publishedCases.map((caseEntry) => caseEntry.data.concepts));
+
+const methodSteps = [
+  {
+    label: "Question",
+    text: "Start with the decision-level question, not a headline or a personality story.",
+  },
+  {
+    label: "Evidence",
+    text: "Separate verified source material from interpretation and narrative momentum.",
+  },
+  {
+    label: "Counterargument",
+    text: "Give the strongest reasonable competing explanation room to breathe.",
+  },
+  {
+    label: "Judgement",
+    text: "Arrive at a bounded conclusion and name what could change it.",
+  },
+];
 ---
 
-<BaseLayout title="V1 Foundation" description="Minimal Astro project foundation for structured business cases.">
-  <section class="space-y-5">
-    <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">Foundation build</p>
-    <h1 class="text-4xl font-semibold tracking-normal text-slate-950">Astro content foundation</h1>
-    <p class="max-w-2xl text-lg leading-8 text-slate-700">
-      This page is intentionally neutral. It proves that published case content can be listed from Astro Content Collections.
-    </p>
-  </section>
+<BaseLayout
+  title="Structured Business Analysis"
+  description="Editorial business case analysis organized by questions, evidence, counterarguments, and judgement."
+>
+  <div class="home-page">
+    <section class="home-hero" aria-labelledby="home-heading">
+      <div>
+        <p class="home-eyebrow">Structured Business Analysis</p>
+        <h1 id="home-heading">Business cases for readers who want the machinery, not the myth.</h1>
+      </div>
+      <div class="home-hero__aside">
+        <p>
+          An editorial case library for understanding how companies compete, grow, price, and build power over time.
+        </p>
+        <a href="#cases">Explore published cases</a>
+      </div>
+    </section>
 
-  <section class="mt-10">
-    <h2 class="text-2xl font-semibold text-slate-950">Published Cases</h2>
-    <ul class="mt-4 space-y-4">
-      {
-        publishedCases.map((caseEntry) => (
-          <li class="rounded border border-slate-200 bg-white p-5">
-            <a class="text-lg font-semibold text-slate-950 underline decoration-slate-300 underline-offset-4 hover:decoration-slate-700" href={`/cases/${caseEntry.id}/`}>
-              {caseEntry.data.title}
-            </a>
-            <p class="mt-2 text-slate-700">{caseEntry.data.summary}</p>
-            <p class="mt-3 text-sm text-slate-500">Status: {caseEntry.data.status}</p>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+    {
+      featuredCase && (
+        <section class="home-featured" id="cases" aria-labelledby="featured-heading">
+          <div class="home-section-kicker">
+            <span>Featured Case</span>
+            <span>{formatDate(featuredCase.data.publishedDate)}</span>
+          </div>
+          <div class="home-featured__layout">
+            <div>
+              <p class="home-meta">{featuredCase.data.caseType} case</p>
+              <h2 id="featured-heading">
+                <a href={`/cases/${featuredCase.id}/`}>{featuredCase.data.title}</a>
+              </h2>
+            </div>
+            <div class="home-featured__summary">
+              <p class="home-question">{featuredCase.data.centralQuestion}</p>
+              <p>{featuredCase.data.quickThesis || featuredCase.data.summary}</p>
+              <div class="home-tagline" aria-label="Featured case taxonomy">
+                {[...featuredCase.data.topics, ...featuredCase.data.concepts].map((item) => (
+                  <span>{item}</span>
+                ))}
+              </div>
+              <a class="home-read-link" href={`/cases/${featuredCase.id}/`}>Read the case</a>
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <section class="home-explore" aria-label="Explore the case library">
+      <div id="topics" class="home-explore__group">
+        <p class="home-eyebrow">Explore by Topic</p>
+        <h2>What the case is about</h2>
+        <div class="home-term-list">
+          {topics.map((topic) => <span>{topic}</span>)}
+        </div>
+      </div>
+      <div id="concepts" class="home-explore__group">
+        <p class="home-eyebrow">Explore by Business Concept</p>
+        <h2>The ideas underneath the case</h2>
+        <div class="home-term-list">
+          {concepts.map((concept) => <span>{concept}</span>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="home-thinking" id="method" aria-labelledby="thinking-heading">
+      <div class="home-thinking__intro">
+        <p class="home-eyebrow">How We Think</p>
+        <h2 id="thinking-heading">A case is not a take. It is a structured argument.</h2>
+      </div>
+      <ol class="home-method-list">
+        {
+          methodSteps.map((step, index) => (
+            <li>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <h3>{step.label}</h3>
+                <p>{step.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="home-recent" aria-labelledby="recent-heading">
+      <div class="home-section-kicker">
+        <span>Recent / Published Cases</span>
+        <span>{publishedCases.length === 1 ? "1 public case" : `${publishedCases.length} public cases`}</span>
+      </div>
+      <h2 id="recent-heading">Published analysis</h2>
+      <ol>
+        {
+          publishedCases.map((caseEntry) => (
+            <li>
+              <time datetime={caseEntry.data.publishedDate.toISOString()}>{formatDate(caseEntry.data.publishedDate)}</time>
+              <div>
+                <h3>
+                  <a href={`/cases/${caseEntry.id}/`}>{caseEntry.data.title}</a>
+                </h3>
+                <p>{caseEntry.data.centralQuestion}</p>
+              </div>
+              <a href={`/cases/${caseEntry.id}/`}>Read</a>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="home-method-preview" aria-labelledby="method-preview-heading">
+      <div>
+        <p class="home-eyebrow">Method Preview</p>
+        <h2 id="method-preview-heading">The standard is visible in the structure.</h2>
+      </div>
+      <ul>
+        <li>Evidence and interpretation are kept distinct.</li>
+        <li>Counterarguments are treated as part of the analysis, not decoration.</li>
+        <li>Uncertainty and source limits are named before publication confidence rises.</li>
+        <li>References remain visible and inspectable.</li>
+      </ul>
+    </section>
+
+    <footer class="home-footer" id="about">
+      <p>Structured Business Analysis is a temporary descriptor for this V1 editorial system.</p>
+      <p>Built around questions, evidence, counterarguments, and judgement.</p>
+    </footer>
+  </div>
 </BaseLayout>

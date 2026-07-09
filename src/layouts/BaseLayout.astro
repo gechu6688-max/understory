@@ -19,9 +19,15 @@ const { title, description = "V1 Astro foundation build." } = Astro.props;
   </head>
   <body class="antialiased">
     <header class="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
-      <nav class="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
-        <a class="font-semibold tracking-tight text-[var(--color-text)]" href="/">V1 Foundation</a>
-        <a class="text-sm text-[var(--color-text-secondary)] underline-offset-4 hover:text-[var(--color-text)] hover:underline" href="/cases/sample-foundation-case/">Sample Case</a>
+      <nav class="mx-auto flex max-w-5xl flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <a class="font-semibold tracking-tight text-[var(--color-text)]" href="/">Structured Business Analysis</a>
+        <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm text-[var(--color-text-secondary)]">
+          <a class="underline-offset-4 hover:text-[var(--color-text)] hover:underline" href="/#cases">Cases</a>
+          <a class="underline-offset-4 hover:text-[var(--color-text)] hover:underline" href="/#topics">Topics</a>
+          <a class="underline-offset-4 hover:text-[var(--color-text)] hover:underline" href="/#concepts">Concepts</a>
+          <a class="underline-offset-4 hover:text-[var(--color-text)] hover:underline" href="/#method">Method</a>
+          <a class="underline-offset-4 hover:text-[var(--color-text)] hover:underline" href="/#about">About</a>
+        </div>
       </nav>
     </header>
     <main class="mx-auto max-w-5xl px-5 py-8 sm:py-12">
