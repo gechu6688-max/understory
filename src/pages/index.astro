@@ -9,6 +9,27 @@ const featuredCase = publishedCases.find((caseEntry) => caseEntry.data.featured)
 
 const topics = getTaxonomyItems(publishedCases, "topics");
 const concepts = getTaxonomyItems(publishedCases, "concepts");
+const searchIndex = publishedCases.map((caseEntry) => ({
+  title: caseEntry.data.title,
+  summary: caseEntry.data.summary,
+  centralQuestion: caseEntry.data.centralQuestion,
+  url: `/cases/${caseEntry.id}/`,
+  caseType: caseEntry.data.caseType,
+  entities: caseEntry.data.entities,
+  topics: caseEntry.data.topics,
+  concepts: caseEntry.data.concepts,
+  searchableText: [
+    caseEntry.data.title,
+    caseEntry.data.summary,
+    caseEntry.data.centralQuestion,
+    caseEntry.data.caseType,
+    ...caseEntry.data.entities,
+    ...caseEntry.data.topics,
+    ...caseEntry.data.concepts,
+  ]
+    .join(" ")
+    .toLowerCase(),
+}));
 
 const methodSteps = [
   {
@@ -27,22 +48,30 @@ const methodSteps = [
     label: "Judgement",
     text: "Arrive at a bounded conclusion and name what could change it.",
   },
+  {
+    label: "One More Question",
+    text: "Let the conclusion sharpen what remains unresolved and what should be asked next.",
+  },
 ];
 ---
 
 <BaseLayout
-  title="Structured Business Analysis"
-  description="Editorial business case analysis organized by questions, evidence, counterarguments, and judgement."
+  title="understory"
+  description="Cases on business, technology, and the forces beneath them."
 >
   <div class="home-page">
     <section class="home-hero" aria-labelledby="home-heading">
       <div>
-        <p class="home-eyebrow">Structured Business Analysis</p>
-        <h1 id="home-heading">Business cases for readers who want the machinery, not the myth.</h1>
+        <p class="home-eyebrow">understory</p>
+        <h1 id="home-heading">
+          <span>Look beneath.</span>
+          {" "}
+          <span>Ask one more question.</span>
+        </h1>
       </div>
       <div class="home-hero__aside">
         <p>
-          An editorial case library for understanding how companies compete, grow, price, and build power over time.
+          Cases on business, technology, and the forces beneath them.
         </p>
         {
           featuredCase && (
@@ -52,6 +81,22 @@ const methodSteps = [
           )
         }
         <a class="home-inline-link" href="/cases/">Explore published cases</a>
+      </div>
+    </section>
+
+    <section class="home-discovery" aria-labelledby="discovery-heading">
+      <div>
+        <p class="home-eyebrow">Discovery</p>
+        <h2 id="discovery-heading">What’s your one more question?</h2>
+        <p>Search cases, companies, topics, concepts, and ideas.</p>
+      </div>
+      <div class="home-search" data-search-root>
+        <label class="sr-only" for="home-search-input">Search published cases</label>
+        <input id="home-search-input" type="search" placeholder="What’s your one more question?" autocomplete="off" data-search-input />
+        <div class="home-search__meta" aria-live="polite" data-search-status>
+          Search is limited to published cases.
+        </div>
+        <ol class="home-search__results" data-search-results></ol>
       </div>
     </section>
 
@@ -108,7 +153,7 @@ const methodSteps = [
     <section class="home-thinking" id="method" aria-labelledby="thinking-heading">
       <div class="home-thinking__intro">
         <p class="home-eyebrow">How We Think</p>
-        <h2 id="thinking-heading">A case is not a take. It is a structured argument.</h2>
+        <h2 id="thinking-heading">A conclusion should sharpen curiosity, not end it.</h2>
       </div>
       <ol class="home-method-list">
         {
@@ -159,13 +204,60 @@ const methodSteps = [
         <li>Evidence and interpretation are kept distinct.</li>
         <li>Counterarguments are treated as part of the analysis, not decoration.</li>
         <li>Uncertainty and source limits are named before publication confidence rises.</li>
-        <li>References remain visible and inspectable.</li>
+        <li>A conclusion should sharpen curiosity, not end it.</li>
       </ul>
     </section>
 
     <footer class="home-footer" id="about">
-      <p>Structured Business Analysis is a temporary descriptor for this V1 editorial system.</p>
-      <p>Built around questions, evidence, counterarguments, and judgement.</p>
+      <p>understory</p>
+      <p>Look beneath. Ask one more question.</p>
     </footer>
   </div>
+  <script is:inline type="application/json" id="published-search-index" set:html={JSON.stringify(searchIndex)} />
+  <script is:inline>
+    // @ts-nocheck
+    const indexElement = document.getElementById("published-search-index");
+    const searchRoot = document.querySelector("[data-search-root]");
+    const input = searchRoot?.querySelector("[data-search-input]");
+    const status = searchRoot?.querySelector("[data-search-status]");
+    const results = searchRoot?.querySelector("[data-search-results]");
+    const searchIndex = indexElement?.textContent ? JSON.parse(indexElement.textContent) : [];
+
+    const renderResults = (query) => {
+      if (!(input instanceof HTMLInputElement) || !status || !results) return;
+      const normalizedQuery = query.trim().toLowerCase();
+      results.innerHTML = "";
+
+      if (normalizedQuery.length < 2) {
+        status.textContent = "Search is limited to published cases.";
+        return;
+      }
+
+      const matches = searchIndex.filter((item) => item.searchableText.includes(normalizedQuery)).slice(0, 5);
+
+      status.textContent = matches.length
+        ? `${matches.length} published ${matches.length === 1 ? "case" : "cases"} found.`
+        : "No published cases match yet.";
+
+      for (const item of matches) {
+        const result = document.createElement("li");
+        const link = document.createElement("a");
+        const title = document.createElement("span");
+        const meta = document.createElement("small");
+
+        link.href = item.url;
+        title.textContent = item.title;
+        meta.textContent = `${item.caseType} · ${[...item.entities, ...item.topics, ...item.concepts].slice(0, 4).join(" · ")}`;
+        link.append(title, meta);
+        result.append(link);
+        results.append(result);
+      }
+    };
+
+    input?.addEventListener("input", (event) => {
+      if (event.target instanceof HTMLInputElement) {
+        renderResults(event.target.value);
+      }
+    });
+  </script>
 </BaseLayout>

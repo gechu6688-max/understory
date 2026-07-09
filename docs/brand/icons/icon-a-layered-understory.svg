@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Icon A: Layered Understory</title>
+  <desc id="desc">An abstract layered U form suggesting surface and underlying structure.</desc>
+  <g fill="none" stroke="#174D3C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 16v20c0 8.8 7.2 16 16 16s16-7.2 16-16V16" />
+    <path d="M24 16v18c0 4.4 3.6 8 8 8s8-3.6 8-8V16" />
+    <path d="M20 9h24" />
+    <path d="M24 57h16" opacity="0.72" />
+  </g>
+</svg>

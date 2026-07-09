@@ -6,7 +6,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "V1 Astro foundation build." } = Astro.props;
+const { title, description = "Cases on business, technology, and the forces beneath them." } = Astro.props;
 const pathname = Astro.url.pathname;
 const isPreview = !import.meta.env.PROD;
 const navItems = [
@@ -31,7 +31,7 @@ const isActive = (section: string) => pathname === section || pathname.startsWit
   <body class="antialiased">
     <header class="site-header">
       <nav class="site-nav" aria-label="Primary navigation">
-        <a class="site-identity" href="/">Structured Business Analysis</a>
+        <a class="site-identity" href="/" aria-label="understory home">understory</a>
         <div class="site-nav__links">
           {
             navItems.map((item) => (

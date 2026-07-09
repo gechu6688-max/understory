@@ -18,21 +18,25 @@ const methodSteps = [
     label: "Judgement",
     text: "A case ends with a bounded conclusion and a clear sense of what could change that conclusion.",
   },
+  {
+    label: "One More Question",
+    text: "What remains unresolved? What evidence could change the conclusion? What should we ask next?",
+  },
 ];
 ---
 
-<BaseLayout title="Method" description="The analytical method behind Structured Business Analysis.">
+<BaseLayout title="Method" description="The analytical method behind understory.">
   <section class="page-shell method-page" aria-labelledby="method-heading">
     <div class="page-hero">
       <p class="home-eyebrow">Method</p>
       <h1 id="method-heading">How the analysis is structured</h1>
-      <p>The method is designed for readable business thinking: clear questions, visible evidence, serious alternatives, and careful judgement.</p>
+      <p>The method is designed for readable business thinking: clear questions, visible evidence, serious alternatives, careful judgement, and curiosity that continues after the conclusion.</p>
     </div>
 
     <section class="method-panel" aria-labelledby="method-sequence-heading">
       <div>
         <p class="home-eyebrow">Analytical Sequence</p>
-        <h2 id="method-sequence-heading">A case is a structured argument.</h2>
+        <h2 id="method-sequence-heading">A conclusion should sharpen curiosity.</h2>
       </div>
       <ol class="home-method-list">
         {
@@ -57,6 +61,7 @@ const methodSteps = [
         <li>Uncertainty is named when claims are still draft, alleged, incomplete, or dependent on better data.</li>
         <li>References stay visible so readers can inspect the source base behind a case.</li>
         <li>Each conclusion should include what would weaken or change it.</li>
+        <li>A conclusion should sharpen curiosity, not end it.</li>
       </ul>
     </section>
   </section>
