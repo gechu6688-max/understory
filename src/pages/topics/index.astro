@@ -1,27 +1,29 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getPublishedCases, getTaxonomyItems } from "../../lib/cases";
+import { topicDescriptions } from "../../lib/siteCopy";
 
 const publishedCases = await getPublishedCases();
 const topics = getTaxonomyItems(publishedCases, "topics");
 ---
 
 <BaseLayout title="Topics" description="Explore published cases by topic.">
-  <section class="page-shell" aria-labelledby="topics-heading">
-    <div class="page-hero">
+  <section class="page-shell topics-page" aria-labelledby="topics-heading">
+    <div class="page-hero page-hero--field">
       <p class="home-eyebrow">Topics</p>
       <h1 id="topics-heading">Explore by topic</h1>
-      <p>Topics are generated only from currently published cases. Empty categories are not shown.</p>
+      <p>Topics are broad fields of exploration. They are generated only from currently published cases, so empty categories are not shown.</p>
     </div>
 
-    <ol class="taxonomy-index">
+    <ol class="topic-map">
       {
         topics.map((topic) => (
           <li>
             <a href={`/topics/${topic.slug}/`}>
-              <span>{topic.name}</span>
-              <span>{topic.cases.length === 1 ? "1 published case" : `${topic.cases.length} published cases`}</span>
+              <span class="topic-map__name">{topic.name}</span>
+              <span class="topic-map__count">{topic.cases.length === 1 ? "1 published case" : `${topic.cases.length} published cases`}</span>
             </a>
+            <p class="topic-map__description">{topicDescriptions[topic.name] ?? "A broad field currently represented by published Understory analysis."}</p>
             <p>{topic.cases.map((caseEntry) => caseEntry.data.title).join(", ")}</p>
           </li>
         ))

@@ -1,17 +1,28 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { formatDate, getPublishedCases } from "../../lib/cases";
+import { siteCopy } from "../../lib/siteCopy";
 
 const publishedCases = await getPublishedCases();
 ---
 
 <BaseLayout title="Cases" description="Published business analysis cases.">
-  <section class="page-shell" aria-labelledby="cases-heading">
-    <div class="page-hero">
-      <p class="home-eyebrow">Cases</p>
-      <h1 id="cases-heading">Published business analysis</h1>
-      <p>All public cases are published entries only. Drafts, reviews, and archived cases stay out of this library.</p>
+  <section class="page-shell cases-page" aria-labelledby="cases-heading">
+    <div class="library-hero">
+      <div>
+        <p class="home-eyebrow">Cases</p>
+        <h1 id="cases-heading">Analysis library</h1>
+      </div>
+      <div class="library-hero__panel">
+        <strong>{publishedCases.length === 1 ? "1 published case" : `${publishedCases.length} published cases`}</strong>
+        <p>Public entries only. Drafts, reviews, and archived cases stay out of this library.</p>
+      </div>
     </div>
+
+    <section class="library-discovery" aria-label="Case library discovery">
+      <p>{siteCopy.search.placeholder}</p>
+      <span>Filters will become useful as the library grows; today this index stays honest and published-only.</span>
+    </section>
 
     <ol class="library-list">
       {

@@ -1,35 +1,17 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { siteCopy } from "../../lib/siteCopy";
 
-const methodSteps = [
-  {
-    label: "Question",
-    text: "Each case begins with a business question that can be argued with evidence, not a headline that already assumes the answer.",
-  },
-  {
-    label: "Evidence",
-    text: "Source material is separated from interpretation so readers can see what is known, alleged, inferred, or still uncertain.",
-  },
-  {
-    label: "Counterargument",
-    text: "The strongest reasonable competing explanation is part of the case, not an afterthought.",
-  },
-  {
-    label: "Judgement",
-    text: "A case ends with a bounded conclusion and a clear sense of what could change that conclusion.",
-  },
-  {
-    label: "One More Question",
-    text: "What remains unresolved? What evidence could change the conclusion? What should we ask next?",
-  },
-];
+const methodSteps = siteCopy.method.steps;
 ---
 
 <BaseLayout title="Method" description="The analytical method behind understory.">
-  <section class="page-shell method-page" aria-labelledby="method-heading">
-    <div class="page-hero">
-      <p class="home-eyebrow">Method</p>
-      <h1 id="method-heading">How the analysis is structured</h1>
+  <section class="page-shell method-page method-page--path" aria-labelledby="method-heading">
+    <div class="method-hero">
+      <div>
+        <p class="home-eyebrow">Method</p>
+        <h1 id="method-heading">A thinking path for unfinished questions</h1>
+      </div>
       <p>The method is designed for readable business thinking: clear questions, visible evidence, serious alternatives, careful judgement, and curiosity that continues after the conclusion.</p>
     </div>
 
@@ -38,10 +20,10 @@ const methodSteps = [
         <p class="home-eyebrow">Analytical Sequence</p>
         <h2 id="method-sequence-heading">A conclusion should sharpen curiosity.</h2>
       </div>
-      <ol class="home-method-list">
+      <ol class="home-method-list method-path">
         {
           methodSteps.map((step, index) => (
-            <li>
+            <li tabindex="0">
               <span>{String(index + 1).padStart(2, "0")}</span>
               <div>
                 <h3>{step.label}</h3>

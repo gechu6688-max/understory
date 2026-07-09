@@ -1,27 +1,22 @@
 ---
 import "../styles/global.css";
+import { siteCopy } from "../lib/siteCopy";
 
 interface Props {
   title: string;
   description?: string;
 }
 
-const { title, description = "Cases on business, technology, and the forces beneath them." } = Astro.props;
+const { title, description = siteCopy.brand.descriptor } = Astro.props;
 const pathname = Astro.url.pathname;
 const isPreview = !import.meta.env.PROD;
-const navItems = [
-  { label: "Cases", href: "/cases/", section: "/cases/" },
-  { label: "Topics", href: "/topics/", section: "/topics/" },
-  { label: "Concepts", href: "/concepts/", section: "/concepts/" },
-  { label: "Method", href: "/method/", section: "/method/" },
-  { label: "About", href: "/about/", section: "/about/" },
-];
+const navItems = siteCopy.nav;
 
 const isActive = (section: string) => pathname === section || pathname.startsWith(section);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={siteCopy.lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
@@ -31,8 +26,9 @@ const isActive = (section: string) => pathname === section || pathname.startsWit
   <body class="antialiased">
     <header class="site-header">
       <nav class="site-nav" aria-label="Primary navigation">
-        <a class="site-identity" href="/" aria-label="understory home">understory</a>
-        <div class="site-nav__links">
+        <a class="site-identity" href="/" aria-label={`${siteCopy.brand.name} home`}>{siteCopy.brand.name}</a>
+        <div class="site-nav__actions">
+          <div class="site-nav__links">
           {
             navItems.map((item) => (
               <a class={isActive(item.section) ? "is-active" : undefined} href={item.href} aria-current={isActive(item.section) ? "page" : undefined}>
@@ -41,6 +37,8 @@ const isActive = (section: string) => pathname === section || pathname.startsWit
             ))
           }
           {isPreview && <a class="site-nav__preview" href="/preview/">Local Preview</a>}
+          </div>
+          <div class="site-locale-slot" aria-hidden="true"></div>
         </div>
         <details class="site-menu">
           <summary>Menu</summary>

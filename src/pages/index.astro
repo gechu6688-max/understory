@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { formatDate, getTaxonomyItems, sortCasesByDate } from "../lib/cases";
+import { siteCopy } from "../lib/siteCopy";
 
 const publishedCases = sortCasesByDate(await getCollection("cases", ({ data }) => data.status === "published"));
 
@@ -31,38 +32,17 @@ const searchIndex = publishedCases.map((caseEntry) => ({
     .toLowerCase(),
 }));
 
-const methodSteps = [
-  {
-    label: "Question",
-    text: "Start with the decision-level question, not a headline or a personality story.",
-  },
-  {
-    label: "Evidence",
-    text: "Separate verified source material from interpretation and narrative momentum.",
-  },
-  {
-    label: "Counterargument",
-    text: "Give the strongest reasonable competing explanation room to breathe.",
-  },
-  {
-    label: "Judgement",
-    text: "Arrive at a bounded conclusion and name what could change it.",
-  },
-  {
-    label: "One More Question",
-    text: "Let the conclusion sharpen what remains unresolved and what should be asked next.",
-  },
-];
+const methodSteps = siteCopy.method.steps;
 ---
 
 <BaseLayout
-  title="understory"
-  description="Cases on business, technology, and the forces beneath them."
+  title={siteCopy.brand.name}
+  description={siteCopy.brand.descriptor}
 >
   <div class="home-page">
     <section class="home-hero" aria-labelledby="home-heading">
       <div>
-        <p class="home-eyebrow">understory</p>
+        <p class="home-eyebrow">{siteCopy.brand.name}</p>
         <h1 id="home-heading">
           <span>Look beneath.</span>
           {" "}
@@ -71,7 +51,7 @@ const methodSteps = [
       </div>
       <div class="home-hero__aside">
         <p>
-          Cases on business, technology, and the forces beneath them.
+          {siteCopy.brand.descriptor}
         </p>
         {
           featuredCase && (
@@ -87,14 +67,14 @@ const methodSteps = [
     <section class="home-discovery" aria-labelledby="discovery-heading">
       <div>
         <p class="home-eyebrow">Discovery</p>
-        <h2 id="discovery-heading">What’s your one more question?</h2>
-        <p>Search cases, companies, topics, concepts, and ideas.</p>
+        <h2 id="discovery-heading">{siteCopy.search.placeholder}</h2>
+        <p>{siteCopy.search.helper}</p>
       </div>
-      <div class="home-search" data-search-root>
-        <label class="sr-only" for="home-search-input">Search published cases</label>
-        <input id="home-search-input" type="search" placeholder="What’s your one more question?" autocomplete="off" data-search-input />
+      <div class="home-search" data-search-root data-search-idle={siteCopy.search.idle} data-search-empty={siteCopy.search.empty}>
+        <label class="sr-only" for="home-search-input">{siteCopy.search.label}</label>
+        <input id="home-search-input" type="search" placeholder={siteCopy.search.placeholder} autocomplete="off" data-search-input />
         <div class="home-search__meta" aria-live="polite" data-search-status>
-          Search is limited to published cases.
+          {siteCopy.search.idle}
         </div>
         <ol class="home-search__results" data-search-results></ol>
       </div>
@@ -153,7 +133,7 @@ const methodSteps = [
     <section class="home-thinking" id="method" aria-labelledby="thinking-heading">
       <div class="home-thinking__intro">
         <p class="home-eyebrow">How We Think</p>
-        <h2 id="thinking-heading">A conclusion should sharpen curiosity, not end it.</h2>
+        <h2 id="thinking-heading">{siteCopy.brand.principle}</h2>
       </div>
       <ol class="home-method-list">
         {
@@ -209,8 +189,8 @@ const methodSteps = [
     </section>
 
     <footer class="home-footer" id="about">
-      <p>understory</p>
-      <p>Look beneath. Ask one more question.</p>
+      <p>{siteCopy.brand.name}</p>
+      <p>{siteCopy.brand.line}</p>
     </footer>
   </div>
   <script is:inline type="application/json" id="published-search-index" set:html={JSON.stringify(searchIndex)} />
@@ -221,6 +201,8 @@ const methodSteps = [
     const input = searchRoot?.querySelector("[data-search-input]");
     const status = searchRoot?.querySelector("[data-search-status]");
     const results = searchRoot?.querySelector("[data-search-results]");
+    const idleText = searchRoot?.dataset.searchIdle ?? "Search is limited to published cases.";
+    const emptyText = searchRoot?.dataset.searchEmpty ?? "No matching published content was found.";
     const searchIndex = indexElement?.textContent ? JSON.parse(indexElement.textContent) : [];
 
     const renderResults = (query) => {
@@ -229,7 +211,7 @@ const methodSteps = [
       results.innerHTML = "";
 
       if (normalizedQuery.length < 2) {
-        status.textContent = "Search is limited to published cases.";
+        status.textContent = idleText;
         return;
       }
 
@@ -237,7 +219,7 @@ const methodSteps = [
 
       status.textContent = matches.length
         ? `${matches.length} published ${matches.length === 1 ? "case" : "cases"} found.`
-        : "No published cases match yet.";
+        : emptyText;
 
       for (const item of matches) {
         const result = document.createElement("li");

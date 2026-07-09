@@ -1,16 +1,18 @@
 ---
+import { siteCopy } from "../../lib/siteCopy";
+
 interface Props {
   question: string;
   prompt?: string;
 }
 
-const { question, prompt = "What would you ask next?" } = Astro.props;
+const { question, prompt = siteCopy.oneMoreQuestion.prompt } = Astro.props;
 ---
 
 <aside class="one-more-question" aria-labelledby="one-more-question-heading">
   <div class="one-more-question__mark" aria-hidden="true"></div>
   <div>
-    <p id="one-more-question-heading" class="one-more-question__label">One More Question</p>
+    <p id="one-more-question-heading" class="one-more-question__label">{siteCopy.oneMoreQuestion.label}</p>
     <p class="one-more-question__question">{question}</p>
     {prompt && <p class="one-more-question__prompt">{prompt}</p>}
   </div>

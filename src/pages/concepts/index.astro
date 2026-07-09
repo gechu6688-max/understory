@@ -1,28 +1,30 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getPublishedCases, getTaxonomyItems } from "../../lib/cases";
+import { conceptDescriptions } from "../../lib/siteCopy";
 
 const publishedCases = await getPublishedCases();
 const concepts = getTaxonomyItems(publishedCases, "concepts");
 ---
 
 <BaseLayout title="Concepts" description="Explore published cases by business concept.">
-  <section class="page-shell" aria-labelledby="concepts-heading">
-    <div class="page-hero">
+  <section class="page-shell concepts-page" aria-labelledby="concepts-heading">
+    <div class="page-hero page-hero--index">
       <p class="home-eyebrow">Business Concepts</p>
-      <h1 id="concepts-heading">Explore by idea</h1>
-      <p>Concepts show the business ideas beneath each published case. Draft-only concepts remain private.</p>
+      <h1 id="concepts-heading">Idea index</h1>
+      <p>Concepts are analytical mechanisms and reusable lenses beneath each published case. Draft-only concepts remain private.</p>
     </div>
 
-    <ol class="taxonomy-index">
+    <ol class="concept-index">
       {
         concepts.map((concept) => (
           <li>
             <a href={`/concepts/${concept.slug}/`}>
-              <span>{concept.name}</span>
-              <span>{concept.cases.length === 1 ? "1 published case" : `${concept.cases.length} published cases`}</span>
+              <span class="concept-index__name">{concept.name}</span>
+              <span class="concept-index__count">Used in {concept.cases.length === 1 ? "1 case" : `${concept.cases.length} cases`} -></span>
             </a>
-            <p>{concept.cases.map((caseEntry) => caseEntry.data.title).join(", ")}</p>
+            <p>{conceptDescriptions[concept.name] ?? "A reusable idea currently present in published Understory analysis."}</p>
+            <small>{concept.cases.map((caseEntry) => caseEntry.data.title).join(", ")}</small>
           </li>
         ))
       }
