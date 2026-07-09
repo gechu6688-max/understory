@@ -23,8 +23,10 @@ This is the V1 Astro foundation for a static case-writing site.
 
 Cases can use `draft`, `review`, `published`, or `archived`.
 
-Only `published` cases appear on the public homepage listing by default. Case routes are still generated for all local entries so drafts and review items can be checked directly by URL during manual editing.
+Only `published` cases appear on the public homepage listing and generate normal public production routes by default. Draft, review, and archived cases validate as content but are not publicly routable unless a future approved preview system is added.
 
 ## Editing Guidance
 
 Add or edit normal case content in `src/content/cases/`. Avoid changing `src/content.config.ts`, `astro.config.mjs`, or `package.json` casually; those files control the site foundation.
+
+For the case-writing workflow, use `docs/case-writing-workflow.md`.
