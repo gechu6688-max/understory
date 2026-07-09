@@ -1,0 +1,73 @@
+---
+import { getCollection, render } from "astro:content";
+import References from "../../components/References.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const cases = await getCollection("cases");
+
+  return cases.map((caseEntry) => ({
+    params: { slug: caseEntry.id },
+    props: { caseEntry },
+  }));
+}
+
+const { caseEntry } = Astro.props;
+const { Content } = await render(caseEntry);
+const { data } = caseEntry;
+
+const publishedDate = new Intl.DateTimeFormat("en", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+}).format(data.publishedDate);
+---
+
+<BaseLayout title={data.title} description={data.summary}>
+  <article>
+    <p class="text-sm font-semibold uppercase tracking-wide text-slate-500">Case status: {data.status}</p>
+    <h1 class="mt-3 text-4xl font-semibold tracking-normal text-slate-950">{data.title}</h1>
+    {data.subtitle && <p class="mt-3 text-xl text-slate-600">{data.subtitle}</p>}
+    <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-700">{data.summary}</p>
+
+    <dl class="mt-8 grid gap-4 border-y border-slate-200 py-6 sm:grid-cols-2">
+      <div>
+        <dt class="text-sm font-semibold text-slate-500">Central Question</dt>
+        <dd class="mt-1 text-slate-900">{data.centralQuestion}</dd>
+      </div>
+      <div>
+        <dt class="text-sm font-semibold text-slate-500">Quick Thesis</dt>
+        <dd class="mt-1 text-slate-900">{data.quickThesis}</dd>
+      </div>
+      <div>
+        <dt class="text-sm font-semibold text-slate-500">Published</dt>
+        <dd class="mt-1 text-slate-900">{publishedDate}</dd>
+      </div>
+      <div>
+        <dt class="text-sm font-semibold text-slate-500">Case Type</dt>
+        <dd class="mt-1 text-slate-900">{data.caseType}</dd>
+      </div>
+    </dl>
+
+    <section class="mt-8 grid gap-4 sm:grid-cols-3">
+      <div>
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Entities</h2>
+        <p class="mt-2 text-slate-800">{data.entities.join(", ")}</p>
+      </div>
+      <div>
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Topics</h2>
+        <p class="mt-2 text-slate-800">{data.topics.join(", ")}</p>
+      </div>
+      <div>
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Concepts</h2>
+        <p class="mt-2 text-slate-800">{data.concepts.join(", ")}</p>
+      </div>
+    </section>
+
+    <div class="mt-10 max-w-none space-y-5 leading-8 text-slate-800">
+      <Content />
+    </div>
+
+    <References sources={data.sources} />
+  </article>
+</BaseLayout>

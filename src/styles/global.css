@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,14 @@
+---
+interface Props {
+  label?: string;
+}
+
+const { label = "Evidence" } = Astro.props;
+---
+
+<section class="my-6 rounded border border-slate-200 bg-white p-5">
+  <p class="text-sm font-semibold uppercase tracking-wide text-slate-600">{label}</p>
+  <div class="mt-2 text-base leading-7 text-slate-800">
+    <slot />
+  </div>
+</section>
