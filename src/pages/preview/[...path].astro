@@ -7,9 +7,13 @@ export async function getStaticPaths() {
 }
 
 const previewCases = await getPreviewCases();
+const previewLocalePaths = {
+  en: "/preview/",
+  zh: "/preview/",
+};
 ---
 
-<BaseLayout title="Local Preview" description="Development-only preview index for non-published cases.">
+<BaseLayout title="Local Preview" description="Development-only preview index for non-published cases." languagePaths={previewLocalePaths} alternatePaths={{}}>
   <section class="page-shell preview-page preview-page--compact" aria-labelledby="preview-heading">
     <div class="page-hero">
       <p class="home-eyebrow">Local Preview</p>

@@ -16,8 +16,13 @@ export async function getStaticPaths() {
 
 const { caseEntry } = Astro.props;
 const previewLabel = `Local Preview · ${caseEntry.data.status}`;
+const previewPath = `/preview/cases/${caseEntry.id}/`;
+const previewLocalePaths = {
+  en: previewPath,
+  zh: previewPath,
+};
 ---
 
-<BaseLayout title={`Preview: ${caseEntry.data.title}`} description={caseEntry.data.summary}>
+<BaseLayout title={`Preview: ${caseEntry.data.title}`} description={caseEntry.data.summary} languagePaths={previewLocalePaths} alternatePaths={{}}>
   <CaseArticle caseEntry={caseEntry} previewLabel={previewLabel} />
 </BaseLayout>

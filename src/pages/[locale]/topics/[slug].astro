@@ -32,6 +32,10 @@ const caseCount = locale === "zh" ? `${topicCases.length} 个公开案例` : top
         </li>
       ))}
     </ol>
-    {topicCases.length === 0 && locale === "zh" && <p class="library-empty">{copy.pages.cases.empty}</p>}
+    {topicCases.length === 0 && locale === "zh" && (
+      <p class="library-empty">
+        {copy.pages.topics.empty} <a href={localizedPath("en", `/topics/${topic.slug}/`)}>阅读英文主题 -></a>
+      </p>
+    )}
   </section>
 </BaseLayout>

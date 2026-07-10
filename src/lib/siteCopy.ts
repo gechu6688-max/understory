@@ -12,6 +12,8 @@ export const localizedPath = (locale: Locale, path = "/") => {
 };
 
 export const switchLocalePath = (targetLocale: Locale, pathname: string) => {
+  if (pathname === "/preview/" || pathname.startsWith("/preview/")) return pathname;
+
   const parts = pathname.split("/").filter(Boolean);
   const rest = isLocale(parts[0]) ? parts.slice(1) : parts;
   const suffix = rest.length ? `/${rest.join("/")}/` : "/";
@@ -55,7 +57,7 @@ const zhMethodSteps = [
   {
     label: "让证据说话",
     short: "把已知事实和推断区分开。",
-    text: "资料、数据、公开文件和解释需要分开放置，让读者看见什么是已知，什么仍只是推测、指控或有待确认。",
+    text: "我会尽量把资料、数据、公开文件和自己的判断分清楚，让读者看见哪些已经比较确定，哪些还只是推测、指控或有待确认。",
   },
   {
     label: "给另一种解释留位置",
@@ -65,12 +67,12 @@ const zhMethodSteps = [
   {
     label: "形成有边界的判断",
     short: "得出结论，也说清它的限度。",
-    text: "判断应该是有边界的：它需要说明目前能相信什么，也需要说明什么证据会改变这个判断。",
+    text: "一个判断需要有边界：我能暂时相信什么，哪里还不够确定，以及什么样的新证据会让我改变想法。",
   },
   {
-    label: "再追问一步",
-    short: "让结论指向尚未解决的问题。",
-    text: "还有什么没有想清楚？什么证据会改变结论？下一步应该继续追问什么？",
+    label: "让问题继续",
+    short: "让答案把新的问题慢慢带出来。",
+    text: "一个答案如果真的有用，往往不会把好奇心关上。它会留下新的线索，让我们继续看见更深一层的问题。",
   },
 ];
 
@@ -106,6 +108,7 @@ export const siteCopy = {
     search: {
       label: "Search published cases",
       placeholder: "What’s your one more question?",
+      heading: "What’s your one more question?",
       helper: "Search cases, companies, topics, concepts, and ideas.",
       idle: "Search is limited to published cases.",
       empty: "No matching published content was found. This may be a question worth following.",
@@ -137,12 +140,14 @@ export const siteCopy = {
         title: "Explore by topic",
         description:
           "Topics are broad fields of exploration. They are generated only from currently published cases, so empty categories are not shown.",
+        empty: "No published topics are available yet.",
       },
       concepts: {
         eyebrow: "Business Concepts",
         title: "Idea index",
         description:
           "Concepts are analytical mechanisms and reusable lenses beneath each published case. Draft-only concepts remain private.",
+        empty: "No published concepts are available yet.",
       },
       about: {
         title: "A place for questions that do not end quickly",
@@ -182,10 +187,10 @@ export const siteCopy = {
       name: "understory",
       displayName: "Understory",
       localName: "问溯",
-      line: "问起于好奇，溯向未见之处。",
-      descriptor: "关于商业、科技，以及那些藏在表面之下的力量。",
-      principle: "一个结论，不该终止好奇；它应该让下一步追问更清晰。",
-      heroLines: ["问起于好奇，", "溯向未见之处。"],
+      line: "问有所起，思有所往",
+      descriptor: "从商业与科技出发，看看那些不总在第一眼里出现的力量。",
+      principle: "好的结论，不是把问题关上，而是让下一步更清楚。",
+      heroLines: ["问有所起，", "思有所往"],
     },
     nav: [
       { label: "案例", href: "/cases/", section: "/cases/" },
@@ -206,55 +211,59 @@ export const siteCopy = {
     },
     search: {
       label: "搜索已发布案例",
-      placeholder: "你还想再追问什么？",
+      placeholder: "输入一个问题、公司或想法……",
+      heading: "还有什么，让你好奇？",
       helper: "搜索案例、公司、主题、概念与想法。",
       idle: "搜索范围仅限已发布案例。",
-      empty: "暂时没有匹配的已发布内容。也许这正是一个值得继续追问的问题。",
+      empty: "暂时还没有匹配的已发布内容。也许，这正是一个值得继续想下去的问题。",
     },
     method: {
       eyebrow: "方法",
-      title: "为未完成的问题，留一条思考路径",
-      description: "这里的方法不是为了把问题迅速收束，而是为了让问题、证据、另一种解释和判断之间的关系更清楚。",
+      title: "让问题慢慢变清楚",
+      description: "我不想急着给每个问题下结论。更重要的是，把问题问清楚，把证据看清楚，也把自己还不确定的地方留下来。",
       sequence: "分析路径",
       standards: "写作原则",
       steps: zhMethodSteps,
     },
     oneMoreQuestion: {
-      label: "再追问一步",
-      prompt: "你还会问什么？",
+      label: "问题还在继续",
+      prompt: "这个答案，让你想到了些什么？",
     },
     pages: {
       cases: {
         title: "案例库",
-        description: "已发布的商业与科技案例分析。",
+        description: "已经认真写完、可以公开阅读的中文案例。",
         count: (count: number) => `${count} 个已发布案例`,
-        note: "这里只展示已发布内容。草稿、审阅中和归档案例不会进入公开页面。",
-        discovery: "随着案例增加，你可以从问题、公司、主题与概念进入这座案例库。",
-        empty: "中文案例正在整理中。这里不会自动机器翻译已有英文案例。",
+        note: "这里只展示真正完成的公开案例。草稿和审阅中的内容不会出现在这里。",
+        discovery: "以后你可以从问题、公司、主题和概念进入这座案例库。",
+        empty: "中文案例还在慢慢整理中。我不想把英文内容直接机器翻译后放上来；等一篇案例真正用中文写好，它会出现在这里。",
       },
       topics: {
         eyebrow: "主题",
         title: "按主题探索",
-        description: "主题是较宽的探索领域，只来自已经发布的案例；没有内容的分类不会显示。",
+        description: "主题会跟着真正发布的中文案例一起长出来。现在还很少，但不会用空分类假装已经很多。",
+        empty: "中文主题索引会随着中文案例一起出现。现在可以先去英文版看看已有主题。",
       },
       concepts: {
         eyebrow: "商业概念",
         title: "概念索引",
-        description: "概念是理解案例背后机制的分析工具，而不是宽泛主题。",
+        description: "概念不是漂亮词汇，而是帮助我理解一个商业现象为什么会发生的工具。",
+        empty: "中文概念索引会随着真实中文案例慢慢长出来。这里不会为了填满页面而编造内容。",
       },
       about: {
-        title: "给那些不会很快结束的问题，一个地方",
-        note: "Understory，起初只是源于我的一个小习惯：总忍不住再多问一句。",
+        title: "有些问题，不必急着结束",
+        note: "每当遇到一件让我好奇的事，我总会多问一句，再多问一句。也是在这些一次次往下问的时刻里，我慢慢长出了自己的思考和想法。",
         paragraphs: [
-          "我一直很喜欢那些没有标准答案的问题。为什么人们会长久停留在一个平台？便利为什么有时会慢慢变成一种力量？为什么有些新技术足以重塑整个行业，而另一些却悄无声息地消失？",
-          "对我来说，一个问题常常会牵出另一个问题。于是我开始做 Understory，也开始想象“问溯”——想给这种好奇心留一个更认真一点的地方：去找证据，比较不同解释，想一想得失与代价，也诚实面对那些我还没有想明白的部分。",
-          "我现在还只是一个学生，也并不期待每一个案例都能通向一个漂亮而完整的答案。",
-          "恰恰因为还在学习，我更愿意让这些思考保持开放：如果更好的证据出现，结论就应该改变；如果一个问题还没有想清楚，那就把它留下来，继续往前问。",
+          "我一直很喜欢那些没有标准答案的问题。为什么人会越来越离不开一个平台？为什么一件原本只是“方便”的事，慢慢会变成一种力量？为什么有些新技术能改变一个行业，而另一些很快就被忘记？",
+          "这些问题一开始可能很小：一个产品为什么突然流行，一家公司为什么能涨价，用户为什么明明有别的选择却不离开。可是往下想，它们又会牵出竞争、技术、选择、习惯和代价。",
+          "我做 Understory，也给它取中文名字“问溯”，是想给这种好奇心留一个更认真的地方。在这里，我会试着找证据，比较不同解释，看见一个选择背后的取舍，也诚实承认自己还没有想明白的地方。",
+          "我现在还只是一个学生，所以并不期待每个案例都能得到完美答案。相反，我更希望自己的判断是可以被改变的：如果更好的证据出现，结论就应该跟着变。",
+          "我关心商业，也关心新技术，尤其是 AI、平台、消费选择和市场变化怎样影响真实的人。Understory / 问溯不是一份冷冰冰的公司分析，更像是一个慢慢练习思考的地方。也许有一天，它也能成为其他好奇的学生一起想问题的地方。",
         ],
       },
       caseUnavailable: {
         title: "该案例的中文版本仍在准备中。",
-        body: "英文原文已经可以阅读。这里不会自动机器翻译；中文版本会在认真改写和校对后发布。",
+        body: "英文原文已经可以阅读。中文版本不会直接机器翻译；等它被认真改写和校对后，会再放到这里。",
         action: "继续阅读英文",
       },
     },

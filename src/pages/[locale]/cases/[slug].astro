@@ -18,9 +18,18 @@ const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
 const copy = getSiteCopy(locale);
 const { caseEntry } = Astro.props;
 const available = hasCaseLocale(locale, caseEntry.id);
+const casePath = `/cases/${caseEntry.id}/`;
+const languagePaths = {
+  en: localizedPath("en", casePath),
+  zh: localizedPath("zh", casePath),
+};
+const alternatePaths = {
+  en: localizedPath("en", casePath),
+  zh: hasCaseLocale("zh", caseEntry.id) ? localizedPath("zh", casePath) : null,
+};
 ---
 
-<BaseLayout title={available ? caseEntry.data.title : copy.pages.caseUnavailable.title} description={available ? caseEntry.data.summary : copy.pages.caseUnavailable.body} locale={locale}>
+<BaseLayout title={available ? caseEntry.data.title : copy.pages.caseUnavailable.title} description={available ? caseEntry.data.summary : copy.pages.caseUnavailable.body} locale={locale} languagePaths={languagePaths} alternatePaths={alternatePaths}>
   {
     available ? (
       <CaseArticle caseEntry={caseEntry} locale={locale} />

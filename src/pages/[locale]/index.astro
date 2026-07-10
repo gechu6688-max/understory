@@ -66,7 +66,7 @@ const methodSteps = copy.method.steps;
     <section class="home-discovery" aria-labelledby="discovery-heading">
       <div>
         <p class="home-eyebrow">Discovery</p>
-        <h2 id="discovery-heading">{copy.search.placeholder}</h2>
+        <h2 id="discovery-heading">{copy.search.heading}</h2>
         <p>{copy.search.helper}</p>
       </div>
       <div class="home-search" data-search-root data-search-idle={copy.search.idle} data-search-empty={copy.search.empty} data-locale={locale}>
@@ -110,6 +110,7 @@ const methodSteps = copy.method.steps;
         <h2>{locale === "zh" ? "案例所在的领域" : "What the case is about"}</h2>
         <p class="home-term-note">{locale === "zh" ? "当前已发布案例涉及的主题。" : "Current topics represented by published cases."}</p>
         <div class="home-term-list">{topics.map((topic) => <a href={localizedPath(locale, `/topics/${topic.slug}/`)}>{topic.name}</a>)}</div>
+        {topics.length === 0 && locale === "zh" && <p class="home-term-empty">{copy.pages.topics.empty}</p>}
         <a class="home-section-link" href={localizedPath(locale, "/topics/")}>{locale === "zh" ? "浏览全部主题 ->" : "Explore all topics ->"}</a>
       </div>
       <div id="concepts" class="home-explore__group">
@@ -117,6 +118,7 @@ const methodSteps = copy.method.steps;
         <h2>{locale === "zh" ? "案例背后的分析概念" : "The ideas underneath the case"}</h2>
         <p class="home-term-note">{locale === "zh" ? "当前已发布案例涉及的商业概念。" : "Current concepts represented by published cases."}</p>
         <div class="home-term-list">{concepts.map((concept) => <a href={localizedPath(locale, `/concepts/${concept.slug}/`)}>{concept.name}</a>)}</div>
+        {concepts.length === 0 && locale === "zh" && <p class="home-term-empty">{copy.pages.concepts.empty}</p>}
         <a class="home-section-link" href={localizedPath(locale, "/concepts/")}>{locale === "zh" ? "浏览全部概念 ->" : "Explore all concepts ->"}</a>
       </div>
     </section>

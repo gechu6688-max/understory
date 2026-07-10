@@ -6,6 +6,8 @@ interface Props {
   title: string;
   description?: string;
   locale?: Locale;
+  languagePaths?: Partial<Record<Locale, string>>;
+  alternatePaths?: Partial<Record<Locale, string | null>>;
 }
 
 const { title, locale = defaultLocale } = Astro.props;
@@ -13,7 +15,9 @@ const copy = getSiteCopy(locale);
 const description = Astro.props.description ?? copy.brand.descriptor;
 const pathname = Astro.url.pathname;
 const isPreview = !import.meta.env.PROD;
-const canonicalPath = switchLocalePath(locale, pathname);
+const languagePaths = Astro.props.languagePaths ?? {};
+const alternatePaths = Astro.props.alternatePaths;
+const canonicalPath = languagePaths[locale] ?? switchLocalePath(locale, pathname);
 const navItems = copy.nav.map((item) => ({
   ...item,
   href: localizedPath(locale, item.href),
@@ -24,9 +28,24 @@ const isActive = (section: string) => pathname === section || pathname.startsWit
 const localeLinks = locales.map((item) => ({
   locale: item,
   label: copy.language[item],
-  href: switchLocalePath(item, pathname),
+  href: languagePaths[item] ?? switchLocalePath(item, pathname),
   active: item === locale,
 }));
+const seoAlternateLinks =
+  alternatePaths === undefined
+    ? localeLinks
+    : locales
+        .map((item) => {
+          const href = alternatePaths[item];
+          return href === undefined || href === null
+            ? null
+            : {
+                locale: item,
+                href,
+              };
+        })
+        .filter((item): item is { locale: Locale; href: string } => item !== null);
+const mobileLocaleLink = localeLinks.find((item) => !item.active);
 ---
 
 <!doctype html>
@@ -37,7 +56,7 @@ const localeLinks = locales.map((item) => ({
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="canonical" href={canonicalPath} />
     {
-      localeLinks.map((item) => (
+      seoAlternateLinks.map((item) => (
         <link rel="alternate" hreflang={item.locale === "zh" ? "zh-CN" : "en"} href={item.href} />
       ))
     }
@@ -47,6 +66,13 @@ const localeLinks = locales.map((item) => ({
     <header class="site-header">
       <nav class="site-nav" aria-label="Primary navigation">
         <a class="site-identity" href={localizedPath(locale)} aria-label={`${copy.brand.name} home`}>{copy.brand.name}</a>
+        {
+          mobileLocaleLink && (
+            <a class="site-mobile-language" href={mobileLocaleLink.href} aria-label={`${copy.menu.language}: ${mobileLocaleLink.label}`}>
+              {mobileLocaleLink.label}
+            </a>
+          )
+        }
         <div class="site-nav__actions">
           <div class="site-nav__links">
           {

@@ -33,6 +33,10 @@ const topics = getTaxonomyItems(localizedCases, "topics");
         </li>
       ))}
     </ol>
-    {topics.length === 0 && locale === "zh" && <p class="library-empty">{copy.pages.cases.empty}</p>}
+    {topics.length === 0 && locale === "zh" && (
+      <p class="library-empty">
+        {copy.pages.topics.empty} <a href={localizedPath("en", "/topics/")}>先看英文主题 -></a>
+      </p>
+    )}
   </section>
 </BaseLayout>

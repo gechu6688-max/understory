@@ -32,6 +32,10 @@ const caseCount = locale === "zh" ? `${conceptCases.length} 个公开案例` : c
         </li>
       ))}
     </ol>
-    {conceptCases.length === 0 && locale === "zh" && <p class="library-empty">{copy.pages.cases.empty}</p>}
+    {conceptCases.length === 0 && locale === "zh" && (
+      <p class="library-empty">
+        {copy.pages.concepts.empty} <a href={localizedPath("en", `/concepts/${concept.slug}/`)}>阅读英文概念 -></a>
+      </p>
+    )}
   </section>
 </BaseLayout>
