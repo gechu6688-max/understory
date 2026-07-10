@@ -23,12 +23,17 @@ const methodSteps = siteCopy.method.steps;
       <ol class="home-method-list method-path">
         {
           methodSteps.map((step, index) => (
-            <li tabindex="0">
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <div>
-                <h3>{step.label}</h3>
-                <p>{step.text}</p>
-              </div>
+            <li>
+              <details class="method-step" open>
+                <summary>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <div>
+                    <h3>{step.label}</h3>
+                    <p>{step.short}</p>
+                  </div>
+                </summary>
+                <p class="method-step__body">{step.text}</p>
+              </details>
             </li>
           ))
         }
@@ -47,4 +52,17 @@ const methodSteps = siteCopy.method.steps;
       </ul>
     </section>
   </section>
+  <script is:inline>
+    const syncMethodDisclosure = () => {
+      const shouldCollapse = window.matchMedia("(max-width: 640px)").matches;
+      document.querySelectorAll(".method-step").forEach((step) => {
+        if (step instanceof HTMLDetailsElement) {
+          step.open = !shouldCollapse;
+        }
+      });
+    };
+
+    syncMethodDisclosure();
+    window.matchMedia("(max-width: 640px)").addEventListener("change", syncMethodDisclosure);
+  </script>
 </BaseLayout>

@@ -25,22 +25,27 @@ export const siteCopy = {
     steps: [
       {
         label: "Question",
+        short: "Begin with the question the case needs to answer.",
         text: "Each case begins with a business question that can be argued with evidence, not a headline that already assumes the answer.",
       },
       {
         label: "Evidence",
+        short: "Separate what is known from what is inferred.",
         text: "Source material is separated from interpretation so readers can see what is known, alleged, inferred, or still uncertain.",
       },
       {
         label: "Counterargument",
+        short: "Give the strongest alternative explanation room.",
         text: "The strongest reasonable competing explanation is part of the case, not an afterthought.",
       },
       {
         label: "Judgement",
+        short: "Reach a bounded conclusion and name its limits.",
         text: "A case ends with a bounded conclusion and a clear sense of what could change that conclusion.",
       },
       {
         label: "One More Question",
+        short: "Let the conclusion point toward what remains unresolved.",
         text: "What remains unresolved? What evidence could change the conclusion? What should we ask next?",
       },
     ],
