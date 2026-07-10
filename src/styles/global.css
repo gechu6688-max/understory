@@ -20,6 +20,8 @@
   --color-judgement: #174d3c;
   --radius-small: 6px;
   --measure-article: 45rem;
+  --measure-zh-article: 38rem;
+  --measure-zh-prose: 40rem;
   --measure-wide: 58rem;
   --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-display: Georgia, "Times New Roman", serif;
@@ -1046,6 +1048,14 @@ html:lang(zh-CN) .about-hero h1 {
   line-height: 1.14;
 }
 
+html:lang(zh-CN) .method-hero h1,
+html:lang(zh-CN) .topics-page .page-hero h1,
+html:lang(zh-CN) .concepts-page .page-hero h1,
+html:lang(zh-CN) .cases-page .library-hero h1 {
+  font-family: var(--font-zh-body);
+  font-weight: 780;
+}
+
 .library-hero__panel,
 .founder-note {
   border-top: 2px solid var(--color-accent);
@@ -1114,6 +1124,33 @@ html:lang(zh-CN) .about-hero h1 {
   font-weight: 650;
   text-decoration-color: var(--color-border);
   text-underline-offset: 0.24em;
+}
+
+.library-empty--editorial {
+  display: grid;
+  gap: 0.7rem;
+  max-width: min(var(--measure-zh-prose), 100%);
+  border-top: 0;
+  border-left: 2px solid color-mix(in srgb, var(--color-accent) 74%, var(--color-border));
+  padding: 0.15rem 0 0.2rem 1.25rem;
+}
+
+.library-empty--editorial p {
+  margin: 0;
+}
+
+.library-empty--editorial a {
+  width: fit-content;
+  margin-top: 0.2rem;
+}
+
+.library-empty--concepts {
+  max-width: 35rem;
+  border-left-color: var(--color-text);
+}
+
+.library-empty--cases {
+  max-width: var(--measure-zh-prose);
 }
 
 .library-list > li {
@@ -1687,6 +1724,284 @@ html:lang(zh-CN) .founder-note p {
 
 .one-more-question:hover .one-more-question__mark::after {
   transform: translate(0.16rem, 0.1rem);
+}
+
+@media (min-width: 900px) {
+  html:lang(zh-CN) .home-page {
+    gap: clamp(2rem, 3.2vw, 3rem);
+  }
+
+  html:lang(zh-CN) .home-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(1.15rem, 2vw, 1.8rem);
+    align-items: start;
+    padding-block: clamp(2.1rem, 5vw, 4.1rem) clamp(1.35rem, 2.8vw, 2rem);
+  }
+
+  html:lang(zh-CN) .home-hero h1 {
+    max-width: none;
+    font-size: clamp(3.2rem, 6vw, 5rem);
+    line-height: 1.08;
+  }
+
+  html:lang(zh-CN) .home-hero h1 span {
+    display: inline;
+  }
+
+  html:lang(zh-CN) .home-hero__aside {
+    width: min(35rem, 58%);
+    margin-left: min(32rem, 38vw);
+    border-top-width: 1px;
+    padding-top: 1.1rem;
+  }
+
+  html:lang(zh-CN) .home-hero__aside p {
+    font-size: 1.08rem;
+    line-height: 1.78;
+  }
+
+  html:lang(zh-CN) .home-discovery {
+    grid-template-columns: minmax(16rem, 0.72fr) minmax(0, 1.28fr);
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    align-items: center;
+    padding-block: 0.35rem clamp(1.55rem, 3vw, 2.15rem);
+  }
+
+  html:lang(zh-CN) .home-discovery h2 {
+    max-width: 12em;
+    font-size: clamp(1.75rem, 2.7vw, 2.35rem);
+    line-height: 1.2;
+  }
+
+  html:lang(zh-CN) .home-discovery p:not(.home-eyebrow) {
+    max-width: 21rem;
+  }
+
+  html:lang(zh-CN) .home-search {
+    border-top-width: 1px;
+  }
+
+  html:lang(zh-CN) .home-explore {
+    gap: clamp(2.2rem, 6vw, 5rem);
+  }
+
+  html:lang(zh-CN) .about-hero {
+    grid-template-columns: minmax(0, 0.92fr) minmax(17rem, 0.58fr);
+    gap: clamp(2rem, 6vw, 5.2rem);
+    align-items: center;
+  }
+
+  html:lang(zh-CN) .about-hero h1 {
+    max-width: 8em;
+    font-size: clamp(3.1rem, 5.6vw, 4.7rem);
+    line-height: 1.12;
+  }
+
+  html:lang(zh-CN) .about-hero h1 span,
+  html:lang(zh-CN) .method-hero h1 span,
+  html:lang(zh-CN) .method-panel h2 span {
+    display: block;
+  }
+
+  html:lang(zh-CN) .founder-note {
+    max-width: 25rem;
+    border-top: 0;
+    border-left: 2px solid color-mix(in srgb, var(--color-accent) 72%, var(--color-border));
+    background: transparent;
+    padding: 0.1rem 0 0.1rem 1.25rem;
+  }
+
+  html:lang(zh-CN) .founder-note p {
+    font-family: var(--font-zh-body);
+    font-size: clamp(1.02rem, 1.45vw, 1.22rem);
+    line-height: 1.82;
+  }
+
+  html:lang(zh-CN) .about-copy {
+    max-width: var(--measure-zh-article);
+  }
+
+  html:lang(zh-CN) .about-copy--founder {
+    margin-left: min(6vw, 4rem);
+    padding-left: clamp(1.1rem, 2.5vw, 1.7rem);
+  }
+
+  html:lang(zh-CN) .about-copy p {
+    font-size: 1.02rem;
+    line-height: 1.9;
+  }
+
+  html:lang(zh-CN) .method-hero {
+    grid-template-columns: minmax(0, 0.82fr) minmax(18rem, 0.68fr);
+    gap: clamp(1.8rem, 4vw, 3.2rem);
+    align-items: center;
+  }
+
+  html:lang(zh-CN) .method-hero h1 {
+    max-width: 8em;
+    font-size: clamp(2.85rem, 4.8vw, 4rem);
+    line-height: 1.16;
+  }
+
+  html:lang(zh-CN) .method-hero p {
+    max-width: 31rem;
+    line-height: 1.82;
+  }
+
+  html:lang(zh-CN) .method-panel {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3rem);
+  }
+
+  html:lang(zh-CN) .home-thinking {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3rem);
+  }
+
+  html:lang(zh-CN) .home-thinking__intro {
+    max-width: 47rem;
+  }
+
+  html:lang(zh-CN) .home-thinking h2 {
+    max-width: none;
+    font-size: clamp(2.15rem, 3.7vw, 3.35rem);
+    line-height: 1.18;
+  }
+
+  html:lang(zh-CN) .home-thinking .home-method-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(1.6rem, 4vw, 3.2rem);
+  }
+
+  html:lang(zh-CN) .home-thinking .home-method-list li::before {
+    display: none;
+  }
+
+  html:lang(zh-CN) .home-thinking .home-method-list p {
+    max-width: 24rem;
+    font-size: 0.94rem;
+    line-height: 1.72;
+  }
+
+  html:lang(zh-CN) .method-panel > div:first-child {
+    max-width: 47rem;
+  }
+
+  html:lang(zh-CN) .method-panel h2 {
+    max-width: none;
+    font-size: clamp(2.15rem, 3.7vw, 3.35rem);
+    line-height: 1.18;
+  }
+
+  html:lang(zh-CN) .method-panel h2 span:nth-child(2) {
+    display: inline;
+  }
+
+  html:lang(zh-CN) .method-panel h2 span:nth-child(3) {
+    display: inline;
+  }
+
+  html:lang(zh-CN) .method-panel .home-method-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(1.6rem, 4vw, 3.2rem);
+    border-top: 1px solid color-mix(in srgb, var(--color-surface) 24%, transparent);
+  }
+
+  html:lang(zh-CN) .method-panel .home-method-list li {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-surface) 22%, transparent);
+  }
+
+  html:lang(zh-CN) .method-panel .home-method-list li::before {
+    display: none;
+  }
+
+  html:lang(zh-CN) .method-step {
+    padding-block: 1.1rem 1.2rem;
+  }
+
+  html:lang(zh-CN) .method-step summary {
+    grid-template-columns: 2.4rem minmax(0, 1fr);
+    gap: 0.85rem;
+  }
+
+  html:lang(zh-CN) .home-method-list h3 {
+    font-size: 1.02rem;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+
+  html:lang(zh-CN) .method-step summary p,
+  html:lang(zh-CN) .method-step__body {
+    max-width: 24rem;
+    font-size: 0.94rem;
+    line-height: 1.72;
+  }
+
+  html:lang(zh-CN) .method-step__body {
+    margin-left: 3.25rem;
+  }
+
+  html:lang(zh-CN) .method-notes {
+    max-width: var(--measure-zh-prose);
+  }
+
+  html:lang(zh-CN) .topics-page,
+  html:lang(zh-CN) .concepts-page,
+  html:lang(zh-CN) .cases-page {
+    gap: clamp(2rem, 4vw, 3.2rem);
+  }
+
+  html:lang(zh-CN) .topics-page .page-hero,
+  html:lang(zh-CN) .concepts-page .page-hero {
+    max-width: 48rem;
+    padding-block: clamp(2.4rem, 5vw, 4rem) clamp(1.35rem, 2.5vw, 1.8rem);
+  }
+
+  html:lang(zh-CN) .topics-page .page-hero h1,
+  html:lang(zh-CN) .concepts-page .page-hero h1 {
+    max-width: 7em;
+    font-size: clamp(2.55rem, 4vw, 3.6rem);
+    line-height: 1.15;
+  }
+
+  html:lang(zh-CN) .topics-page .page-hero p:not(.home-eyebrow),
+  html:lang(zh-CN) .concepts-page .page-hero p:not(.home-eyebrow) {
+    max-width: var(--measure-zh-prose);
+  }
+
+  html:lang(zh-CN) .topics-page .topic-map:empty,
+  html:lang(zh-CN) .concepts-page .concept-index:empty,
+  html:lang(zh-CN) .cases-page .library-list:empty {
+    display: none;
+  }
+
+  html:lang(zh-CN) .topics-page .library-empty--editorial,
+  html:lang(zh-CN) .concepts-page .library-empty--editorial {
+    margin-top: -0.6rem;
+    margin-left: min(12vw, 7rem);
+  }
+
+  html:lang(zh-CN) .cases-page .library-hero {
+    grid-template-columns: minmax(0, 0.85fr) minmax(18rem, 0.65fr);
+    align-items: center;
+  }
+
+  html:lang(zh-CN) .cases-page .library-hero h1 {
+    font-size: clamp(2.7rem, 4.4vw, 3.8rem);
+  }
+
+  html:lang(zh-CN) .cases-page .library-hero__panel {
+    border-top-width: 1px;
+  }
+
+  html:lang(zh-CN) .cases-page .library-discovery {
+    align-items: center;
+    padding-block: 0.8rem;
+  }
+
+  html:lang(zh-CN) .cases-page .library-empty--editorial {
+    margin-left: min(8vw, 5rem);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

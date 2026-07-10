@@ -45,9 +45,20 @@ const methodSteps = copy.method.steps;
       <div>
         <p class="home-eyebrow">{locale === "zh" ? copy.brand.localName : copy.brand.name}</p>
         <h1 id="home-heading">
-          <span>{copy.brand.heroLines[0]}</span>
-          {" "}
-          <span>{copy.brand.heroLines[1]}</span>
+          {
+            locale === "zh" ? (
+              <>
+                <span>问有所起，</span>
+                <span>思有所往</span>
+              </>
+            ) : (
+              <>
+                <span>{copy.brand.heroLines[0]}</span>
+                {" "}
+                <span>{copy.brand.heroLines[1]}</span>
+              </>
+            )
+          }
         </h1>
       </div>
       <div class="home-hero__aside">
@@ -110,7 +121,7 @@ const methodSteps = copy.method.steps;
         <h2>{locale === "zh" ? "案例所在的领域" : "What the case is about"}</h2>
         <p class="home-term-note">{locale === "zh" ? "当前已发布案例涉及的主题。" : "Current topics represented by published cases."}</p>
         <div class="home-term-list">{topics.map((topic) => <a href={localizedPath(locale, `/topics/${topic.slug}/`)}>{topic.name}</a>)}</div>
-        {topics.length === 0 && locale === "zh" && <p class="home-term-empty">{copy.pages.topics.empty}</p>}
+        {topics.length === 0 && locale === "zh" && <p class="home-term-empty">中文主题会随着真正完成的中文案例慢慢出现。可以先去英文版看看已有的探索领域。</p>}
         <a class="home-section-link" href={localizedPath(locale, "/topics/")}>{locale === "zh" ? "浏览全部主题 ->" : "Explore all topics ->"}</a>
       </div>
       <div id="concepts" class="home-explore__group">
@@ -118,7 +129,7 @@ const methodSteps = copy.method.steps;
         <h2>{locale === "zh" ? "案例背后的分析概念" : "The ideas underneath the case"}</h2>
         <p class="home-term-note">{locale === "zh" ? "当前已发布案例涉及的商业概念。" : "Current concepts represented by published cases."}</p>
         <div class="home-term-list">{concepts.map((concept) => <a href={localizedPath(locale, `/concepts/${concept.slug}/`)}>{concept.name}</a>)}</div>
-        {concepts.length === 0 && locale === "zh" && <p class="home-term-empty">{copy.pages.concepts.empty}</p>}
+        {concepts.length === 0 && locale === "zh" && <p class="home-term-empty">中文概念索引会跟着真实中文案例慢慢长出来，不会为了填满页面而编造内容。</p>}
         <a class="home-section-link" href={localizedPath(locale, "/concepts/")}>{locale === "zh" ? "浏览全部概念 ->" : "Explore all concepts ->"}</a>
       </div>
     </section>

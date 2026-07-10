@@ -16,7 +16,18 @@ const methodSteps = copy.method.steps;
     <div class="method-hero">
       <div>
         <p class="home-eyebrow">{copy.method.eyebrow}</p>
-        <h1 id="method-heading">{copy.method.title}</h1>
+        <h1 id="method-heading">
+          {
+            locale === "zh" ? (
+              <>
+                <span>让问题</span>
+                <span>慢慢变清楚</span>
+              </>
+            ) : (
+              copy.method.title
+            )
+          }
+        </h1>
       </div>
       <p>{copy.method.description}</p>
     </div>
@@ -24,7 +35,19 @@ const methodSteps = copy.method.steps;
     <section class="method-panel" aria-labelledby="method-sequence-heading">
       <div>
         <p class="home-eyebrow">{copy.method.sequence}</p>
-        <h2 id="method-sequence-heading">{copy.brand.principle}</h2>
+        <h2 id="method-sequence-heading">
+          {
+            locale === "zh" ? (
+              <>
+                <span>好的结论，</span>
+                <span>不是把问题关上，</span>
+                <span>而是让下一步更清楚。</span>
+              </>
+            ) : (
+              copy.brand.principle
+            )
+          }
+        </h2>
       </div>
       <ol class="home-method-list method-path">
         {methodSteps.map((step, index) => (

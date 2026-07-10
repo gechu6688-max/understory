@@ -15,7 +15,18 @@ const copy = getSiteCopy(locale);
     <div class="about-hero">
       <div>
         <p class="home-eyebrow">{locale === "zh" ? "关于" : "About"}</p>
-        <h1 id="about-heading">{copy.pages.about.title}</h1>
+        <h1 id="about-heading">
+          {
+            locale === "zh" ? (
+              <>
+                <span>有些问题，</span>
+                <span>不必急着结束</span>
+              </>
+            ) : (
+              copy.pages.about.title
+            )
+          }
+        </h1>
       </div>
       <aside class="founder-note" aria-label="Founder note">
         <p>{copy.pages.about.note}</p>

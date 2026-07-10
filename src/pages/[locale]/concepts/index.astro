@@ -34,9 +34,11 @@ const concepts = getTaxonomyItems(localizedCases, "concepts");
       ))}
     </ol>
     {concepts.length === 0 && locale === "zh" && (
-      <p class="library-empty">
-        {copy.pages.concepts.empty} <a href={localizedPath("en", "/concepts/")}>先看英文概念 -></a>
-      </p>
+      <section class="library-empty library-empty--editorial library-empty--concepts" aria-label="中文概念说明">
+        <p>中文概念索引会随着真实中文案例慢慢长出来。</p>
+        <p>这里不会为了填满页面而编造内容。</p>
+        <a href={localizedPath("en", "/concepts/")}>先看英文概念 -></a>
+      </section>
     )}
   </section>
 </BaseLayout>

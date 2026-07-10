@@ -34,9 +34,11 @@ const topics = getTaxonomyItems(localizedCases, "topics");
       ))}
     </ol>
     {topics.length === 0 && locale === "zh" && (
-      <p class="library-empty">
-        {copy.pages.topics.empty} <a href={localizedPath("en", "/topics/")}>先看英文主题 -></a>
-      </p>
+      <section class="library-empty library-empty--editorial library-empty--topics" aria-label="中文主题说明">
+        <p>中文主题会随着真正完成的中文案例慢慢出现。</p>
+        <p>在那之前，可以先去英文版看看已有的探索领域。</p>
+        <a href={localizedPath("en", "/topics/")}>先看英文主题 -></a>
+      </section>
     )}
   </section>
 </BaseLayout>

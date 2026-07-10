@@ -53,9 +53,11 @@ const cases = locale === "zh" ? publishedCases.filter((caseEntry) => hasCaseLoca
       ))}
     </ol>
     {cases.length === 0 && locale === "zh" && (
-      <p class="library-empty">
-        {copy.pages.cases.empty} <a href={localizedPath("en", "/cases/")}>先看英文案例库 -></a>
-      </p>
+      <section class="library-empty library-empty--editorial library-empty--cases" aria-label="中文案例说明">
+        <p>中文案例还在慢慢整理中。等一篇案例真正用中文写好，它会出现在这里。</p>
+        <p>现在可以先阅读英文案例库。</p>
+        <a href={localizedPath("en", "/cases/")}>先看英文案例库 -></a>
+      </section>
     )}
   </section>
 </BaseLayout>
