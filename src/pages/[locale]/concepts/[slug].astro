@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { formatDate, getPublishedCases, getTaxonomyItems } from "../../../lib/cases";
+import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
+
+export async function getStaticPaths() {
+  const publishedCases = await getPublishedCases();
+  const concepts = getTaxonomyItems(publishedCases, "concepts");
+  return locales.flatMap((locale) => concepts.map((concept) => ({ params: { locale, slug: concept.slug }, props: { concept } })));
+}
+
+const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
+const copy = getSiteCopy(locale);
+const { concept } = Astro.props;
+const conceptCases = locale === "zh" ? concept.cases.filter((caseEntry) => hasCaseLocale(locale, caseEntry.id)) : concept.cases;
+const caseCount = locale === "zh" ? `${conceptCases.length} 个公开案例` : conceptCases.length === 1 ? "1 public case" : `${conceptCases.length} public cases`;
+---
+
+<BaseLayout title={concept.name} description={`Published cases about ${concept.name}.`} locale={locale}>
+  <section class="page-shell" aria-labelledby="concept-heading">
+    <div class="page-hero">
+      <p class="home-eyebrow">{copy.pages.concepts.eyebrow}</p>
+      <h1 id="concept-heading">{concept.name}</h1>
+      <p>{caseCount}</p>
+    </div>
+    <ol class="library-list library-list--compact">
+      {conceptCases.map((caseEntry) => (
+        <li>
+          <div class="library-list__meta"><time datetime={caseEntry.data.publishedDate.toISOString()}>{formatDate(caseEntry.data.publishedDate)}</time><span>{caseEntry.data.caseType} {copy.labels.case}</span></div>
+          <div class="library-list__body"><h2><a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{caseEntry.data.title}</a></h2><p class="library-question">{caseEntry.data.centralQuestion}</p></div>
+          <a class="library-read" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
+        </li>
+      ))}
+    </ol>
+    {conceptCases.length === 0 && locale === "zh" && <p class="library-empty">{copy.pages.cases.empty}</p>}
+  </section>
+</BaseLayout>

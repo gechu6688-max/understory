@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { getSiteCopy, isLocale, locales } from "../../../lib/siteCopy";
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
+const copy = getSiteCopy(locale);
+---
+
+<BaseLayout title={locale === "zh" ? "关于问溯" : "About understory"} description={locale === "zh" ? "关于 Understory / 问溯。" : "About understory."} locale={locale}>
+  <section class="page-shell about-page about-page--founder" aria-labelledby="about-heading">
+    <div class="about-hero">
+      <div>
+        <p class="home-eyebrow">{locale === "zh" ? "关于" : "About"}</p>
+        <h1 id="about-heading">{copy.pages.about.title}</h1>
+      </div>
+      <aside class="founder-note" aria-label="Founder note">
+        <p>{copy.pages.about.note}</p>
+      </aside>
+    </div>
+    <div class="about-copy about-copy--founder">
+      {copy.pages.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+  </section>
+</BaseLayout>

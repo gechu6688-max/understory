@@ -1,0 +1,64 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { getSiteCopy, isLocale, locales } from "../../../lib/siteCopy";
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
+const copy = getSiteCopy(locale);
+const methodSteps = copy.method.steps;
+---
+
+<BaseLayout title={locale === "zh" ? "方法" : "Method"} description={copy.method.description} locale={locale}>
+  <section class="page-shell method-page method-page--path" aria-labelledby="method-heading">
+    <div class="method-hero">
+      <div>
+        <p class="home-eyebrow">{copy.method.eyebrow}</p>
+        <h1 id="method-heading">{copy.method.title}</h1>
+      </div>
+      <p>{copy.method.description}</p>
+    </div>
+
+    <section class="method-panel" aria-labelledby="method-sequence-heading">
+      <div>
+        <p class="home-eyebrow">{copy.method.sequence}</p>
+        <h2 id="method-sequence-heading">{copy.brand.principle}</h2>
+      </div>
+      <ol class="home-method-list method-path">
+        {methodSteps.map((step, index) => (
+          <li>
+            <details class="method-step" open>
+              <summary>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div><h3>{step.label}</h3><p>{step.short}</p></div>
+              </summary>
+              <p class="method-step__body">{step.text}</p>
+            </details>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="method-notes" aria-labelledby="standards-heading">
+      <h2 id="standards-heading">{copy.method.standards}</h2>
+      <ul>
+        <li>{locale === "zh" ? "证据与解释应该被清楚地区分。" : "Evidence and interpretation should be visibly different."}</li>
+        <li>{locale === "zh" ? "不同类型的来源不应被当作同一种证据。" : "Legal complaints, company filings, academic arguments, and datasets should not be treated as the same kind of source."}</li>
+        <li>{locale === "zh" ? "当判断仍然依赖更好的资料时，应当说明不确定性。" : "Uncertainty is named when claims are still draft, alleged, incomplete, or dependent on better data."}</li>
+        <li>{locale === "zh" ? "结论应该说明什么证据可能改变它。" : "Each conclusion should include what would weaken or change it."}</li>
+      </ul>
+    </section>
+  </section>
+  <script is:inline>
+    const syncMethodDisclosure = () => {
+      const shouldCollapse = window.matchMedia("(max-width: 640px)").matches;
+      document.querySelectorAll(".method-step").forEach((step) => {
+        if (step instanceof HTMLDetailsElement) step.open = !shouldCollapse;
+      });
+    };
+    syncMethodDisclosure();
+    window.matchMedia("(max-width: 640px)").addEventListener("change", syncMethodDisclosure);
+  </script>
+</BaseLayout>

@@ -1,0 +1,38 @@
+---
+import { getPublishedCases } from "../../../lib/cases";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import CaseArticle from "../../../components/CaseArticle.astro";
+import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
+
+export async function getStaticPaths() {
+  const cases = await getPublishedCases();
+  return locales.flatMap((locale) =>
+    cases.map((caseEntry) => ({
+      params: { locale, slug: caseEntry.id },
+      props: { caseEntry },
+    })),
+  );
+}
+
+const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
+const copy = getSiteCopy(locale);
+const { caseEntry } = Astro.props;
+const available = hasCaseLocale(locale, caseEntry.id);
+---
+
+<BaseLayout title={available ? caseEntry.data.title : copy.pages.caseUnavailable.title} description={available ? caseEntry.data.summary : copy.pages.caseUnavailable.body} locale={locale}>
+  {
+    available ? (
+      <CaseArticle caseEntry={caseEntry} locale={locale} />
+    ) : (
+      <section class="page-shell case-unavailable" aria-labelledby="case-unavailable-heading">
+        <div class="page-hero">
+          <p class="home-eyebrow">{copy.labels.publishedAnalysis}</p>
+          <h1 id="case-unavailable-heading">{copy.pages.caseUnavailable.title}</h1>
+          <p>{copy.pages.caseUnavailable.body}</p>
+        </div>
+        <a class="home-inline-link" href={localizedPath("en", `/cases/${caseEntry.id}/`)}>{copy.pages.caseUnavailable.action}</a>
+      </section>
+    )
+  }
+</BaseLayout>

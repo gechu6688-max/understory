@@ -1,32 +1,52 @@
 ---
 import "../styles/global.css";
-import { siteCopy } from "../lib/siteCopy";
+import { defaultLocale, getSiteCopy, localizedPath, locales, switchLocalePath, type Locale } from "../lib/siteCopy";
 
 interface Props {
   title: string;
   description?: string;
+  locale?: Locale;
 }
 
-const { title, description = siteCopy.brand.descriptor } = Astro.props;
+const { title, locale = defaultLocale } = Astro.props;
+const copy = getSiteCopy(locale);
+const description = Astro.props.description ?? copy.brand.descriptor;
 const pathname = Astro.url.pathname;
 const isPreview = !import.meta.env.PROD;
-const navItems = siteCopy.nav;
+const canonicalPath = switchLocalePath(locale, pathname);
+const navItems = copy.nav.map((item) => ({
+  ...item,
+  href: localizedPath(locale, item.href),
+  section: localizedPath(locale, item.section),
+}));
 
 const isActive = (section: string) => pathname === section || pathname.startsWith(section);
+const localeLinks = locales.map((item) => ({
+  locale: item,
+  label: copy.language[item],
+  href: switchLocalePath(item, pathname),
+  active: item === locale,
+}));
 ---
 
 <!doctype html>
-<html lang={siteCopy.lang}>
+<html lang={copy.lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="canonical" href={canonicalPath} />
+    {
+      localeLinks.map((item) => (
+        <link rel="alternate" hreflang={item.locale === "zh" ? "zh-CN" : "en"} href={item.href} />
+      ))
+    }
     <title>{title}</title>
   </head>
   <body class="antialiased">
     <header class="site-header">
       <nav class="site-nav" aria-label="Primary navigation">
-        <a class="site-identity" href="/" aria-label={`${siteCopy.brand.name} home`}>{siteCopy.brand.name}</a>
+        <a class="site-identity" href={localizedPath(locale)} aria-label={`${copy.brand.name} home`}>{copy.brand.name}</a>
         <div class="site-nav__actions">
           <div class="site-nav__links">
           {
@@ -38,10 +58,19 @@ const isActive = (section: string) => pathname === section || pathname.startsWit
           }
           {isPreview && <a class="site-nav__preview" href="/preview/">Local Preview</a>}
           </div>
-          <div class="site-locale-slot" aria-hidden="true"></div>
+          <div class="site-language" aria-label={copy.menu.language}>
+            {
+              localeLinks.map((item, index) => (
+                <>
+                  {index > 0 && <span aria-hidden="true">/</span>}
+                  <a class={item.active ? "is-active" : undefined} href={item.href} aria-current={item.active ? "true" : undefined}>{item.label}</a>
+                </>
+              ))
+            }
+          </div>
         </div>
         <details class="site-menu">
-          <summary>Menu</summary>
+          <summary>{copy.menu.label}</summary>
           <div class="site-menu__panel">
             {
               navItems.map((item) => (
@@ -50,7 +79,20 @@ const isActive = (section: string) => pathname === section || pathname.startsWit
                 </a>
               ))
             }
-            {isPreview && <a class="site-nav__preview site-menu__preview-link" href="/preview/">Local Preview</a>}
+            <div class="site-menu__language" aria-label={copy.menu.language}>
+              <span>{copy.menu.language}</span>
+              <div>
+                {
+                  localeLinks.map((item, index) => (
+                    <>
+                      {index > 0 && <span aria-hidden="true">/</span>}
+                      <a class={item.active ? "is-active" : undefined} href={item.href} aria-current={item.active ? "true" : undefined}>{item.label}</a>
+                    </>
+                  ))
+                }
+              </div>
+            </div>
+            {isPreview && <a class="site-nav__preview site-menu__preview-link" href="/preview/">{copy.menu.localPreview}</a>}
           </div>
         </details>
       </nav>

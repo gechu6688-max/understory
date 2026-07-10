@@ -1,32 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import LocaleRedirect from "../../components/LocaleRedirect.astro";
 ---
 
-<BaseLayout title="About understory" description="About understory.">
-  <section class="page-shell about-page about-page--founder" aria-labelledby="about-heading">
-    <div class="about-hero">
-      <div>
-        <p class="home-eyebrow">About</p>
-        <h1 id="about-heading">A place for questions that do not end quickly</h1>
-      </div>
-      <aside class="founder-note" aria-label="Founder note">
-        <p>Understory began with a habit I have never really been able to stop: asking one more question.</p>
-      </aside>
-    </div>
-
-    <div class="about-copy about-copy--founder">
-      <p>
-        I have always been drawn to questions without obvious answers. Why do people stay with one platform? Why can convenience become a source of power? Why does one new technology reshape an industry while another disappears almost unnoticed?
-      </p>
-      <p>
-        One question usually leads me to another. I started Understory because I wanted a place to follow that curiosity more carefully: to look at evidence, compare explanations, think about trade-offs, and stay honest about what I still do not know.
-      </p>
-      <p>
-        I am still a student, so I do not expect every case to end with a perfect answer. I am interested in companies, markets, consumer choices, platforms, AI, innovation, and the ways competition changes when technology changes.
-      </p>
-      <p>
-        The goal is to make my thinking visible enough that it can improve. If better evidence changes the picture, the conclusion should change too. Over time, I hope Understory can become a place where other curious students think alongside me.
-      </p>
-    </div>
-  </section>
-</BaseLayout>
+<LocaleRedirect to="/en/about/" />

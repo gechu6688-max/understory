@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { getPublishedCases, getTaxonomyItems } from "../../../lib/cases";
+import { conceptDescriptions, getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
+const copy = getSiteCopy(locale);
+const publishedCases = await getPublishedCases();
+const localizedCases = locale === "zh" ? publishedCases.filter((caseEntry) => hasCaseLocale(locale, caseEntry.id)) : publishedCases;
+const concepts = getTaxonomyItems(localizedCases, "concepts");
+---
+
+<BaseLayout title={copy.pages.concepts.eyebrow} description={copy.pages.concepts.description} locale={locale}>
+  <section class="page-shell concepts-page" aria-labelledby="concepts-heading">
+    <div class="page-hero page-hero--index">
+      <p class="home-eyebrow">{copy.pages.concepts.eyebrow}</p>
+      <h1 id="concepts-heading">{copy.pages.concepts.title}</h1>
+      <p>{copy.pages.concepts.description}</p>
+    </div>
+    <ol class="concept-index">
+      {concepts.map((concept) => (
+        <li>
+          <a href={localizedPath(locale, `/concepts/${concept.slug}/`)}>
+            <span class="concept-index__name">{concept.name}</span>
+            <span class="concept-index__count">{locale === "zh" ? `用于 ${concept.cases.length} 个案例 ->` : `Used in ${concept.cases.length === 1 ? "1 case" : `${concept.cases.length} cases`} ->`}</span>
+          </a>
+          <p>{conceptDescriptions[locale][concept.name] ?? conceptDescriptions.en[concept.name] ?? ""}</p>
+          <small>{concept.cases.map((caseEntry) => caseEntry.data.title).join(", ")}</small>
+        </li>
+      ))}
+    </ol>
+    {concepts.length === 0 && locale === "zh" && <p class="library-empty">{copy.pages.cases.empty}</p>}
+  </section>
+</BaseLayout>

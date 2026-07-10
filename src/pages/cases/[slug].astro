@@ -1,20 +1,16 @@
 ---
-import { getCollection } from "astro:content";
-import CaseArticle from "../../components/CaseArticle.astro";
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import LocaleRedirect from "../../components/LocaleRedirect.astro";
+import { getPublishedCases } from "../../lib/cases";
 
 export async function getStaticPaths() {
-  const cases = await getCollection("cases", ({ data }) => data.status === "published");
-
+  const cases = await getPublishedCases();
   return cases.map((caseEntry) => ({
     params: { slug: caseEntry.id },
-    props: { caseEntry },
+    props: { slug: caseEntry.id },
   }));
 }
 
-const { caseEntry } = Astro.props;
+const { slug } = Astro.props;
 ---
 
-<BaseLayout title={caseEntry.data.title} description={caseEntry.data.summary}>
-  <CaseArticle caseEntry={caseEntry} />
-</BaseLayout>
+<LocaleRedirect to={`/en/cases/${slug}/`} />

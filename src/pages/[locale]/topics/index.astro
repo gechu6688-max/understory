@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { getPublishedCases, getTaxonomyItems } from "../../../lib/cases";
+import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath, topicDescriptions } from "../../../lib/siteCopy";
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
+const copy = getSiteCopy(locale);
+const publishedCases = await getPublishedCases();
+const localizedCases = locale === "zh" ? publishedCases.filter((caseEntry) => hasCaseLocale(locale, caseEntry.id)) : publishedCases;
+const topics = getTaxonomyItems(localizedCases, "topics");
+---
+
+<BaseLayout title={copy.pages.topics.eyebrow} description={copy.pages.topics.description} locale={locale}>
+  <section class="page-shell topics-page" aria-labelledby="topics-heading">
+    <div class="page-hero page-hero--field">
+      <p class="home-eyebrow">{copy.pages.topics.eyebrow}</p>
+      <h1 id="topics-heading">{copy.pages.topics.title}</h1>
+      <p>{copy.pages.topics.description}</p>
+    </div>
+    <ol class="topic-map">
+      {topics.map((topic) => (
+        <li>
+          <a href={localizedPath(locale, `/topics/${topic.slug}/`)}>
+            <span class="topic-map__name">{topic.name}</span>
+            <span class="topic-map__count">{locale === "zh" ? `${topic.cases.length} 个公开案例` : topic.cases.length === 1 ? "1 public case" : `${topic.cases.length} public cases`}</span>
+          </a>
+          <p class="topic-map__description">{topicDescriptions[locale][topic.name] ?? topicDescriptions.en[topic.name] ?? ""}</p>
+          <p>{topic.cases.map((caseEntry) => caseEntry.data.title).join(", ")}</p>
+        </li>
+      ))}
+    </ol>
+    {topics.length === 0 && locale === "zh" && <p class="library-empty">{copy.pages.cases.empty}</p>}
+  </section>
+</BaseLayout>

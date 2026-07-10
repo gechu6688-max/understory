@@ -1,46 +1,16 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { formatDate, getPublishedCases, getTaxonomyItems } from "../../lib/cases";
+import LocaleRedirect from "../../components/LocaleRedirect.astro";
+import { getPublishedCases, getTaxonomyItems } from "../../lib/cases";
 
 export async function getStaticPaths() {
-  const publishedCases = await getPublishedCases();
-  const concepts = getTaxonomyItems(publishedCases, "concepts");
-
-  return concepts.map((concept) => ({
+  const cases = await getPublishedCases();
+  return getTaxonomyItems(cases, "concepts").map((concept) => ({
     params: { slug: concept.slug },
-    props: { concept },
+    props: { slug: concept.slug },
   }));
 }
 
-const { concept } = Astro.props;
+const { slug } = Astro.props;
 ---
 
-<BaseLayout title={concept.name} description={`Published cases about ${concept.name}.`}>
-  <section class="page-shell" aria-labelledby="concept-heading">
-    <div class="page-hero">
-      <p class="home-eyebrow">Business Concept</p>
-      <h1 id="concept-heading">{concept.name}</h1>
-      <p>{concept.cases.length === 1 ? "1 published case currently uses this concept." : `${concept.cases.length} published cases currently use this concept.`}</p>
-    </div>
-
-    <ol class="library-list library-list--compact">
-      {
-        concept.cases.map((caseEntry) => (
-          <li>
-            <div class="library-list__meta">
-              <time datetime={caseEntry.data.publishedDate.toISOString()}>{formatDate(caseEntry.data.publishedDate)}</time>
-              <span>{caseEntry.data.caseType} case</span>
-            </div>
-            <div class="library-list__body">
-              <h2>
-                <a href={`/cases/${caseEntry.id}/`}>{caseEntry.data.title}</a>
-              </h2>
-              <p class="library-question">{caseEntry.data.centralQuestion}</p>
-            </div>
-            <a class="library-read" href={`/cases/${caseEntry.id}/`}>Read -></a>
-          </li>
-        ))
-      }
-    </ol>
-  </section>
-</BaseLayout>
+<LocaleRedirect to={`/en/concepts/${slug}/`} />

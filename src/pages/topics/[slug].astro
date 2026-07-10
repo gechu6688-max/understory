@@ -1,46 +1,16 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { formatDate, getPublishedCases, getTaxonomyItems } from "../../lib/cases";
+import LocaleRedirect from "../../components/LocaleRedirect.astro";
+import { getPublishedCases, getTaxonomyItems } from "../../lib/cases";
 
 export async function getStaticPaths() {
-  const publishedCases = await getPublishedCases();
-  const topics = getTaxonomyItems(publishedCases, "topics");
-
-  return topics.map((topic) => ({
+  const cases = await getPublishedCases();
+  return getTaxonomyItems(cases, "topics").map((topic) => ({
     params: { slug: topic.slug },
-    props: { topic },
+    props: { slug: topic.slug },
   }));
 }
 
-const { topic } = Astro.props;
+const { slug } = Astro.props;
 ---
 
-<BaseLayout title={topic.name} description={`Published cases about ${topic.name}.`}>
-  <section class="page-shell" aria-labelledby="topic-heading">
-    <div class="page-hero">
-      <p class="home-eyebrow">Topic</p>
-      <h1 id="topic-heading">{topic.name}</h1>
-      <p>{topic.cases.length === 1 ? "1 published case currently uses this topic." : `${topic.cases.length} published cases currently use this topic.`}</p>
-    </div>
-
-    <ol class="library-list library-list--compact">
-      {
-        topic.cases.map((caseEntry) => (
-          <li>
-            <div class="library-list__meta">
-              <time datetime={caseEntry.data.publishedDate.toISOString()}>{formatDate(caseEntry.data.publishedDate)}</time>
-              <span>{caseEntry.data.caseType} case</span>
-            </div>
-            <div class="library-list__body">
-              <h2>
-                <a href={`/cases/${caseEntry.id}/`}>{caseEntry.data.title}</a>
-              </h2>
-              <p class="library-question">{caseEntry.data.centralQuestion}</p>
-            </div>
-            <a class="library-read" href={`/cases/${caseEntry.id}/`}>Read -></a>
-          </li>
-        ))
-      }
-    </ol>
-  </section>
-</BaseLayout>
+<LocaleRedirect to={`/en/topics/${slug}/`} />

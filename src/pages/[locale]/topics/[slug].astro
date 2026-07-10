@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { formatDate, getPublishedCases, getTaxonomyItems } from "../../../lib/cases";
+import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
+
+export async function getStaticPaths() {
+  const publishedCases = await getPublishedCases();
+  const topics = getTaxonomyItems(publishedCases, "topics");
+  return locales.flatMap((locale) => topics.map((topic) => ({ params: { locale, slug: topic.slug }, props: { topic } })));
+}
+
+const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
+const copy = getSiteCopy(locale);
+const { topic } = Astro.props;
+const topicCases = locale === "zh" ? topic.cases.filter((caseEntry) => hasCaseLocale(locale, caseEntry.id)) : topic.cases;
+const caseCount = locale === "zh" ? `${topicCases.length} 个公开案例` : topicCases.length === 1 ? "1 public case" : `${topicCases.length} public cases`;
+---
+
+<BaseLayout title={topic.name} description={`Published cases about ${topic.name}.`} locale={locale}>
+  <section class="page-shell" aria-labelledby="topic-heading">
+    <div class="page-hero">
+      <p class="home-eyebrow">{copy.pages.topics.eyebrow}</p>
+      <h1 id="topic-heading">{topic.name}</h1>
+      <p>{caseCount}</p>
+    </div>
+    <ol class="library-list library-list--compact">
+      {topicCases.map((caseEntry) => (
+        <li>
+          <div class="library-list__meta"><time datetime={caseEntry.data.publishedDate.toISOString()}>{formatDate(caseEntry.data.publishedDate)}</time><span>{caseEntry.data.caseType} {copy.labels.case}</span></div>
+          <div class="library-list__body"><h2><a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{caseEntry.data.title}</a></h2><p class="library-question">{caseEntry.data.centralQuestion}</p></div>
+          <a class="library-read" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
+        </li>
+      ))}
+    </ol>
+    {topicCases.length === 0 && locale === "zh" && <p class="library-empty">{copy.pages.cases.empty}</p>}
+  </section>
+</BaseLayout>

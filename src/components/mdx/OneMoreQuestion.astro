@@ -1,18 +1,21 @@
 ---
-import { siteCopy } from "../../lib/siteCopy";
+import { defaultLocale, getSiteCopy, type Locale } from "../../lib/siteCopy";
 
 interface Props {
   question: string;
   prompt?: string;
+  locale?: Locale;
 }
 
-const { question, prompt = siteCopy.oneMoreQuestion.prompt } = Astro.props;
+const { question, locale = defaultLocale } = Astro.props;
+const copy = getSiteCopy(locale);
+const prompt = Astro.props.prompt ?? copy.oneMoreQuestion.prompt;
 ---
 
 <aside class="one-more-question" aria-labelledby="one-more-question-heading">
   <div class="one-more-question__mark" aria-hidden="true"></div>
   <div>
-    <p id="one-more-question-heading" class="one-more-question__label">{siteCopy.oneMoreQuestion.label}</p>
+    <p id="one-more-question-heading" class="one-more-question__label">{copy.oneMoreQuestion.label}</p>
     <p class="one-more-question__question">{question}</p>
     {prompt && <p class="one-more-question__prompt">{prompt}</p>}
   </div>
