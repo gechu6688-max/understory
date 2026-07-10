@@ -1768,21 +1768,55 @@ html:lang(zh-CN) .founder-note p {
   }
 
   html:lang(zh-CN) .home-discovery h2 {
-    max-width: 12em;
+    max-width: 10em;
     font-size: clamp(1.75rem, 2.7vw, 2.35rem);
     line-height: 1.2;
   }
 
+  html:lang(zh-CN) .home-discovery h2 span {
+    display: block;
+  }
+
   html:lang(zh-CN) .home-discovery p:not(.home-eyebrow) {
     max-width: 21rem;
+    margin-top: 0.95rem;
+    color: color-mix(in srgb, var(--color-text-secondary) 86%, var(--color-page));
+    line-height: 1.78;
   }
 
   html:lang(zh-CN) .home-search {
     border-top-width: 1px;
+    padding-top: 1.05rem;
   }
 
   html:lang(zh-CN) .home-explore {
     gap: clamp(2.2rem, 6vw, 5rem);
+  }
+
+  html:lang(zh-CN) .home-explore__group {
+    padding-top: 1.15rem;
+  }
+
+  html:lang(zh-CN) .home-explore h2 {
+    margin-top: 0.78rem;
+    line-height: 1.22;
+  }
+
+  html:lang(zh-CN) .home-term-note {
+    max-width: 25rem;
+    margin-top: 1rem;
+    color: color-mix(in srgb, var(--color-text-muted) 88%, var(--color-page));
+    line-height: 1.78;
+  }
+
+  html:lang(zh-CN) .home-term-empty {
+    max-width: 24rem;
+    margin-top: 1.3rem !important;
+    line-height: 1.78;
+  }
+
+  html:lang(zh-CN) .home-section-link {
+    margin-top: 1.25rem;
   }
 
   html:lang(zh-CN) .about-hero {
@@ -1934,7 +1968,7 @@ html:lang(zh-CN) .founder-note p {
   html:lang(zh-CN) .method-step__body {
     max-width: 24rem;
     font-size: 0.94rem;
-    line-height: 1.72;
+    line-height: 1.78;
   }
 
   html:lang(zh-CN) .method-step__body {
@@ -1981,6 +2015,11 @@ html:lang(zh-CN) .founder-note p {
     margin-left: min(12vw, 7rem);
   }
 
+  html:lang(zh-CN) .library-empty--editorial {
+    gap: 0.82rem;
+    line-height: 1.82;
+  }
+
   html:lang(zh-CN) .cases-page .library-hero {
     grid-template-columns: minmax(0, 0.85fr) minmax(18rem, 0.65fr);
     align-items: center;
@@ -2022,17 +2061,27 @@ html:lang(zh-CN) .founder-note p {
   }
 
   .site-nav {
+    position: relative;
     align-items: center;
     flex-direction: row;
     gap: 0.85rem;
+    min-height: 3.65rem;
     padding-block: 0.7rem;
   }
 
   .site-identity {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: normal;
   }
 
   .site-mobile-language {
+    position: absolute;
+    top: 50%;
+    right: 4.4rem;
+    transform: translateY(-50%);
+    flex: 0 0 auto;
     display: inline-flex;
     margin-left: auto;
   }
@@ -2046,6 +2095,11 @@ html:lang(zh-CN) .founder-note p {
   }
 
   .site-menu {
+    position: absolute;
+    top: 50%;
+    right: 1.25rem;
+    transform: translateY(-50%);
+    flex: 0 0 auto;
     display: block;
   }
 
