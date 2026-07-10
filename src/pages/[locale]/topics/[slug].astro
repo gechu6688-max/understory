@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import { formatDate, getPublishedCases, getTaxonomyItems } from "../../../lib/cases";
 import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
 
@@ -18,6 +19,14 @@ const caseCount = locale === "zh" ? `${topicCases.length} 个公开案例` : top
 
 <BaseLayout title={topic.name} description={`Published cases about ${topic.name}.`} locale={locale}>
   <section class="page-shell" aria-labelledby="topic-heading">
+    <Breadcrumbs
+      label={locale === "zh" ? "页面路径" : "Breadcrumb"}
+      items={[
+        { label: locale === "zh" ? "首页" : "Home", href: localizedPath(locale) },
+        { label: copy.pages.topics.eyebrow, href: localizedPath(locale, "/topics/") },
+        { label: topic.name },
+      ]}
+    />
     <div class="page-hero">
       <p class="home-eyebrow">{copy.pages.topics.eyebrow}</p>
       <h1 id="topic-heading">{topic.name}</h1>

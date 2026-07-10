@@ -18,6 +18,8 @@ const isPreview = !import.meta.env.PROD;
 const languagePaths = Astro.props.languagePaths ?? {};
 const alternatePaths = Astro.props.alternatePaths;
 const canonicalPath = languagePaths[locale] ?? switchLocalePath(locale, pathname);
+const homePath = localizedPath(locale);
+const homeLabel = locale === "zh" ? "返回首页" : "Go to homepage";
 const navItems = copy.nav.map((item) => ({
   ...item,
   href: localizedPath(locale, item.href),
@@ -65,7 +67,7 @@ const mobileLocaleLink = localeLinks.find((item) => !item.active);
   <body class="antialiased">
     <header class="site-header">
       <nav class="site-nav" aria-label="Primary navigation">
-        <a class="site-identity" href={localizedPath(locale)} aria-label={`${copy.brand.name} home`}>{copy.brand.name}</a>
+        <a class="site-identity" href={homePath} aria-label={homeLabel}>{copy.brand.name}</a>
         {
           mobileLocaleLink && (
             <a class="site-mobile-language" href={mobileLocaleLink.href} aria-label={`${copy.menu.language}: ${mobileLocaleLink.label}`}>

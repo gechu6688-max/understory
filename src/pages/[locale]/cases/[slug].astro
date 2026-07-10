@@ -1,6 +1,7 @@
 ---
 import { getPublishedCases } from "../../../lib/cases";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import CaseArticle from "../../../components/CaseArticle.astro";
 import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
 
@@ -30,6 +31,14 @@ const alternatePaths = {
 ---
 
 <BaseLayout title={available ? caseEntry.data.title : copy.pages.caseUnavailable.title} description={available ? caseEntry.data.summary : copy.pages.caseUnavailable.body} locale={locale} languagePaths={languagePaths} alternatePaths={alternatePaths}>
+  <Breadcrumbs
+    label={locale === "zh" ? "页面路径" : "Breadcrumb"}
+    items={[
+      { label: locale === "zh" ? "首页" : "Home", href: localizedPath(locale) },
+      { label: copy.nav[0].label, href: localizedPath(locale, "/cases/") },
+      { label: available ? caseEntry.data.title : copy.pages.caseUnavailable.title },
+    ]}
+  />
   {
     available ? (
       <CaseArticle caseEntry={caseEntry} locale={locale} />
