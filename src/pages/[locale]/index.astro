@@ -70,7 +70,7 @@ const methodSteps = copy.method.steps;
             </p>
           )
         }
-        <a class="home-inline-link" href={localizedPath(locale, "/cases/")}>{copy.labels.exploreCases}</a>
+        <a class="home-inline-link cta-link" href={localizedPath(locale, "/cases/")}>{copy.labels.exploreCases}</a>
       </div>
     </section>
 
@@ -93,7 +93,10 @@ const methodSteps = copy.method.steps;
       </div>
       <div class="home-search" data-search-root data-search-idle={copy.search.idle} data-search-empty={copy.search.empty} data-locale={locale}>
         <label class="sr-only" for="home-search-input">{copy.search.label}</label>
-        <input id="home-search-input" type="search" placeholder={copy.search.placeholder} autocomplete="off" data-search-input />
+        <div class="home-search__field">
+          <span class="home-search__icon" aria-hidden="true"></span>
+          <input id="home-search-input" type="search" placeholder={copy.search.placeholder} autocomplete="off" data-search-input />
+        </div>
         <div class="home-search__meta" aria-live="polite" data-search-status>{copy.search.idle}</div>
         <ol class="home-search__results" data-search-results></ol>
       </div>
@@ -119,7 +122,7 @@ const methodSteps = copy.method.steps;
               <div class="home-tagline" aria-label="Featured case taxonomy">
                 {[...featuredCase.data.topics, ...featuredCase.data.concepts].map((item) => <span>{item}</span>)}
               </div>
-              <a class="home-read-link" href={localizedPath(locale, `/cases/${featuredCase.id}/`)}>{copy.labels.read}</a>
+              <a class="home-read-link cta-link" href={localizedPath(locale, `/cases/${featuredCase.id}/`)}>{copy.labels.read}</a>
             </div>
           </div>
         </section>
@@ -133,7 +136,7 @@ const methodSteps = copy.method.steps;
         <p class="home-term-note">{locale === "zh" ? "未来的中文案例，会在这里慢慢形成自己的主题脉络。" : "Current topics represented by published cases."}</p>
         <div class="home-term-list">{topics.map((topic) => <a href={localizedPath(locale, `/topics/${topic.slug}/`)}>{topic.name}</a>)}</div>
         {topics.length === 0 && locale === "zh" && <p class="home-term-empty">在那之前，可以先去英文版看看已有的探索领域。</p>}
-        <a class="home-section-link" href={localizedPath(locale, "/topics/")}>{locale === "zh" ? "浏览全部主题 ->" : "Explore all topics ->"}</a>
+        <a class="home-section-link cta-link" href={localizedPath(locale, "/topics/")}>{locale === "zh" ? "浏览全部主题 ->" : "Explore all topics ->"}</a>
       </div>
       <div id="concepts" class="home-explore__group">
         <p class="home-eyebrow">{copy.pages.concepts.eyebrow}</p>
@@ -141,7 +144,7 @@ const methodSteps = copy.method.steps;
         <p class="home-term-note">{locale === "zh" ? "概念会跟着案例一起出现，用来解释现象背后的机制。" : "Current concepts represented by published cases."}</p>
         <div class="home-term-list">{concepts.map((concept) => <a href={localizedPath(locale, `/concepts/${concept.slug}/`)}>{concept.name}</a>)}</div>
         {concepts.length === 0 && locale === "zh" && <p class="home-term-empty">中文概念索引会随着真实完成的中文案例慢慢长出来。</p>}
-        <a class="home-section-link" href={localizedPath(locale, "/concepts/")}>{locale === "zh" ? "浏览全部概念 ->" : "Explore all concepts ->"}</a>
+        <a class="home-section-link cta-link" href={localizedPath(locale, "/concepts/")}>{locale === "zh" ? "浏览全部概念 ->" : "Explore all concepts ->"}</a>
       </div>
     </section>
 
@@ -158,7 +161,7 @@ const methodSteps = copy.method.steps;
           </li>
         ))}
       </ol>
-      <a class="home-method-link" href={localizedPath(locale, "/method/")}>{locale === "zh" ? "阅读方法 ->" : "Read the method ->"}</a>
+      <a class="home-method-link cta-link" href={localizedPath(locale, "/method/")}>{locale === "zh" ? "阅读方法 ->" : "Read the method ->"}</a>
     </section>
 
     <section class="home-recent" aria-labelledby="recent-heading">
@@ -172,7 +175,7 @@ const methodSteps = copy.method.steps;
           <li>
             <time datetime={caseEntry.data.publishedDate.toISOString()}>{formatDate(caseEntry.data.publishedDate)}</time>
             <div><h3><a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{caseEntry.data.title}</a></h3><p>{caseEntry.data.centralQuestion}</p></div>
-            <a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
+            <a class="cta-link" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
           </li>
         ))}
       </ol>

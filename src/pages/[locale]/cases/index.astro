@@ -48,7 +48,7 @@ const cases = locale === "zh" ? publishedCases.filter((caseEntry) => hasCaseLoca
               <div><dt>{copy.labels.concepts}</dt><dd>{caseEntry.data.concepts.join(", ")}</dd></div>
             </dl>
           </div>
-          <a class="library-read" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
+          <a class="library-read cta-link" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
         </li>
       ))}
     </ol>
@@ -56,7 +56,7 @@ const cases = locale === "zh" ? publishedCases.filter((caseEntry) => hasCaseLoca
       <section class="library-empty library-empty--editorial library-empty--cases" aria-label="中文案例说明">
         <p>中文案例还在慢慢整理。等第一篇真正用中文写好的案例完成后，它会出现在这里。</p>
         <p>现在可以先阅读英文案例库。</p>
-        <a href={localizedPath("en", "/cases/")}>先看英文案例库 -></a>
+        <a class="cta-link" href={localizedPath("en", "/cases/")}>先看英文案例库 -></a>
       </section>
     )}
   </section>

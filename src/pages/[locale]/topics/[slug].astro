@@ -37,13 +37,13 @@ const caseCount = locale === "zh" ? `${topicCases.length} 个公开案例` : top
         <li>
           <div class="library-list__meta"><time datetime={caseEntry.data.publishedDate.toISOString()}>{formatDate(caseEntry.data.publishedDate)}</time><span>{caseEntry.data.caseType} {copy.labels.case}</span></div>
           <div class="library-list__body"><h2><a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{caseEntry.data.title}</a></h2><p class="library-question">{caseEntry.data.centralQuestion}</p></div>
-          <a class="library-read" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
+          <a class="library-read cta-link" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
         </li>
       ))}
     </ol>
     {topicCases.length === 0 && locale === "zh" && (
       <p class="library-empty">
-        {copy.pages.topics.empty} <a href={localizedPath("en", `/topics/${topic.slug}/`)}>阅读英文主题 -></a>
+        {copy.pages.topics.empty} <a class="cta-link" href={localizedPath("en", `/topics/${topic.slug}/`)}>阅读英文主题 -></a>
       </p>
     )}
   </section>
