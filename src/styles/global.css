@@ -52,6 +52,9 @@ body {
 html:lang(zh-CN) body {
   font-family: var(--font-zh-ui);
   font-synthesis-weight: none;
+  line-break: loose;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 a {
@@ -149,6 +152,79 @@ html:lang(zh-CN) .method-panel h2,
 html:lang(zh-CN) .founder-note p,
 html:lang(zh-CN) .one-more-question__question {
   font-family: var(--font-zh-display);
+}
+
+html:lang(zh-CN) .site-nav__links a,
+html:lang(zh-CN) .site-mobile-language,
+html:lang(zh-CN) .site-language,
+html:lang(zh-CN) .site-menu__panel a,
+html:lang(zh-CN) .home-eyebrow,
+html:lang(zh-CN) .cta-link,
+html:lang(zh-CN) .library-read,
+html:lang(zh-CN) .breadcrumbs,
+html:lang(zh-CN) .topic-map__count,
+html:lang(zh-CN) .concept-index__count,
+html:lang(zh-CN) .library-list__meta,
+html:lang(zh-CN) .library-taxonomy dt {
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+
+html:lang(zh-CN) .home-hero h1,
+html:lang(zh-CN) .home-discovery h2,
+html:lang(zh-CN) .home-explore h2,
+html:lang(zh-CN) .home-thinking h2,
+html:lang(zh-CN) .page-hero h1,
+html:lang(zh-CN) .library-hero h1,
+html:lang(zh-CN) .method-hero h1,
+html:lang(zh-CN) .about-hero h1,
+html:lang(zh-CN) .method-panel h2,
+html:lang(zh-CN) .method-notes h2,
+html:lang(zh-CN) .topic-map__name,
+html:lang(zh-CN) .concept-index__name,
+html:lang(zh-CN) .library-list__body h2 {
+  line-break: strict;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  text-wrap: balance;
+}
+
+html:lang(zh-CN) .page-hero p:not(.home-eyebrow),
+html:lang(zh-CN) .library-hero__panel p,
+html:lang(zh-CN) .method-hero p,
+html:lang(zh-CN) .home-hero__aside p,
+html:lang(zh-CN) .home-term-note,
+html:lang(zh-CN) .home-term-empty,
+html:lang(zh-CN) .library-empty,
+html:lang(zh-CN) .topic-map__description,
+html:lang(zh-CN) .topic-map p:not(.topic-map__description),
+html:lang(zh-CN) .concept-index p,
+html:lang(zh-CN) .concept-index small,
+html:lang(zh-CN) .library-list__body p,
+html:lang(zh-CN) .about-copy p,
+html:lang(zh-CN) .method-step summary p,
+html:lang(zh-CN) .method-step__body,
+html:lang(zh-CN) .method-notes li {
+  line-break: loose;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+html:lang(zh-CN) .page-hero,
+html:lang(zh-CN) .library-empty--editorial {
+  min-width: 0;
+  max-width: min(100%, calc(100vw - 2.5rem));
+}
+
+html:lang(zh-CN) .page-hero p:not(.home-eyebrow),
+html:lang(zh-CN) .library-empty--editorial p {
+  display: block;
+  inline-size: 100%;
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: anywhere !important;
 }
 
 .site-identity:hover,
@@ -1095,6 +1171,7 @@ html:lang(zh-CN) .home-thinking h2 {
 
 .page-hero {
   max-width: var(--measure-wide);
+  min-width: 0;
   border-bottom: 1px solid var(--color-border);
   padding-block: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 3vw, 2.25rem);
 }
@@ -1113,6 +1190,7 @@ html:lang(zh-CN) .home-thinking h2 {
 
 .page-hero p:not(.home-eyebrow) {
   max-width: var(--measure-article);
+  min-width: 0;
   margin: 1.2rem 0 0;
   color: var(--color-text-secondary);
   font-size: 1.1rem;
@@ -1201,6 +1279,10 @@ html:lang(zh-CN) .home-thinking h2,
 html:lang(zh-CN) .method-panel h2,
 html:lang(zh-CN) .one-more-question__question {
   font-weight: 500;
+}
+
+html:lang(zh-CN) .method-panel h2 span {
+  display: block;
 }
 
 html:lang(zh-CN) .home-method-list p,
@@ -1406,6 +1488,7 @@ html:lang(zh-CN) .method-step__body {
   display: grid;
   grid-template-columns: minmax(12rem, 0.75fr) minmax(0, 1fr);
   gap: clamp(1rem, 4vw, 3rem);
+  min-width: 0;
   margin-inline: -0.75rem;
   padding: clamp(1.25rem, 3vw, 2rem) 0.75rem;
   border-bottom: 1px solid var(--color-border);
@@ -1426,6 +1509,7 @@ html:lang(zh-CN) .method-step__body {
   display: grid;
   gap: 0.6rem;
   align-content: start;
+  min-width: 0;
   color: var(--color-text);
   text-decoration: none;
 }
@@ -1455,6 +1539,7 @@ html:lang(zh-CN) .method-step__body {
 
 .topic-map__description {
   margin: 0 !important;
+  min-width: 0;
   color: var(--color-text);
   font-size: clamp(1.05rem, 2vw, 1.28rem);
   line-height: 1.55;
@@ -1482,6 +1567,7 @@ html:lang(zh-CN) .method-step__body {
   grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1fr) minmax(9rem, auto);
   gap: clamp(1rem, 3vw, 2rem);
   align-items: baseline;
+  min-width: 0;
   margin-inline: -0.75rem;
   padding: 1rem 0.75rem;
   border-bottom: 1px solid var(--color-border);
@@ -1498,6 +1584,7 @@ html:lang(zh-CN) .method-step__body {
 .concept-index a {
   display: grid;
   gap: 0.35rem;
+  min-width: 0;
   color: var(--color-text);
   text-decoration: none;
 }
@@ -1509,12 +1596,14 @@ html:lang(zh-CN) .method-step__body {
 }
 
 .concept-index p {
+  min-width: 0;
   margin: 0;
   color: var(--color-text-secondary);
   line-height: 1.6;
 }
 
 .concept-index small {
+  min-width: 0;
   color: var(--color-text-muted);
   font-size: 0.82rem;
   line-height: 1.45;
@@ -2342,6 +2431,23 @@ html:lang(zh-CN) .founder-note p {
     margin-top: 0.85rem;
     font-size: 1rem;
     line-height: 1.65;
+  }
+
+  html:lang(zh-CN) .topics-page .page-hero,
+  html:lang(zh-CN) .concepts-page .page-hero,
+  html:lang(zh-CN) .library-empty--editorial {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  html:lang(zh-CN) .topics-page .page-hero p:not(.home-eyebrow),
+  html:lang(zh-CN) .concepts-page .page-hero p:not(.home-eyebrow),
+  html:lang(zh-CN) .library-empty--editorial p {
+    max-width: 100%;
+    white-space: normal;
+    line-break: loose;
+    word-break: normal;
+    overflow-wrap: anywhere;
   }
 
   .library-hero,
