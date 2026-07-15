@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
 import References from "./References.astro";
+import { formatCaseStatus, formatCaseType, getCaseDisplayData } from "../lib/cases";
 import { defaultLocale, getSiteCopy, type Locale } from "../lib/siteCopy";
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 const { caseEntry, previewLabel, locale = defaultLocale } = Astro.props;
 const { Content } = await render(caseEntry);
 const { data } = caseEntry;
+const displayData = getCaseDisplayData(caseEntry, locale);
 const copy = getSiteCopy(locale);
 
 const publishedDate = new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en", {
@@ -33,34 +35,34 @@ const publishedDate = new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en", 
   }
 
   <header class="max-w-[var(--measure-wide)] border-b border-[var(--color-border)] pb-10">
-    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-text-muted)]">{copy.labels.caseStatus}: {data.status} · {data.caseType} · {publishedDate}</p>
-    <h1 class="mt-5 max-w-4xl font-serif text-[2.65rem] font-semibold leading-[1.04] tracking-normal text-[var(--color-text)] sm:text-[4.35rem]">{data.title}</h1>
-    {data.subtitle && <p class="mt-4 max-w-2xl text-lg text-[var(--color-text-secondary)] sm:text-xl">{data.subtitle}</p>}
-    <p class="mt-6 max-w-[var(--measure-article)] text-lg leading-8 text-[var(--color-text-secondary)]">{data.summary}</p>
+    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-text-muted)]">{copy.labels.caseStatus}: {formatCaseStatus(data.status, locale)} · {formatCaseType(data.caseType, locale)} · {publishedDate}</p>
+    <h1 class="mt-5 max-w-4xl font-serif text-[2.65rem] font-semibold leading-[1.04] tracking-normal text-[var(--color-text)] sm:text-[4.35rem]">{displayData.title}</h1>
+    {displayData.subtitle && <p class="mt-4 max-w-2xl text-lg text-[var(--color-text-secondary)] sm:text-xl">{displayData.subtitle}</p>}
+    <p class="mt-6 max-w-[var(--measure-article)] text-lg leading-8 text-[var(--color-text-secondary)]">{displayData.summary}</p>
 
     <div class="mt-9 grid gap-7 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
       <section class="border-t-2 border-[var(--color-accent)] pt-4">
         <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">{copy.labels.centralQuestion}</p>
-        <p class="mt-3 text-xl leading-8 text-[var(--color-text)] sm:text-2xl">{data.centralQuestion}</p>
+        <p class="mt-3 text-xl leading-8 text-[var(--color-text)] sm:text-2xl">{displayData.centralQuestion}</p>
       </section>
       <section class="border-l border-[var(--color-border)] pl-5 max-lg:border-l-0 max-lg:border-t max-lg:pl-0 max-lg:pt-5">
         <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-text-muted)]">{copy.labels.quickThesis}</p>
-        <p class="mt-3 text-lg leading-8 text-[var(--color-text)]">{data.quickThesis}</p>
+        <p class="mt-3 text-lg leading-8 text-[var(--color-text)]">{displayData.quickThesis}</p>
       </section>
     </div>
 
     <dl class="mt-8 grid gap-4 text-sm sm:grid-cols-3">
       <div>
         <dt class="font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{copy.labels.entities}</dt>
-        <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]">{data.entities.join(", ")}</dd>
+        <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]">{displayData.entities.join(", ")}</dd>
       </div>
       <div>
         <dt class="font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{copy.labels.topics}</dt>
-        <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]">{data.topics.join(", ")}</dd>
+        <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]">{displayData.topics.join(", ")}</dd>
       </div>
       <div>
         <dt class="font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{copy.labels.concepts}</dt>
-        <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]">{data.concepts.join(", ")}</dd>
+        <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]">{displayData.concepts.join(", ")}</dd>
       </div>
     </dl>
   </header>
@@ -69,5 +71,5 @@ const publishedDate = new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en", 
     <Content />
   </div>
 
-  <References sources={data.sources} />
+  <References sources={data.sources} locale={locale} />
 </article>

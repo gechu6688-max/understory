@@ -291,10 +291,16 @@ export const topicDescriptions: Record<Locale, Record<string, string>> = {
   en: {
     Strategy: "How companies make choices about positioning, advantage, trade-offs, and long-term direction.",
     Technology: "How new technologies reshape competition, markets, and behavior.",
+    "Market Power": "How firms gain room to influence prices, quality, access, or market rules.",
+    Competition: "How rival pressure shapes prices, choices, innovation, and consumer outcomes.",
+    "Consumer Choice": "How market structure changes what consumers can realistically choose.",
   },
   zh: {
     Strategy: "公司如何在定位、优势、取舍与长期方向之间做选择。",
     Technology: "新技术如何改变竞争、市场与人的行为。",
+    "Market Power": "企业如何获得影响价格、质量、渠道或市场规则的空间。",
+    Competition: "竞争压力如何影响价格、选择、创新和消费者结果。",
+    "Consumer Choice": "市场结构如何改变消费者真正能选择什么。",
   },
 };
 
@@ -302,16 +308,20 @@ export const conceptDescriptions: Record<Locale, Record<string, string>> = {
   en: {
     "Pricing Power": "A firm's ability to sustain higher prices without losing enough demand to make the increase unprofitable.",
     "Switching Costs": "The friction that makes it harder for customers, sellers, or users to move from one option to another.",
+    "Network Effects": "A mechanism where a product or platform becomes more valuable as more people or sellers use it.",
+    "Market Competition": "The pressure created when rivals can meaningfully challenge a firm's price, quality, or service.",
   },
   zh: {
     "Pricing Power": "企业在不流失过多需求的情况下，持续维持更高价格的能力。",
     "Switching Costs": "让消费者、卖家或用户不容易从一种选择转向另一种选择的摩擦。",
+    "Network Effects": "当使用者或卖家越多，产品或平台本身就越有价值的机制。",
+    "Market Competition": "当竞争者能够真正挑战一家公司的价格、质量或服务时形成的压力。",
   },
 };
 
 export const translatedCaseIds: Record<Locale, Set<string>> = {
-  en: new Set(["sample-foundation-case"]),
-  zh: new Set([]),
+  en: new Set(["sample-foundation-case", "amazon-convenience-market-power"]),
+  zh: new Set(["amazon-convenience-market-power"]),
 };
 
 export const hasCaseLocale = (locale: Locale, caseId: string) => translatedCaseIds[locale].has(caseId);

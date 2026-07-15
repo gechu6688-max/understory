@@ -27,6 +27,20 @@ const sourceSchema = z.object({
   accessDate: z.coerce.date().optional(),
   sourceType: z.enum(sourceTypes),
   relevanceNote: z.string(),
+  relevanceNoteZh: z.string().optional(),
+});
+
+const localizedCaseSchema = z.object({
+  title: z.string().optional(),
+  subtitle: z.string().optional(),
+  summary: z.string().optional(),
+  centralQuestion: z.string().optional(),
+  quickThesis: z.string().optional(),
+  entities: z.array(z.string()).optional(),
+  topics: z.array(z.string()).optional(),
+  concepts: z.array(z.string()).optional(),
+  counterargumentSummary: z.string().optional(),
+  whatWouldChangeMyMind: z.string().optional(),
 });
 
 const cases = defineCollection({
@@ -51,6 +65,11 @@ const cases = defineCollection({
     relatedCases: z.array(z.string()).optional(),
     counterargumentSummary: z.string().optional(),
     whatWouldChangeMyMind: z.string().optional(),
+    localized: z
+      .object({
+        zh: localizedCaseSchema.optional(),
+      })
+      .optional(),
   }),
 });
 

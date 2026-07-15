@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
-import { formatDate, getPublishedCases, getTaxonomyItems } from "../../../lib/cases";
+import { formatCaseType, formatDate, getCaseDisplayData, getPublishedCases, getTaxonomyItems } from "../../../lib/cases";
 import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
 
 export async function getStaticPaths() {
@@ -33,13 +33,17 @@ const caseCount = locale === "zh" ? `${conceptCases.length} 个公开案例` : c
       <p>{caseCount}</p>
     </div>
     <ol class="library-list library-list--compact">
-      {conceptCases.map((caseEntry) => (
-        <li>
-          <div class="library-list__meta"><time datetime={caseEntry.data.publishedDate.toISOString()}>{formatDate(caseEntry.data.publishedDate)}</time><span>{caseEntry.data.caseType} {copy.labels.case}</span></div>
-          <div class="library-list__body"><h2><a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{caseEntry.data.title}</a></h2><p class="library-question">{caseEntry.data.centralQuestion}</p></div>
-          <a class="library-read cta-link" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
-        </li>
-      ))}
+      {conceptCases.map((caseEntry) => {
+        const displayData = getCaseDisplayData(caseEntry, locale);
+
+        return (
+          <li>
+            <div class="library-list__meta"><time datetime={caseEntry.data.publishedDate.toISOString()}>{formatDate(caseEntry.data.publishedDate)}</time><span>{formatCaseType(caseEntry.data.caseType, locale)} {copy.labels.case}</span></div>
+            <div class="library-list__body"><h2><a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{displayData.title}</a></h2><p class="library-question">{displayData.centralQuestion}</p></div>
+            <a class="library-read cta-link" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
+          </li>
+        );
+      })}
     </ol>
     {conceptCases.length === 0 && locale === "zh" && (
       <p class="library-empty">

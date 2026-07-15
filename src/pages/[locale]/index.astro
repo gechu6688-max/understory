@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { formatDate, getTaxonomyItems, sortCasesByDate } from "../../lib/cases";
+import { formatCaseType, formatDate, getCaseDisplayData, getTaxonomyItems, sortCasesByDate } from "../../lib/cases";
 import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../lib/siteCopy";
 
 export function getStaticPaths() {
@@ -13,29 +13,34 @@ const copy = getSiteCopy(locale);
 const publishedCases = sortCasesByDate(await getCollection("cases", ({ data }) => data.status === "published"));
 const localizedCases = locale === "zh" ? publishedCases.filter((caseEntry) => hasCaseLocale(locale, caseEntry.id)) : publishedCases;
 const featuredCase = localizedCases.find((caseEntry) => caseEntry.data.featured) ?? localizedCases[0];
+const featuredDisplay = featuredCase ? getCaseDisplayData(featuredCase, locale) : null;
 const topics = getTaxonomyItems(localizedCases, "topics");
 const concepts = getTaxonomyItems(localizedCases, "concepts");
-const searchIndex = localizedCases.map((caseEntry) => ({
-  title: caseEntry.data.title,
-  summary: caseEntry.data.summary,
-  centralQuestion: caseEntry.data.centralQuestion,
-  url: localizedPath(locale, `/cases/${caseEntry.id}/`),
-  caseType: caseEntry.data.caseType,
-  entities: caseEntry.data.entities,
-  topics: caseEntry.data.topics,
-  concepts: caseEntry.data.concepts,
-  searchableText: [
-    caseEntry.data.title,
-    caseEntry.data.summary,
-    caseEntry.data.centralQuestion,
-    caseEntry.data.caseType,
-    ...caseEntry.data.entities,
-    ...caseEntry.data.topics,
-    ...caseEntry.data.concepts,
-  ]
-    .join(" ")
-    .toLowerCase(),
-}));
+const searchIndex = localizedCases.map((caseEntry) => {
+  const displayData = getCaseDisplayData(caseEntry, locale);
+
+  return {
+    title: displayData.title,
+    summary: displayData.summary,
+    centralQuestion: displayData.centralQuestion,
+    url: localizedPath(locale, `/cases/${caseEntry.id}/`),
+    caseType: formatCaseType(caseEntry.data.caseType, locale),
+    entities: displayData.entities,
+    topics: displayData.topics,
+    concepts: displayData.concepts,
+    searchableText: [
+      displayData.title,
+      displayData.summary,
+      displayData.centralQuestion,
+      formatCaseType(caseEntry.data.caseType, locale),
+      ...displayData.entities,
+      ...displayData.topics,
+      ...displayData.concepts,
+    ]
+      .join(" ")
+      .toLowerCase(),
+  };
+});
 const methodSteps = copy.method.steps;
 ---
 
@@ -66,7 +71,7 @@ const methodSteps = copy.method.steps;
         {
           featuredCase && (
             <p class="home-latest">
-              {copy.labels.latestCase}: <a href={localizedPath(locale, `/cases/${featuredCase.id}/`)}>{featuredCase.data.title}</a>
+              {copy.labels.latestCase}: <a href={localizedPath(locale, `/cases/${featuredCase.id}/`)}>{featuredDisplay?.title}</a>
             </p>
           )
         }
@@ -111,16 +116,16 @@ const methodSteps = copy.method.steps;
           </div>
           <div class="home-featured__layout">
             <div>
-              <p class="home-meta">{featuredCase.data.caseType} {copy.labels.case}</p>
+              <p class="home-meta">{formatCaseType(featuredCase.data.caseType, locale)} {copy.labels.case}</p>
               <h2 id="featured-heading">
-                <a href={localizedPath(locale, `/cases/${featuredCase.id}/`)}>{featuredCase.data.title}</a>
+                <a href={localizedPath(locale, `/cases/${featuredCase.id}/`)}>{featuredDisplay?.title}</a>
               </h2>
             </div>
             <div class="home-featured__summary">
-              <p class="home-question">{featuredCase.data.centralQuestion}</p>
-              <p>{featuredCase.data.quickThesis || featuredCase.data.summary}</p>
+              <p class="home-question">{featuredDisplay?.centralQuestion}</p>
+              <p>{featuredDisplay?.quickThesis || featuredDisplay?.summary}</p>
               <div class="home-tagline" aria-label="Featured case taxonomy">
-                {[...featuredCase.data.topics, ...featuredCase.data.concepts].map((item) => <span>{item}</span>)}
+                {[...(featuredDisplay?.topics ?? []), ...(featuredDisplay?.concepts ?? [])].map((item) => <span>{item}</span>)}
               </div>
               <a class="home-read-link cta-link" href={localizedPath(locale, `/cases/${featuredCase.id}/`)}>{copy.labels.read}</a>
             </div>
@@ -171,13 +176,17 @@ const methodSteps = copy.method.steps;
       </div>
       <h2 id="recent-heading">{copy.labels.publishedAnalysis}</h2>
       <ol>
-        {localizedCases.map((caseEntry) => (
-          <li>
-            <time datetime={caseEntry.data.publishedDate.toISOString()}>{formatDate(caseEntry.data.publishedDate)}</time>
-            <div><h3><a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{caseEntry.data.title}</a></h3><p>{caseEntry.data.centralQuestion}</p></div>
-            <a class="cta-link" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
-          </li>
-        ))}
+        {localizedCases.map((caseEntry) => {
+          const displayData = getCaseDisplayData(caseEntry, locale);
+
+          return (
+            <li>
+              <time datetime={caseEntry.data.publishedDate.toISOString()}>{formatDate(caseEntry.data.publishedDate)}</time>
+              <div><h3><a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{displayData.title}</a></h3><p>{displayData.centralQuestion}</p></div>
+              <a class="cta-link" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
+            </li>
+          );
+        })}
       </ol>
       {localizedCases.length === 0 && locale === "zh" && <p class="library-empty">{copy.pages.cases.empty}</p>}
     </section>

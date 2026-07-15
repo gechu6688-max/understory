@@ -1,5 +1,5 @@
 ---
-import { getPublishedCases } from "../../../lib/cases";
+import { getCaseDisplayData, getPublishedCases } from "../../../lib/cases";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import CaseArticle from "../../../components/CaseArticle.astro";
@@ -19,6 +19,7 @@ const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
 const copy = getSiteCopy(locale);
 const { caseEntry } = Astro.props;
 const available = hasCaseLocale(locale, caseEntry.id);
+const displayData = getCaseDisplayData(caseEntry, locale);
 const casePath = `/cases/${caseEntry.id}/`;
 const languagePaths = {
   en: localizedPath("en", casePath),
@@ -30,13 +31,13 @@ const alternatePaths = {
 };
 ---
 
-<BaseLayout title={available ? caseEntry.data.title : copy.pages.caseUnavailable.title} description={available ? caseEntry.data.summary : copy.pages.caseUnavailable.body} locale={locale} languagePaths={languagePaths} alternatePaths={alternatePaths}>
+<BaseLayout title={available ? displayData.title : copy.pages.caseUnavailable.title} description={available ? displayData.summary : copy.pages.caseUnavailable.body} locale={locale} languagePaths={languagePaths} alternatePaths={alternatePaths}>
   <Breadcrumbs
     label={locale === "zh" ? "页面路径" : "Breadcrumb"}
     items={[
       { label: locale === "zh" ? "首页" : "Home", href: localizedPath(locale) },
       { label: copy.nav[0].label, href: localizedPath(locale, "/cases/") },
-      { label: available ? caseEntry.data.title : copy.pages.caseUnavailable.title },
+      { label: available ? displayData.title : copy.pages.caseUnavailable.title },
     ]}
   />
   {

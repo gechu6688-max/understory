@@ -1,17 +1,35 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { defaultLocale, type Locale } from "../lib/siteCopy";
 
 type Source = CollectionEntry<"cases">["data"]["sources"][number];
 
 interface Props {
   sources: Source[];
+  locale?: Locale;
 }
 
-const { sources } = Astro.props;
+const { sources, locale = defaultLocale } = Astro.props;
+const referencesLabel = locale === "zh" ? "参考资料" : "References";
+const publishedLabel = locale === "zh" ? "发布" : "Published";
+const accessedLabel = locale === "zh" ? "访问" : "Accessed";
+const sourceTypeLabels: Record<Source["sourceType"], string> = {
+  "company-filing": "公司文件",
+  "company-report": "公司报告",
+  "official-announcement": "官方公告",
+  "regulatory-source": "监管资料",
+  "academic-paper": "学术论文",
+  "news-article": "新闻报道",
+  "market-research": "市场研究",
+  book: "书籍",
+  dataset: "数据集",
+  interview: "访谈",
+  other: "其他",
+};
 
 const formatDate = (date?: Date) =>
   date
-    ? new Intl.DateTimeFormat("en", {
+    ? new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en", {
         year: "numeric",
         month: "short",
         day: "numeric",
@@ -20,14 +38,14 @@ const formatDate = (date?: Date) =>
 ---
 
 <section aria-labelledby="references-heading" class="mt-14 max-w-[var(--measure-wide)] border-t border-[var(--color-border)] pt-8">
-  <h2 id="references-heading" class="text-2xl font-semibold tracking-tight text-[var(--color-text)]">References</h2>
+  <h2 id="references-heading" class="text-2xl font-semibold tracking-tight text-[var(--color-text)]">{referencesLabel}</h2>
   <ol class="mt-5 divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
     {
       sources.map((source, index) => (
         <li class="grid gap-3 py-5 sm:grid-cols-[3rem_minmax(0,1fr)]" id={source.id}>
           <span class="font-serif text-lg text-[var(--color-text-muted)]">{String(index + 1).padStart(2, "0")}</span>
           <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">{source.publisher} · {source.sourceType}</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">{source.publisher} · {locale === "zh" ? sourceTypeLabels[source.sourceType] : source.sourceType}</p>
             <p class="mt-2 font-semibold leading-7 text-[var(--color-text)]">
               {source.url ? (
                 <a class="underline decoration-[var(--color-border)] underline-offset-4 hover:decoration-[var(--color-accent)]" href={source.url}>
@@ -38,11 +56,11 @@ const formatDate = (date?: Date) =>
               )}
             </p>
             <p class="mt-1 text-sm text-[var(--color-text-muted)]">
-              {formatDate(source.publicationDate) ? `Published ${formatDate(source.publicationDate)}` : ""}
+              {formatDate(source.publicationDate) ? `${publishedLabel} ${formatDate(source.publicationDate)}` : ""}
               {formatDate(source.publicationDate) && formatDate(source.accessDate) ? " · " : ""}
-              {formatDate(source.accessDate) ? `Accessed ${formatDate(source.accessDate)}` : ""}
+              {formatDate(source.accessDate) ? `${accessedLabel} ${formatDate(source.accessDate)}` : ""}
             </p>
-            <p class="mt-2 text-sm leading-6 text-[var(--color-text-secondary)]">{source.relevanceNote}</p>
+            <p class="mt-2 text-sm leading-6 text-[var(--color-text-secondary)]">{locale === "zh" ? source.relevanceNoteZh ?? source.relevanceNote : source.relevanceNote}</p>
           </div>
         </li>
       ))

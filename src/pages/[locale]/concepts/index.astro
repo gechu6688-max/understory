@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { getPublishedCases, getTaxonomyItems } from "../../../lib/cases";
+import { getCaseDisplayData, getPublishedCases, getTaxonomyItems } from "../../../lib/cases";
 import { conceptDescriptions, getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
 
 export function getStaticPaths() {
@@ -29,7 +29,7 @@ const concepts = getTaxonomyItems(localizedCases, "concepts");
             <span class="concept-index__count">{locale === "zh" ? `用于 ${concept.cases.length} 个案例 ->` : `Used in ${concept.cases.length === 1 ? "1 case" : `${concept.cases.length} cases`} ->`}</span>
           </a>
           <p>{conceptDescriptions[locale][concept.name] ?? conceptDescriptions.en[concept.name] ?? ""}</p>
-          <small>{concept.cases.map((caseEntry) => caseEntry.data.title).join(", ")}</small>
+          <small>{concept.cases.map((caseEntry) => getCaseDisplayData(caseEntry, locale).title).join(", ")}</small>
         </li>
       ))}
     </ol>

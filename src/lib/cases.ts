@@ -1,5 +1,6 @@
 import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
+import type { Locale } from "./siteCopy";
 
 export type CaseEntry = CollectionEntry<"cases">;
 
@@ -45,3 +46,46 @@ export const getTaxonomyItems = (cases: CaseEntry[], field: "topics" | "concepts
   )
     .map(([, item]) => item)
     .sort((a, b) => a.name.localeCompare(b.name));
+
+export const getCaseDisplayData = (caseEntry: CaseEntry, locale: Locale) => {
+  const localized = locale === "zh" ? caseEntry.data.localized?.zh : undefined;
+
+  return {
+    ...caseEntry.data,
+    ...localized,
+    entities: localized?.entities ?? caseEntry.data.entities,
+    topics: localized?.topics ?? caseEntry.data.topics,
+    concepts: localized?.concepts ?? caseEntry.data.concepts,
+  };
+};
+
+export const formatCaseType = (caseType: CaseEntry["data"]["caseType"], locale: Locale) => {
+  if (locale === "zh") {
+    const zhLabels: Record<CaseEntry["data"]["caseType"], string> = {
+      company: "公司",
+      industry: "行业",
+      concept: "概念",
+      event: "事件",
+      strategy: "策略",
+    };
+
+    return zhLabels[caseType];
+  }
+
+  return caseType;
+};
+
+export const formatCaseStatus = (status: CaseEntry["data"]["status"], locale: Locale) => {
+  if (locale === "zh") {
+    const zhLabels: Record<CaseEntry["data"]["status"], string> = {
+      draft: "草稿",
+      review: "审核中",
+      published: "已发布",
+      archived: "已归档",
+    };
+
+    return zhLabels[status];
+  }
+
+  return status;
+};

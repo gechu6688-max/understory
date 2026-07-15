@@ -1755,6 +1755,15 @@ html:lang(zh-CN) .founder-note p {
   line-height: 1.85;
 }
 
+.case-body [data-case-lang] {
+  display: none;
+}
+
+html:not(:lang(zh-CN)) .case-body [data-case-lang="en"],
+html:lang(zh-CN) .case-body [data-case-lang="zh"] {
+  display: block;
+}
+
 .case-body > * + * {
   margin-top: 1.25rem;
 }

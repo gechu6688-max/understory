@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { getPublishedCases, getTaxonomyItems } from "../../../lib/cases";
+import { getCaseDisplayData, getPublishedCases, getTaxonomyItems } from "../../../lib/cases";
 import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath, topicDescriptions } from "../../../lib/siteCopy";
 
 export function getStaticPaths() {
@@ -29,7 +29,7 @@ const topics = getTaxonomyItems(localizedCases, "topics");
             <span class="topic-map__count">{locale === "zh" ? `${topic.cases.length} 个公开案例` : topic.cases.length === 1 ? "1 public case" : `${topic.cases.length} public cases`}</span>
           </a>
           <p class="topic-map__description">{topicDescriptions[locale][topic.name] ?? topicDescriptions.en[topic.name] ?? ""}</p>
-          <p>{topic.cases.map((caseEntry) => caseEntry.data.title).join(", ")}</p>
+          <p>{topic.cases.map((caseEntry) => getCaseDisplayData(caseEntry, locale).title).join(", ")}</p>
         </li>
       ))}
     </ol>
