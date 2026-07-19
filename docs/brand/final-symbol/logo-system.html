@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Understory Final Symbol System</title>
+    <style>
+      :root {
+        --page: #f7f4ee;
+        --surface: #fffdf8;
+        --surface-muted: #f1eee7;
+        --ink: #191714;
+        --muted: #655f57;
+        --line: #ded7ca;
+        --green: #174d3c;
+        --dark: #151310;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      main {
+        width: min(1440px, calc(100vw - 48px));
+        margin: 0 auto;
+        padding: 42px 0 72px;
+      }
+      header {
+        display: grid;
+        grid-template-columns: 1fr 0.84fr;
+        gap: 36px;
+        align-items: end;
+        padding-bottom: 26px;
+        border-bottom: 1px solid var(--line);
+      }
+      .eyebrow {
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 760;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      h1, h2, h3 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 600;
+        letter-spacing: 0;
+      }
+      h1 { margin-top: 6px; font-size: clamp(44px, 5.3vw, 84px); line-height: 0.92; }
+      h2 { font-size: 32px; }
+      h3 { font-size: 26px; line-height: 1.08; }
+      p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.62; }
+      .section {
+        margin-top: 34px;
+        padding-top: 28px;
+        border-top: 1px solid var(--line);
+      }
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 28px;
+        align-items: end;
+        margin-bottom: 16px;
+      }
+      .section-head p { max-width: 620px; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .asset-grid {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .card,
+      .asset,
+      .browser,
+      .mobile,
+      .note {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: color-mix(in srgb, var(--surface) 90%, white);
+      }
+      .hero-card {
+        display: grid;
+        place-items: center;
+        min-height: 360px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+      .hero-card img { width: 210px; height: 210px; object-fit: contain; }
+      .asset {
+        display: grid;
+        place-items: center;
+        gap: 10px;
+        min-height: 160px;
+        padding: 16px 10px;
+        text-align: center;
+      }
+      .asset.dark { background: var(--dark); color: white; }
+      .asset.dark .caption { color: #d9d0c2; }
+      .asset img { width: 72px; height: 72px; object-fit: contain; }
+      .caption {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .lockups {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .lockup {
+        display: flex;
+        align-items: center;
+        gap: 0.72rem;
+        min-height: 118px;
+        padding: 24px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+      .lockup img { width: 32px; height: 32px; object-fit: contain; }
+      .wordmark {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 30px;
+        font-weight: 600;
+      }
+      .zh {
+        font-family: "Songti SC", STSong, "Noto Serif CJK SC", serif;
+        font-size: 28px;
+        letter-spacing: 0.04em;
+      }
+      .browser { overflow: hidden; }
+      .bar {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        height: 30px;
+        padding: 0 12px;
+        border-bottom: 1px solid var(--line);
+        background: var(--surface-muted);
+      }
+      .dot { width: 7px; height: 7px; border-radius: 50%; background: #b7afa3; }
+      .site-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--line);
+        background: color-mix(in srgb, var(--surface) 92%, transparent);
+      }
+      .identity {
+        display: flex;
+        align-items: center;
+        gap: 0.52rem;
+        min-width: 0;
+      }
+      .identity img { width: 18px; height: 18px; object-fit: contain; transform: translateY(0.02em); }
+      .identity span {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 20px;
+        font-weight: 600;
+      }
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 16px;
+        color: #55514a;
+        font-size: 13px;
+      }
+      .article { padding: 26px 26px 34px; }
+      .article small,
+      .case small {
+        color: var(--green);
+        font-weight: 760;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .article h3,
+      .case h3 { margin: 10px 0; max-width: 520px; }
+      .mobile {
+        width: 270px;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 24px;
+      }
+      .mobile-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      .mobile-nav .identity img { width: 17px; height: 17px; }
+      .hamburger { width: 22px; height: 12px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+      .mobile-body { padding: 24px 17px 32px; }
+      .mobile-body h3 { font-size: 28px; }
+      .case {
+        min-height: 260px;
+        padding: 28px;
+      }
+      .case-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: start;
+      }
+      .case img { width: 38px; height: 38px; object-fit: contain; }
+      .topic-card {
+        min-height: 180px;
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+      .topic-card img { width: 30px; height: 30px; margin-bottom: 20px; object-fit: contain; }
+      .fav-row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+      }
+      .fav {
+        display: grid;
+        place-items: center;
+        gap: 10px;
+        min-height: 112px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .note {
+        padding: 22px;
+      }
+      .note p { max-width: 980px; }
+      @media (max-width: 980px) {
+        main { width: min(100vw - 28px, 760px); }
+        header, .grid, .lockups, .asset-grid { grid-template-columns: 1fr; }
+        .fav-row { grid-template-columns: repeat(2, 1fr); }
+        .section-head { display: block; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <div class="eyebrow">Understory / Final Symbol System</div>
+          <h1>Suspended Continuation</h1>
+        </div>
+        <p>
+          C-F1 Minimal Optical is the selected Understory symbol. This board documents final assets, wordmark relationships, favicon sizes, and website integration tests without changing content or typography.
+        </p>
+      </header>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Selected Symbol</div>
+            <h2>C-F1 Minimal Optical</h2>
+          </div>
+          <p>未合，不等于终止。The detached lower element is another layer, another thought, another continuation.</p>
+        </div>
+        <div class="hero-card"><img src="final-svg/understory-symbol-black.svg" alt="Understory Symbol" /></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Final SVG</div>
+            <h2>Asset Set</h2>
+          </div>
+          <p>Primary, black, white, brand green, small icon, and favicon-ready SVG assets.</p>
+        </div>
+        <div class="asset-grid">
+          <div class="asset"><img src="final-svg/understory-symbol-primary.svg" alt="" /><span class="caption">Primary</span></div>
+          <div class="asset"><img src="final-svg/understory-symbol-black.svg" alt="" /><span class="caption">Black</span></div>
+          <div class="asset dark"><img src="final-svg/understory-symbol-white.svg" alt="" /><span class="caption">White</span></div>
+          <div class="asset"><img src="final-svg/understory-symbol-green.svg" alt="" /><span class="caption">Green</span></div>
+          <div class="asset"><img src="final-svg/understory-symbol-small.svg" alt="" /><span class="caption">Small</span></div>
+          <div class="asset"><img src="final-svg/understory-symbol-favicon.svg" alt="" /><span class="caption">Favicon</span></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Wordmark</div>
+            <h2>Relationship Test</h2>
+          </div>
+          <p>The wordmark is not redesigned. Only spacing and optical alignment are tested.</p>
+        </div>
+        <div class="lockups">
+          <div class="lockup"><img src="final-svg/understory-symbol-black.svg" alt="" /><span class="wordmark">understory</span></div>
+          <div class="lockup"><img src="final-svg/understory-symbol-black.svg" alt="" /><span class="zh">问溯</span></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Header Integration</div>
+            <h2>Desktop Header</h2>
+          </div>
+          <p>Current header typography, spacing system, and navigation rhythm are preserved.</p>
+        </div>
+        <div class="browser">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <nav class="site-nav">
+            <div class="identity"><img src="final-svg/understory-symbol-black.svg" alt="" /><span>understory</span></div>
+            <div class="nav-links"><span>Cases</span><span>Topics</span><span>Concepts</span><span>Method</span><span>About</span></div>
+          </nav>
+          <div class="article">
+            <small>Homepage Header</small>
+            <h3>Go beneath. Ask again.</h3>
+            <p>The symbol sits quietly before the wordmark, as if it has always belonged there.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Application</div>
+            <h2>Site Page Tests</h2>
+          </div>
+          <p>Homepage, case page, topic page, about page, mobile header, and browser favicon contexts.</p>
+        </div>
+        <div class="grid">
+          <div class="mobile">
+            <div class="mobile-nav">
+              <div class="identity"><img src="final-svg/understory-symbol-black.svg" alt="" /><span>understory</span></div>
+              <div class="hamburger"></div>
+            </div>
+            <div class="mobile-body">
+              <div class="eyebrow">Mobile Header</div>
+              <h3>未合，不等于终止。</h3>
+            </div>
+          </div>
+          <article class="case">
+            <div class="case-top">
+              <div>
+                <small>Case Page</small>
+                <h3>What does convenience cost?</h3>
+              </div>
+              <img src="final-svg/understory-symbol-black.svg" alt="" />
+            </div>
+            <p>The visible layer is not the whole structure.</p>
+          </article>
+          <article class="topic-card">
+            <img src="final-svg/understory-symbol-green.svg" alt="" />
+            <div class="eyebrow">Topic Page</div>
+            <h3>Market Power</h3>
+            <p>A restrained brand signal, not decoration.</p>
+          </article>
+          <article class="topic-card">
+            <img src="final-svg/understory-symbol-black.svg" alt="" />
+            <div class="eyebrow">About Page</div>
+            <h3>One More Question</h3>
+            <p>The thought continues below the obvious answer.</p>
+          </article>
+          <article class="topic-card">
+            <img src="favicon-tests/understory-favicon-32.png" alt="" />
+            <div class="eyebrow">Browser Tab</div>
+            <h3>Favicon</h3>
+            <p>Readable as a compact silhouette.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Favicon Tests</div>
+            <h2>16 / 24 / 32 / 48 / 64 px</h2>
+          </div>
+          <p>The 16px mark keeps the silhouette; larger sizes restore the suspended lower relationship.</p>
+        </div>
+        <div class="fav-row">
+          <div class="fav"><img src="favicon-tests/understory-favicon-16.png" width="16" height="16" alt="" /><span>16px</span></div>
+          <div class="fav"><img src="favicon-tests/understory-favicon-24.png" width="24" height="24" alt="" /><span>24px</span></div>
+          <div class="fav"><img src="favicon-tests/understory-favicon-32.png" width="32" height="32" alt="" /><span>32px</span></div>
+          <div class="fav"><img src="favicon-tests/understory-favicon-48.png" width="48" height="48" alt="" /><span>48px</span></div>
+          <div class="fav"><img src="favicon-tests/understory-favicon-64.png" width="64" height="64" alt="" /><span>64px</span></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <article class="note">
+          <div class="eyebrow">Internal Brand Note</div>
+          <h2>Understory Symbol</h2>
+          <p>
+            Suspended Continuation. A visible structure is never the whole story. The lower element represents another layer of thought, another question, another continuation. The symbol reflects Understory: beneath the obvious. 问溯: following the question deeper. One More Question: the thought continues.
+          </p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

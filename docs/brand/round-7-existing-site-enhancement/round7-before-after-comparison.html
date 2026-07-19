@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Understory Round 7 - Existing Site Enhancement</title>
+    <style>
+      :root {
+        --color-page: #f7f4ee;
+        --color-surface: #fffdf8;
+        --color-surface-muted: #f1eee7;
+        --color-text: #191714;
+        --color-text-secondary: #55514a;
+        --color-text-muted: #7a746b;
+        --color-border: #ded7ca;
+        --color-accent: #174d3c;
+        --color-accent-dark: #0f352b;
+        --color-accent-muted: #6f8b7e;
+        --color-accent-tint: #e8f0ea;
+        --color-evidence: #2d6b65;
+        --color-counterargument: #8a4b32;
+        --color-counterargument-tint: #f4ece6;
+        --color-uncertainty: #9b6b20;
+        --color-uncertainty-tint: #fff8ea;
+        --measure-article: 45rem;
+        --measure-wide: 58rem;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--color-page);
+        color: var(--color-text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: 2.5rem 1.25rem 4.5rem;
+      }
+
+      h1, h2, h3, p, ul, ol, dl, dd { margin: 0; }
+
+      .eyebrow,
+      .meta {
+        color: var(--color-accent);
+        font-size: 0.72rem;
+        font-weight: 750;
+        letter-spacing: 0.16em;
+        line-height: 1.4;
+        text-transform: uppercase;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.78fr);
+        gap: clamp(1.75rem, 5vw, 4rem);
+        align-items: end;
+        border-bottom: 1px solid var(--color-border);
+        padding-block: 1.7rem 2rem;
+      }
+
+      h1 {
+        max-width: 12ch;
+        margin-top: 0.85rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(3rem, 6.3vw, 5.8rem);
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 0.97;
+      }
+
+      .intro aside {
+        border-top: 2px solid var(--color-accent);
+        padding-top: 1rem;
+      }
+
+      .intro p:not(.eyebrow) {
+        color: var(--color-text-secondary);
+        font-size: 1.02rem;
+        line-height: 1.7;
+      }
+
+      .section {
+        margin-top: 2.6rem;
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: minmax(0, 0.8fr) minmax(18rem, 0.7fr);
+        gap: 2rem;
+        align-items: end;
+        border-top: 1px solid var(--color-accent);
+        padding-top: 0.9rem;
+      }
+
+      .section-head h2 {
+        margin-top: 0.55rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2rem, 4vw, 3.25rem);
+        font-weight: 600;
+        line-height: 1.02;
+      }
+
+      .section-head > p {
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+        line-height: 1.55;
+      }
+
+      .foundation-grid,
+      .eval-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 1.15rem;
+      }
+
+      .foundation-card,
+      .eval-card,
+      .seed-card {
+        border-top: 1px solid var(--color-border);
+        background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+        padding: 0.95rem 0 0;
+      }
+
+      .foundation-card h3,
+      .eval-card h3,
+      .seed-card h3 {
+        margin-top: 0.45rem;
+        color: var(--color-text);
+        font-size: 1rem;
+        line-height: 1.25;
+      }
+
+      .foundation-card p,
+      .eval-card p,
+      .seed-card p,
+      .delta li {
+        margin-top: 0.45rem;
+        color: var(--color-text-secondary);
+        font-size: 0.85rem;
+        line-height: 1.55;
+      }
+
+      .experiment {
+        margin-top: 2.6rem;
+        border-top: 2px solid var(--color-accent);
+        padding-top: 1rem;
+      }
+
+      .experiment-title {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 1.25rem;
+      }
+
+      .experiment-title h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2rem, 4.2vw, 3.6rem);
+        font-weight: 600;
+        line-height: 1;
+      }
+
+      .experiment-title p:last-child {
+        max-width: 29rem;
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+        line-height: 1.55;
+        text-align: right;
+      }
+
+      .before-after {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(15rem, 0.7fr);
+        gap: 1rem;
+        margin-top: 1.2rem;
+      }
+
+      .pane {
+        min-width: 0;
+        border: 1px solid var(--color-border);
+        background: var(--color-surface);
+      }
+
+      .pane > .label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        border-bottom: 1px solid var(--color-border);
+        padding: 0.65rem 0.85rem;
+      }
+
+      .pane > .label span:last-child {
+        color: var(--color-text-muted);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .site-header {
+        border-bottom: 1px solid color-mix(in srgb, var(--color-border) 86%, transparent);
+        background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+      }
+
+      .site-nav {
+        display: flex;
+        max-width: 64rem;
+        margin-inline: auto;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.25rem;
+        padding: 0.8rem 1.25rem;
+      }
+
+      .site-identity {
+        color: var(--color-text);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.28rem;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .site-nav__links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 0.35rem 1rem;
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+      }
+
+      .site-nav__links span:first-child {
+        color: var(--color-accent);
+      }
+
+      .site-menu-summary {
+        color: var(--color-accent);
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .mock {
+        padding: 1.05rem;
+      }
+
+      .case-header {
+        max-width: var(--measure-wide);
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: 1.6rem;
+      }
+
+      .case-header h3,
+      .case-title {
+        margin-top: 0.65rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(1.85rem, 2.6vw, 3rem);
+        font-weight: 600;
+        line-height: 1.04;
+      }
+
+      .case-summary {
+        max-width: var(--measure-article);
+        margin-top: 0.8rem;
+        color: var(--color-text-secondary);
+        font-size: 1rem;
+        line-height: 1.65;
+      }
+
+      .case-pair {
+        display: grid;
+        grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+        gap: 1.1rem;
+        margin-top: 1.35rem;
+      }
+
+      .central-question {
+        border-top: 2px solid var(--color-accent);
+        padding-top: 0.75rem;
+      }
+
+      .quick-thesis {
+        border-left: 1px solid var(--color-border);
+        padding-left: 1rem;
+      }
+
+      .central-question p:last-child {
+        margin-top: 0.55rem;
+        color: var(--color-text);
+        font-size: 1.18rem;
+        line-height: 1.42;
+      }
+
+      .quick-thesis p:last-child {
+        margin-top: 0.55rem;
+        color: var(--color-text);
+        line-height: 1.65;
+      }
+
+      .body {
+        max-width: var(--measure-article);
+        margin-top: 1.4rem;
+      }
+
+      .body h4 {
+        color: var(--color-text);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.6rem;
+        line-height: 1.15;
+      }
+
+      .body p {
+        margin-top: 0.75rem;
+        color: var(--color-text);
+        font-size: 0.98rem;
+        line-height: 1.78;
+      }
+
+      .evidence-block {
+        margin-top: 1rem;
+        border-left: 2px solid var(--color-evidence);
+        background: #eef7f3;
+        padding: 0.9rem 1rem;
+      }
+
+      .key-insight {
+        margin-top: 1rem;
+        border-block: 1px solid var(--color-border);
+        padding-block: 1rem;
+      }
+
+      .key-insight .quote {
+        margin-top: 0.55rem;
+        border-left: 2px solid var(--color-accent);
+        padding-left: 1rem;
+        font-size: 1.05rem;
+      }
+
+      .reveal-line {
+        position: relative;
+        margin-top: 0.9rem;
+        border-top: 1px solid var(--color-border);
+        padding-top: 0.8rem;
+      }
+
+      .reveal-line::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -0.35rem;
+        width: 42%;
+        height: 0.35rem;
+        background: color-mix(in srgb, var(--color-accent-tint) 92%, var(--color-surface));
+        border-left: 2px solid var(--color-accent);
+      }
+
+      .underlayer {
+        margin-top: 0.55rem;
+        padding: 0.55rem 0.65rem;
+        border-left: 2px solid var(--color-accent);
+        background: color-mix(in srgb, var(--color-accent-tint) 62%, transparent);
+        color: var(--color-text-secondary);
+        font-size: 0.84rem;
+        line-height: 1.55;
+      }
+
+      .annotation-row {
+        display: grid;
+        grid-template-columns: 2.6rem minmax(0, 1fr);
+        gap: 0.75rem;
+        margin-top: 0.8rem;
+        border-top: 1px solid var(--color-border);
+        padding-top: 0.75rem;
+      }
+
+      .marker {
+        align-self: start;
+        border-top: 2px solid var(--marker-color, var(--color-accent));
+        color: var(--marker-color, var(--color-accent));
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        padding-top: 0.35rem;
+        text-transform: uppercase;
+      }
+
+      .second-reading {
+        margin-top: 1rem;
+        border-top: 1px solid var(--color-border);
+        padding-top: 0.85rem;
+      }
+
+      .first-second {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 1rem;
+      }
+
+      .first-second > div + div {
+        border-left: 1px solid var(--color-border);
+        padding-left: 1rem;
+      }
+
+      .first-second strong {
+        display: block;
+        color: var(--color-text);
+        font-size: 1.1rem;
+        line-height: 1.35;
+      }
+
+      .first-second span {
+        display: block;
+        margin-top: 0.4rem;
+        color: var(--color-text-secondary);
+        font-size: 0.88rem;
+        line-height: 1.55;
+      }
+
+      .editorial-polish .case-header {
+        padding-bottom: 1.35rem;
+      }
+
+      .editorial-polish .case-title {
+        max-width: 13ch;
+      }
+
+      .source-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-top: 0.95rem;
+        border-top: 1px solid var(--color-border);
+        padding-top: 0.65rem;
+        color: var(--color-text-muted);
+        font-size: 0.78rem;
+        line-height: 1.45;
+      }
+
+      .source-strip span {
+        border-bottom: 1px solid color-mix(in srgb, var(--color-accent) 35%, var(--color-border));
+      }
+
+      .homepage-list {
+        border-block: 1px solid var(--color-border);
+        margin-top: 0.9rem;
+      }
+
+      .homepage-list article {
+        display: grid;
+        grid-template-columns: 7rem minmax(0, 1fr) auto;
+        gap: 1rem;
+        align-items: baseline;
+        border-bottom: 1px solid var(--color-border);
+        padding-block: 0.8rem;
+      }
+
+      .homepage-list article:last-child { border-bottom: 0; }
+
+      .homepage-list time {
+        color: var(--color-text-muted);
+        font-size: 0.8rem;
+      }
+
+      .homepage-list h4 {
+        color: var(--color-text);
+        font-size: 1.05rem;
+        line-height: 1.3;
+      }
+
+      .delta {
+        padding: 1rem;
+      }
+
+      .delta ul {
+        display: grid;
+        gap: 0.45rem;
+        margin-top: 0.75rem;
+        padding-left: 1rem;
+      }
+
+      .score-table {
+        width: 100%;
+        margin-top: 1.2rem;
+        border-collapse: collapse;
+        background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+        font-size: 0.84rem;
+      }
+
+      .score-table th,
+      .score-table td {
+        border-bottom: 1px solid var(--color-border);
+        padding: 0.68rem 0.55rem;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .score-table th {
+        color: var(--color-text);
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .score-table td {
+        color: var(--color-text-secondary);
+        line-height: 1.45;
+      }
+
+      .recommendation {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0.8rem;
+        margin-top: 1rem;
+      }
+
+      .recommendation div {
+        border-top: 1px solid var(--color-border);
+        padding-top: 0.75rem;
+      }
+
+      .recommendation strong {
+        display: block;
+        color: var(--color-text);
+        font-size: 0.95rem;
+        line-height: 1.25;
+      }
+
+      .recommendation span {
+        display: block;
+        margin-top: 0.35rem;
+        color: var(--color-text-secondary);
+        font-size: 0.82rem;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 900px) {
+        .intro,
+        .section-head,
+        .before-after {
+          grid-template-columns: 1fr;
+        }
+
+        .foundation-grid,
+        .eval-grid,
+        .recommendation {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .experiment-title {
+          display: grid;
+        }
+
+        .experiment-title p:last-child {
+          text-align: left;
+        }
+      }
+
+      @media (max-width: 640px) {
+        main { padding-inline: 1rem; }
+
+        .foundation-grid,
+        .eval-grid,
+        .recommendation,
+        .case-pair,
+        .first-second {
+          grid-template-columns: 1fr;
+        }
+
+        .site-nav__links { display: none; }
+
+        .quick-thesis,
+        .first-second > div + div {
+          border-left: 0;
+          border-top: 1px solid var(--color-border);
+          padding-left: 0;
+          padding-top: 1rem;
+        }
+
+        .homepage-list article {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">Understory / Round 7</p>
+          <h1>Keep the site. Add only what earns its place.</h1>
+        </div>
+        <aside>
+          <p class="eyebrow">Purpose</p>
+          <p>
+            This round treats the existing Understory website as the source of truth. Round 6 becomes an idea library only: four small mechanisms are tested inside the current site language, then checked for possible future logo seeds.
+          </p>
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">01 / Diagnostic</p>
+            <h2>Existing foundations to preserve</h2>
+          </div>
+          <p>
+            These are not optional. Each experiment uses the current wordmark, palette, typography, header structure, reading width, and case flow.
+          </p>
+        </div>
+        <div class="foundation-grid">
+          <div class="foundation-card">
+            <p class="meta">Typography</p>
+            <h3>Georgia for identity and major headlines; Inter/system for body and metadata.</h3>
+            <p>No new font system. Refinement must come from spacing, rules, hierarchy, and existing sizes.</p>
+          </div>
+          <div class="foundation-card">
+            <p class="meta">Wordmark</p>
+            <h3>Lowercase serif `understory`, quiet and editorial.</h3>
+            <p>The wordmark remains the brand anchor. No symbol is installed or placed beside it.</p>
+          </div>
+          <div class="foundation-card">
+            <p class="meta">Color</p>
+            <h3>Warm paper, off-white surface, black-brown text, restrained green.</h3>
+            <p>Green stays structural: rules, focus states, metadata, and selective emphasis.</p>
+          </div>
+          <div class="foundation-card">
+            <p class="meta">Architecture</p>
+            <h3>64rem navigation, 5xl main width, 58rem wide case header, 45rem article measure.</h3>
+            <p>Cases, Topics, Concepts, Method, About, and the case reading flow remain intact.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="experiment">
+        <div class="experiment-title">
+          <div>
+            <p class="eyebrow">Experiment A / Beneath Reveal</p>
+            <h2>A small lower layer, not a new layout.</h2>
+          </div>
+          <p>Source: Round 6 / Beneath The Surface. Test: can the case page show that a claim has structure beneath it?</p>
+        </div>
+        <div class="before-after">
+          <div class="pane">
+            <div class="label"><p class="meta">Current</p><span>Case header</span></div>
+            <div class="mock">
+              <header class="case-header">
+                <p class="meta" style="color: var(--color-text-muted)">Case status: draft · company · July 9, 2026</p>
+                <h3>Amazon, Convenience, and the Long-Term Cost of Market Power</h3>
+                <p class="case-summary">A draft case asking whether Amazon's low-price convenience necessarily benefits consumers in the long run, especially if competition weakens.</p>
+                <div class="case-pair">
+                  <section class="central-question">
+                    <p class="meta">Central Question</p>
+                    <p>Does Amazon's low-price convenience necessarily benefit consumers in the long run?</p>
+                  </section>
+                  <section class="quick-thesis">
+                    <p class="meta" style="color: var(--color-text-muted)">Quick Thesis</p>
+                    <p>Amazon's convenience can create real short-term consumer benefits, but those benefits may depend on continued competition.</p>
+                  </section>
+                </div>
+              </header>
+            </div>
+          </div>
+          <div class="pane">
+            <div class="label"><p class="meta">Enhanced</p><span>One lower layer</span></div>
+            <div class="mock">
+              <header class="case-header">
+                <p class="meta" style="color: var(--color-text-muted)">Case status: draft · company · July 9, 2026</p>
+                <h3>Amazon, Convenience, and the Long-Term Cost of Market Power</h3>
+                <p class="case-summary">A draft case asking whether Amazon's low-price convenience necessarily benefits consumers in the long run, especially if competition weakens.</p>
+                <div class="case-pair">
+                  <section class="central-question">
+                    <p class="meta">Central Question</p>
+                    <p>Does Amazon's low-price convenience necessarily benefit consumers in the long run?</p>
+                  </section>
+                  <section class="quick-thesis">
+                    <p class="meta" style="color: var(--color-text-muted)">Quick Thesis</p>
+                    <p>Amazon's convenience can create real short-term consumer benefits, but those benefits may depend on continued competition.</p>
+                    <div class="underlayer">Underlying structure: consumer benefit now / seller dependence later / competition as the condition.</div>
+                  </section>
+                </div>
+              </header>
+            </div>
+          </div>
+          <div class="pane">
+            <div class="label"><p class="meta">Delta</p><span>What changed</span></div>
+            <div class="delta">
+              <ul>
+                <li>Adds one exposed lower layer under Quick Thesis.</li>
+                <li>Uses current green, border, and article rhythm.</li>
+                <li>Does not change header structure or content width.</li>
+                <li>Best logo seed: exposed lower plane / reveal edge.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="experiment">
+        <div class="experiment-title">
+          <div>
+            <p class="eyebrow">Experiment B / Evidence Annotation</p>
+            <h2>Make the method visible without making the page academic.</h2>
+          </div>
+          <p>Source: Round 6 / Field Notes. Test: can evidence, counterargument, judgement, and one-more-question become a light recurring language?</p>
+        </div>
+        <div class="before-after">
+          <div class="pane">
+            <div class="label"><p class="meta">Current</p><span>Article body</span></div>
+            <div class="mock">
+              <section class="body">
+                <h4>Evidence</h4>
+                <p>Current verified evidence in this draft supports three limited points: Amazon's own filing, the FTC allegations, and legal scholarship on platform-power risks.</p>
+                <div class="evidence-block">
+                  <p class="meta">Verified source note</p>
+                  <p>The FTC complaint and press release are useful evidence of a regulatory theory of harm.</p>
+                </div>
+                <div class="key-insight">
+                  <p class="meta">Draft Judgement</p>
+                  <p class="quote">Amazon's convenience is a real consumer benefit, but it should not be treated as complete proof of long-term consumer welfare.</p>
+                </div>
+              </section>
+            </div>
+          </div>
+          <div class="pane">
+            <div class="label"><p class="meta">Enhanced</p><span>Selective markers</span></div>
+            <div class="mock">
+              <section class="body">
+                <h4>Evidence</h4>
+                <div class="annotation-row">
+                  <div class="marker" style="--marker-color: var(--color-evidence)">EV</div>
+                  <p>Current verified evidence in this draft supports three limited points: Amazon's own filing, the FTC allegations, and legal scholarship on platform-power risks.</p>
+                </div>
+                <div class="annotation-row">
+                  <div class="marker" style="--marker-color: var(--color-counterargument)">CA</div>
+                  <p>Counterargument: Amazon may benefit consumers through efficiency, scale, logistics, and seller competition rather than harmful market power.</p>
+                </div>
+                <div class="annotation-row">
+                  <div class="marker" style="--marker-color: var(--color-accent)">J</div>
+                  <p>Judgement: convenience is beneficial when competition can still discipline prices, fees, and quality.</p>
+                </div>
+              </section>
+            </div>
+          </div>
+          <div class="pane">
+            <div class="label"><p class="meta">Delta</p><span>What changed</span></div>
+            <div class="delta">
+              <ul>
+                <li>Adds small method markers only at structural moments.</li>
+                <li>Keeps the prose primary; labels do not annotate every paragraph.</li>
+                <li>Could reuse existing evidence/counterargument/judgement colors.</li>
+                <li>Best logo seed: evidence notch / margin marker.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="experiment">
+        <div class="experiment-title">
+          <div>
+            <p class="eyebrow">Experiment C / Second Reading</p>
+            <h2>The first conclusion gets a disciplined second line.</h2>
+          </div>
+          <p>Source: Round 6 / The Second Reading. Test: can a title, claim, or homepage item reveal the complication without becoming a gimmick?</p>
+        </div>
+        <div class="before-after">
+          <div class="pane">
+            <div class="label"><p class="meta">Current</p><span>Homepage list</span></div>
+            <div class="mock">
+              <section>
+                <p class="meta">Recent cases</p>
+                <div class="homepage-list">
+                  <article>
+                    <time>Jul 9, 2026</time>
+                    <div>
+                      <h4>Amazon, Convenience, and the Long-Term Cost of Market Power</h4>
+                      <p class="case-summary">A draft case asking whether convenience necessarily benefits consumers in the long run.</p>
+                    </div>
+                    <p class="meta">Read</p>
+                  </article>
+                </div>
+              </section>
+            </div>
+          </div>
+          <div class="pane">
+            <div class="label"><p class="meta">Enhanced</p><span>First / second read</span></div>
+            <div class="mock">
+              <section>
+                <p class="meta">Recent cases</p>
+                <div class="homepage-list">
+                  <article>
+                    <time>Jul 9, 2026</time>
+                    <div>
+                      <h4>Amazon, Convenience, and the Long-Term Cost of Market Power</h4>
+                      <div class="second-reading">
+                        <div class="first-second">
+                          <div>
+                            <strong>Convenience lowers friction.</strong>
+                            <span>First reading: real consumer benefit.</span>
+                          </div>
+                          <div>
+                            <strong>Dependence may raise the cost.</strong>
+                            <span>Second reading: the condition underneath.</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <p class="meta">Read</p>
+                  </article>
+                </div>
+              </section>
+            </div>
+          </div>
+          <div class="pane">
+            <div class="label"><p class="meta">Delta</p><span>What changed</span></div>
+            <div class="delta">
+              <ul>
+                <li>Adds one paired reading under a case item.</li>
+                <li>Does not alter page grid or typography system.</li>
+                <li>Clarifies Understory's analytical promise quickly.</li>
+                <li>Risk: repeated too often, it becomes formulaic.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="experiment">
+        <div class="experiment-title">
+          <div>
+            <p class="eyebrow">Experiment D / Editorial Refinement</p>
+            <h2>The site may need less than we think.</h2>
+          </div>
+          <p>Source: Round 6 / Editorial Understory. Test: can rule weights, metadata, and source treatment make the current site feel sharper without new components?</p>
+        </div>
+        <div class="before-after">
+          <div class="pane">
+            <div class="label"><p class="meta">Current</p><span>Desktop / mobile header</span></div>
+            <div class="site-header">
+              <nav class="site-nav">
+                <a class="site-identity">understory</a>
+                <div class="site-nav__links"><span>Cases</span><span>Topics</span><span>Concepts</span><span>Method</span><span>About</span><span>EN / 中文</span></div>
+              </nav>
+            </div>
+            <div class="mock">
+              <header class="case-header">
+                <p class="meta" style="color: var(--color-text-muted)">Case status: draft · company · July 9, 2026</p>
+                <h3>Amazon, Convenience, and the Long-Term Cost of Market Power</h3>
+                <p class="case-summary">A draft case asking whether Amazon's low-price convenience necessarily benefits consumers in the long run.</p>
+              </header>
+            </div>
+          </div>
+          <div class="pane editorial-polish">
+            <div class="label"><p class="meta">Enhanced</p><span>Sharper hierarchy</span></div>
+            <div class="site-header">
+              <nav class="site-nav">
+                <a class="site-identity">understory</a>
+                <div class="site-nav__links"><span>Cases</span><span>Topics</span><span>Concepts</span><span>Method</span><span>About</span><span>EN / 中文</span></div>
+              </nav>
+            </div>
+            <div class="mock">
+              <header class="case-header">
+                <p class="meta" style="color: var(--color-text-muted)">Case status: draft · company · July 9, 2026</p>
+                <h3 class="case-title">Amazon, Convenience, and the Long-Term Cost of Market Power</h3>
+                <p class="case-summary">A draft case asking whether Amazon's low-price convenience necessarily benefits consumers in the long run.</p>
+                <div class="source-strip">
+                  <span>SEC filing</span>
+                  <span>FTC complaint</span>
+                  <span>Yale Law Journal</span>
+                  <span>verification required</span>
+                </div>
+              </header>
+            </div>
+          </div>
+          <div class="pane">
+            <div class="label"><p class="meta">Delta</p><span>What changed</span></div>
+            <div class="delta">
+              <ul>
+                <li>No new navigation, grid, font, or color system.</li>
+                <li>Adds source strip and slightly tighter opener rhythm.</li>
+                <li>Improves trust and scan clarity with the least visual risk.</li>
+                <li>Best logo seed: interrupted editorial rule / source tick.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Evaluation</p>
+            <h2>Which additions actually improve Understory?</h2>
+          </div>
+          <p>
+            Scored 1-10 against the requested questions. The goal is not to add everything; it is to identify the mechanism or two that deserve to survive.
+          </p>
+        </div>
+        <table class="score-table">
+          <thead>
+            <tr>
+              <th>Question</th>
+              <th>A Reveal</th>
+              <th>B Annotation</th>
+              <th>C Second Reading</th>
+              <th>D Refinement</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Preserves current site</td><td>9</td><td>8</td><td>8</td><td>10</td></tr>
+            <tr><td>Feels native, not added-on</td><td>8</td><td>8</td><td>7</td><td>9</td></tr>
+            <tr><td>Makes Understory more distinctive</td><td>9</td><td>8</td><td>8</td><td>6</td></tr>
+            <tr><td>Improves analytical clarity</td><td>8</td><td>9</td><td>8</td><td>8</td></tr>
+            <tr><td>Supports long-form reading</td><td>8</td><td>7</td><td>7</td><td>9</td></tr>
+            <tr><td>Avoids generic startup aesthetics</td><td>9</td><td>8</td><td>8</td><td>9</td></tr>
+            <tr><td>Could survive for years</td><td>8</td><td>8</td><td>6</td><td>9</td></tr>
+            <tr><td>Could generate future symbol</td><td>9</td><td>8</td><td>6</td><td>7</td></tr>
+          </tbody>
+        </table>
+
+        <div class="recommendation">
+          <div>
+            <strong>Reject</strong>
+            <span>C if used as a repeated global pattern. It is useful sparingly, but too easy to turn into a formula.</span>
+          </div>
+          <div>
+            <strong>Keep</strong>
+            <span>A Beneath Reveal and B Evidence Annotation are the two mechanisms worth further testing.</span>
+          </div>
+          <div>
+            <strong>Most uniquely Understory</strong>
+            <span>A exposed lower layer: it expresses beneath-the-obvious through site behavior.</span>
+          </div>
+          <div>
+            <strong>Natural seed</strong>
+            <span>The reveal edge / exposed lower plane feels most born from the current site.</span>
+          </div>
+          <div>
+            <strong>Next step</strong>
+            <span>Test A and B in one real case page before starting symbol development.</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

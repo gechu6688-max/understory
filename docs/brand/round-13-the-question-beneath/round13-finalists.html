@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Understory Round 13 - Finalists</title>
+    <style>
+      :root {
+        --page: #f7f4ee;
+        --surface: #fffdf8;
+        --muted-surface: #f1eee7;
+        --ink: #191714;
+        --muted: #655f57;
+        --line: #ded7ca;
+        --green: #174d3c;
+        --dark: #151310;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      main {
+        width: min(1480px, calc(100vw - 48px));
+        margin: 0 auto;
+        padding: 42px 0 70px;
+      }
+      header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 34px;
+        align-items: end;
+        padding-bottom: 26px;
+        border-bottom: 1px solid var(--line);
+      }
+      .eyebrow {
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 760;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      h1 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(42px, 5vw, 82px);
+        line-height: 0.94;
+        font-weight: 600;
+      }
+      h2, h3 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 600;
+      }
+      p { margin: 0; color: var(--muted); line-height: 1.6; }
+      .intro { max-width: 650px; font-size: 15px; }
+      .top-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 28px;
+      }
+      .card {
+        background: color-mix(in srgb, var(--surface) 88%, white);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .symbol-stage {
+        display: grid;
+        place-items: center;
+        min-height: 300px;
+        border-bottom: 1px solid var(--line);
+      }
+      .symbol-stage img { width: 188px; height: 188px; object-fit: contain; }
+      .card-body { padding: 18px; }
+      .card h2 { margin: 5px 0 8px; font-size: 27px; line-height: 1.05; }
+      .mini-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .mini {
+        display: grid;
+        place-items: center;
+        min-height: 80px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--surface);
+      }
+      .mini.dark { background: var(--dark); }
+      .mini.green img { filter: none; }
+      .mini.green { background: color-mix(in srgb, var(--green) 8%, var(--surface)); }
+      .mini.dark img { filter: invert(1); }
+      .mini img { width: 42px; height: 42px; object-fit: contain; }
+      .green img { filter: sepia(1) saturate(3) hue-rotate(98deg) brightness(0.45); }
+      .pairing {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        margin-top: 16px;
+        padding: 13px 14px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--surface);
+      }
+      .pairing img { width: 32px; height: 32px; object-fit: contain; }
+      .wordmark {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 25px;
+        font-weight: 600;
+        letter-spacing: 0;
+      }
+      .zh-mark {
+        font-family: "Songti SC", STSong, "Noto Serif CJK SC", serif;
+        font-size: 23px;
+        letter-spacing: 0.04em;
+      }
+      .section {
+        margin-top: 34px;
+        padding-top: 28px;
+        border-top: 1px solid var(--line);
+      }
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: end;
+        margin-bottom: 16px;
+      }
+      .section h2 { font-size: 32px; }
+      .headers {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .browser {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+      .browser-bar {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        height: 30px;
+        padding: 0 12px;
+        border-bottom: 1px solid var(--line);
+        background: var(--muted-surface);
+      }
+      .dot { width: 7px; height: 7px; border-radius: 50%; background: #b7afa3; }
+      .site-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--line);
+        background: color-mix(in srgb, var(--surface) 92%, transparent);
+      }
+      .identity {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-width: 0;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .identity img { width: 25px; height: 25px; object-fit: contain; }
+      .identity span {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 20px;
+        font-weight: 600;
+      }
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 16px;
+        color: #55514a;
+        font-size: 13px;
+      }
+      .article {
+        padding: 26px 26px 34px;
+      }
+      .article small {
+        color: var(--green);
+        font-weight: 760;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .article h3 {
+        max-width: 480px;
+        margin: 10px 0;
+        font-size: 31px;
+        line-height: 1.08;
+      }
+      .mobile-shell {
+        width: 240px;
+        margin: 0 auto;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        overflow: hidden;
+        background: var(--surface);
+      }
+      .mobile-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      .mobile-nav img { width: 24px; height: 24px; }
+      .mobile-nav span {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 19px;
+        font-weight: 600;
+      }
+      .hamburger { width: 22px; height: 12px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+      .mobile-body { padding: 22px 16px 28px; }
+      .mobile-body h3 { font-size: 26px; line-height: 1.08; }
+      .favicon-grid {
+        display: grid;
+        grid-template-columns: repeat(9, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .fav {
+        display: grid;
+        place-items: center;
+        gap: 8px;
+        min-height: 90px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--surface);
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .fav img { object-fit: contain; image-rendering: auto; }
+      .phrase-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .phrase {
+        min-height: 176px;
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+      .phrase img { width: 34px; height: 34px; margin-bottom: 18px; }
+      .phrase .en {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 32px;
+        line-height: 1.08;
+      }
+      .phrase .zh {
+        margin-top: 10px;
+        font-family: "Songti SC", STSong, "Noto Serif CJK SC", serif;
+        font-size: 20px;
+        color: var(--muted);
+      }
+      .eval {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .eval-card {
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+      .eval-card h3 { margin: 5px 0 12px; font-size: 24px; }
+      dl { display: grid; gap: 10px; margin: 0; }
+      dt {
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 760;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+      dd {
+        margin: 2px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      @media (max-width: 1060px) {
+        main { width: min(100vw - 28px, 820px); }
+        header, .top-grid, .headers, .phrase-grid, .eval { grid-template-columns: 1fr; }
+        .favicon-grid { grid-template-columns: repeat(3, 1fr); }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <div class="eyebrow">Round 13 / Phase 2</div>
+          <h1>Top 3 Symbol Tests</h1>
+        </div>
+        <p class="intro">
+          These finalists were selected for symbol-first strength rather than explicit question-mark readability. The purpose is to test whether the feeling of inquiry, descent, and unfinished continuation survives once the mark enters Understory's real editorial environment.
+        </p>
+      </header>
+
+      <section class="top-grid" id="top-grid"></section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Website Context</div>
+            <h2>Desktop Header Mockup</h2>
+          </div>
+          <p>Current header spacing, lowercase serif wordmark, paper surface, and restrained navigation are preserved.</p>
+        </div>
+        <div class="headers" id="desktop-headers"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Website Context</div>
+            <h2>Mobile Header Mockup</h2>
+          </div>
+          <p>Testing whether the mark survives near wordmark size without becoming a generic app glyph.</p>
+        </div>
+        <div class="headers" id="mobile-headers"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Favicon</div>
+            <h2>16 / 24 / 32 px Test</h2>
+          </div>
+          <p>Small sizes are deliberately unforgiving. The mark must keep its silhouette before the hidden question is legible.</p>
+        </div>
+        <div class="favicon-grid" id="favicons"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Language</div>
+            <h2>Question Phrases</h2>
+          </div>
+          <p>The symbol should sit naturally beside both the English editorial promise and the Chinese interpretation.</p>
+        </div>
+        <div class="phrase-grid" id="phrases"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Evaluation</div>
+            <h2>Which Feels Real First?</h2>
+          </div>
+          <p>Primary question: does the mark feel like a real brand before the question concept is explained?</p>
+        </div>
+        <div class="eval" id="eval"></div>
+      </section>
+    </main>
+
+    <script>
+      const finalists = [
+        {
+          id: "C1",
+          name: "Hidden Counterform",
+          src: "phase-1/c1-hidden-counterform.svg",
+          verdict: "Best hidden-question concept",
+          concept: "A composed abstract emblem where the question is felt through the inner counterform and the unresolved lower state.",
+          strength: "Most closely expresses Understory's beneath-the-obvious logic without needing explicit punctuation.",
+          risk: "The hidden logic may be too subtle unless paired with strong brand repetition.",
+          distinctiveness: "High: proprietary enough, with a quiet editorial intelligence.",
+          favicon: "Strong at 24 and 32 px; 16 px keeps silhouette but loses the internal story.",
+          realFirst: "Yes. It reads as a serious mark first, then reveals the question beneath."
+        },
+        {
+          id: "D2",
+          name: "Inevitable Piece",
+          src: "phase-1/d2-inevitable-piece.svg",
+          verdict: "Best emotional tension",
+          concept: "A direct evolution of C11-B: the separated piece becomes the next question rather than a missing dot.",
+          strength: "Keeps the suspended relationship alive and has the strongest memory shape.",
+          risk: "Still carries some C/Q adjacency because it remains closest to the original lineage.",
+          distinctiveness: "High: memorable, compact, and emotionally warmer than the analytical variants.",
+          favicon: "Best small-size performance of the three; the piece remains visible at 16 px.",
+          realFirst: "Yes. It feels like a brand mark quickly, especially in header and favicon contexts."
+        },
+        {
+          id: "E2",
+          name: "Archive Question",
+          src: "phase-1/e2-archive-question.svg",
+          verdict: "Best editorial fit",
+          concept: "A quieter journal-like symbol where the question feels archived inside the structure rather than announced.",
+          strength: "Most mature and least software-like; could live on a publication cover.",
+          risk: "Less emotionally alive than D2 and slightly more conservative at a glance.",
+          distinctiveness: "Medium-high: refined and durable, though less surprising.",
+          favicon: "Good at 32 px, acceptable at 24 px, compressed at 16 px.",
+          realFirst: "Mostly. It feels credible before explanation, but needs optical refinement to become unmistakable."
+        },
+      ];
+
+      const topGrid = document.querySelector("#top-grid");
+      const desktopHeaders = document.querySelector("#desktop-headers");
+      const mobileHeaders = document.querySelector("#mobile-headers");
+      const favicons = document.querySelector("#favicons");
+      const phrases = document.querySelector("#phrases");
+      const evalRoot = document.querySelector("#eval");
+
+      for (const item of finalists) {
+        topGrid.insertAdjacentHTML("beforeend", `
+          <article class="card">
+            <div class="symbol-stage"><img src="${item.src}" alt="${item.id} ${item.name}" /></div>
+            <div class="card-body">
+              <div class="eyebrow">${item.id} / ${item.verdict}</div>
+              <h2>${item.name}</h2>
+              <p>${item.concept}</p>
+              <div class="mini-row">
+                <div class="mini"><img src="${item.src}" alt="" /></div>
+                <div class="mini dark"><img src="${item.src}" alt="" /></div>
+                <div class="mini green"><img src="${item.src}" alt="" /></div>
+              </div>
+              <div class="pairing"><img src="${item.src}" alt="" /><span class="wordmark">understory</span></div>
+              <div class="pairing"><img src="${item.src}" alt="" /><span class="zh-mark">问溯</span></div>
+            </div>
+          </article>
+        `);
+
+        desktopHeaders.insertAdjacentHTML("beforeend", `
+          <article class="browser">
+            <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <nav class="site-nav">
+              <a class="identity"><img src="${item.src}" alt="" /><span>understory</span></a>
+              <div class="nav-links"><span>Cases</span><span>Topics</span><span>Concepts</span><span>Method</span><span>About</span></div>
+            </nav>
+            <div class="article">
+              <small>Case Study</small>
+              <h3>What does convenience cost?</h3>
+              <p>Analysis that begins at the obvious answer, then follows the question downward.</p>
+            </div>
+          </article>
+        `);
+
+        mobileHeaders.insertAdjacentHTML("beforeend", `
+          <article class="card">
+            <div class="card-body">
+              <div class="eyebrow">${item.id}</div>
+              <div class="mobile-shell">
+                <div class="mobile-nav">
+                  <div class="identity"><img src="${item.src}" alt="" /><span>understory</span></div>
+                  <div class="hamburger"></div>
+                </div>
+                <div class="mobile-body">
+                  <div class="eyebrow">One More Question</div>
+                  <h3>Go beneath. Ask again.</h3>
+                </div>
+              </div>
+            </div>
+          </article>
+        `);
+
+        for (const size of [16, 24, 32]) {
+          favicons.insertAdjacentHTML("beforeend", `
+            <div class="fav"><img src="${item.src}" style="width:${size}px;height:${size}px" alt="${item.id} ${size}px" /><span>${item.id} / ${size}px</span></div>
+          `);
+        }
+
+        phrases.insertAdjacentHTML("beforeend", `
+          <article class="phrase">
+            <img src="${item.src}" alt="" />
+            <div class="en">One More Question</div>
+            <div class="zh">问有所起，思有所往</div>
+          </article>
+        `);
+
+        evalRoot.insertAdjacentHTML("beforeend", `
+          <article class="eval-card">
+            <div class="eyebrow">${item.id}</div>
+            <h3>${item.name}</h3>
+            <dl>
+              <div><dt>Strength</dt><dd>${item.strength}</dd></div>
+              <div><dt>Risk</dt><dd>${item.risk}</dd></div>
+              <div><dt>Brand distinctiveness</dt><dd>${item.distinctiveness}</dd></div>
+              <div><dt>Favicon performance</dt><dd>${item.favicon}</dd></div>
+              <div><dt>Real brand before concept?</dt><dd>${item.realFirst}</dd></div>
+            </dl>
+          </article>
+        `);
+      }
+    </script>
+  </body>
+</html>

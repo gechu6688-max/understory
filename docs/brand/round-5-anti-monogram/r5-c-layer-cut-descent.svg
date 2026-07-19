@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">R5-C: Layer / Cut / Descent</title>
+  <desc id="desc">Shifted planes separated by a cut, suggesting a lower structure revealed beneath the surface.</desc>
+  <path fill="#174D3C" d="M12 11h38v13H12V11Z" />
+  <path fill="#174D3C" d="M18 28h34v12H18V28Z" />
+  <path fill="#174D3C" d="M25 44h27v10H25V44Z" />
+  <path fill="#174D3C" d="M12 24h13l-7 4h-6v-4Z" />
+  <path fill="#174D3C" d="M45 24h7v4h-14l7-4Z" />
+</svg>

@@ -1,4 +1,6 @@
 ---
+import "@fontsource/instrument-serif";
+import "@fontsource-variable/source-sans-3";
 import "../styles/global.css";
 import { defaultLocale, getSiteCopy, localizedPath, locales, switchLocalePath, type Locale } from "../lib/siteCopy";
 
@@ -48,6 +50,7 @@ const seoAlternateLinks =
         })
         .filter((item): item is { locale: Locale; href: string } => item !== null);
 const mobileLocaleLink = localeLinks.find((item) => !item.active);
+const isHome = pathname === homePath;
 ---
 
 <!doctype html>
@@ -57,6 +60,9 @@ const mobileLocaleLink = localeLinks.find((item) => !item.active);
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="canonical" href={canonicalPath} />
+    <link rel="icon" type="image/svg+xml" href="/brand/understory-symbol-favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/brand/understory-favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/brand/understory-favicon-16.png" />
     {
       seoAlternateLinks.map((item) => (
         <link rel="alternate" hreflang={item.locale === "zh" ? "zh-CN" : "en"} href={item.href} />
@@ -64,10 +70,13 @@ const mobileLocaleLink = localeLinks.find((item) => !item.active);
     }
     <title>{title}</title>
   </head>
-  <body class="antialiased">
-    <header class="site-header">
+  <body class:list={["antialiased", { "is-home": isHome }]}>
+    <header class:list={["site-header", { "site-header--home": isHome }]} data-site-header>
       <nav class="site-nav" aria-label="Primary navigation">
-        <a class="site-identity" href={homePath} aria-label={homeLabel}>{copy.brand.name}</a>
+        <a class="site-identity" href={homePath} aria-label={homeLabel}>
+          <span class="site-identity__symbol" aria-hidden="true"></span>
+          <span class="site-identity__wordmark">{copy.brand.name}</span>
+        </a>
         {
           mobileLocaleLink && (
             <a class="site-mobile-language" href={mobileLocaleLink.href} aria-label={`${copy.menu.language}: ${mobileLocaleLink.label}`}>
@@ -84,6 +93,7 @@ const mobileLocaleLink = localeLinks.find((item) => !item.active);
               </a>
             ))
           }
+          <a href={isHome ? "#one-more-question" : `${homePath}#one-more-question`}>{locale === "zh" ? "搜索" : "Search"}</a>
           {isPreview && <a class="site-nav__preview" href="/preview/">Local Preview</a>}
           </div>
           <div class="site-language" aria-label={copy.menu.language}>
@@ -107,6 +117,7 @@ const mobileLocaleLink = localeLinks.find((item) => !item.active);
                 </a>
               ))
             }
+            <a href={isHome ? "#one-more-question" : `${homePath}#one-more-question`}>{locale === "zh" ? "搜索" : "Search"}</a>
             <div class="site-menu__language" aria-label={copy.menu.language}>
               <span>{copy.menu.language}</span>
               <div>
@@ -125,8 +136,16 @@ const mobileLocaleLink = localeLinks.find((item) => !item.active);
         </details>
       </nav>
     </header>
-    <main class="mx-auto max-w-5xl px-5 py-8 sm:py-12">
+    <main class:list={["site-main mx-auto max-w-5xl px-5 py-8 sm:py-12", { "site-main--home": isHome }]}>
       <slot />
     </main>
+    {
+      <script is:inline>
+        const header = document.querySelector("[data-site-header]");
+        const updateHeader = () => header?.classList.toggle("is-scrolled", window.scrollY > 24);
+        updateHeader();
+        window.addEventListener("scroll", updateHeader, { passive: true });
+      </script>
+    }
   </body>
 </html>

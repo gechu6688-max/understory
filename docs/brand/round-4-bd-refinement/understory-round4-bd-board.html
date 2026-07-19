@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Understory Round 4 B/D Refinement Study</title>
+    <style>
+      :root {
+        --page: #f7f4ee;
+        --surface: #fffdf8;
+        --surface-muted: #f1eee7;
+        --text: #191714;
+        --secondary: #55514a;
+        --muted: #7a746b;
+        --border: #ded7ca;
+        --green: #174d3c;
+        --deep: #0f352b;
+        --tint: #e8f0ea;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        max-width: 1480px;
+        margin: 0 auto;
+        padding: 40px 28px 72px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+        gap: 56px;
+        align-items: end;
+        padding-bottom: 34px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .eyebrow,
+      .meta {
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 760;
+        letter-spacing: 0.15em;
+        line-height: 1.45;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 12ch;
+        margin-top: 12px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(54px, 6vw, 80px);
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 0.98;
+      }
+
+      .intro-copy {
+        display: grid;
+        gap: 14px;
+        max-width: 720px;
+        color: var(--secondary);
+        font-size: 17px;
+        line-height: 1.64;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-top: 36px;
+        border-top: 2px solid var(--green);
+        padding-top: 13px;
+      }
+
+      .section-title h2 {
+        margin-top: 7px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 34px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 1.08;
+      }
+
+      .section-title p:last-child {
+        max-width: 56ch;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+        text-align: right;
+      }
+
+      .variant-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .variant {
+        min-width: 0;
+        border-top: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 78%, transparent);
+        padding-top: 14px;
+      }
+
+      .variant h3 {
+        margin-top: 8px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 25px;
+        font-weight: 600;
+        line-height: 1.1;
+      }
+
+      .stage {
+        display: grid;
+        min-height: 204px;
+        margin-top: 15px;
+        place-items: center;
+        border-block: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 68%, transparent);
+      }
+
+      .stage img {
+        width: 138px;
+        height: 138px;
+      }
+
+      .tone-row,
+      .size-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .tone,
+      .size-box {
+        display: grid;
+        min-height: 60px;
+        place-items: center;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .tone img {
+        width: 34px;
+        height: 34px;
+      }
+
+      .tone--black img,
+      .silhouette img {
+        filter: brightness(0);
+      }
+
+      .tone--white {
+        background: var(--text);
+      }
+
+      .tone--white img {
+        filter: brightness(0) invert(1);
+      }
+
+      .tone--green {
+        background: var(--tint);
+      }
+
+      .tone--deep {
+        border-color: var(--deep);
+        background: var(--deep);
+      }
+
+      .tone--deep img {
+        filter: brightness(0) invert(1);
+      }
+
+      .size-box {
+        min-height: 68px;
+      }
+
+      .size-box small {
+        display: block;
+        margin-top: 7px;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 760;
+        letter-spacing: 0.1em;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .wordmark {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 13px;
+        border-block: 1px solid var(--border);
+        padding: 13px 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 24px;
+        font-weight: 600;
+      }
+
+      .wordmark img {
+        width: 34px;
+        height: 34px;
+      }
+
+      .notes {
+        display: grid;
+        gap: 8px;
+        margin-top: 13px;
+        color: var(--secondary);
+        font-size: 12.3px;
+        line-height: 1.48;
+      }
+
+      .notes strong {
+        color: var(--text);
+      }
+
+      .mock-grid,
+      .test-grid,
+      .ranking-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .mock,
+      .test,
+      .ranking-card {
+        border-top: 1px solid var(--border);
+        padding-top: 13px;
+      }
+
+      .desktop-shell,
+      .mobile-shell {
+        margin-top: 10px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .mobile-shell {
+        max-width: 326px;
+      }
+
+      .site-header {
+        border-bottom: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
+        background: color-mix(in srgb, var(--surface) 92%, transparent);
+      }
+
+      .site-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 14px;
+      }
+
+      .site-identity {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 18px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .site-identity img {
+        width: 26px;
+        height: 26px;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 8px;
+        color: var(--secondary);
+        font-size: 10.5px;
+        white-space: nowrap;
+      }
+
+      .menu-word {
+        color: var(--green);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .test-pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .silhouette-box,
+      .blur-box {
+        display: grid;
+        min-height: 132px;
+        place-items: center;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .blur-box {
+        background: var(--surface-muted);
+      }
+
+      .silhouette-box img {
+        width: 92px;
+        height: 92px;
+      }
+
+      .blur-box img {
+        width: 76px;
+        height: 76px;
+        filter: brightness(0) blur(1.45px);
+        opacity: 0.78;
+      }
+
+      .ranking-card {
+        display: grid;
+        min-height: 180px;
+        align-content: start;
+        gap: 10px;
+        background: color-mix(in srgb, var(--surface) 72%, transparent);
+      }
+
+      .ranking-card img {
+        width: 54px;
+        height: 54px;
+      }
+
+      .ranking-card p {
+        color: var(--secondary);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .ranking-card strong {
+        color: var(--text);
+      }
+
+      @media (max-width: 1180px) {
+        .variant-grid,
+        .mock-grid,
+        .test-grid,
+        .ranking-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 720px) {
+        main {
+          padding-inline: 20px;
+        }
+
+        .intro,
+        .variant-grid,
+        .mock-grid,
+        .test-grid,
+        .ranking-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .section-title {
+          align-items: start;
+          flex-direction: column;
+        }
+
+        .section-title p:last-child {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">Understory / Round 4</p>
+          <h1>B and D refinement study.</h1>
+        </div>
+        <div class="intro-copy">
+          <p>This round continues only the two strongest Round 3 families: B’s hidden-structure logic and D’s compact standalone presence.</p>
+          <p>The central question is whether a future direction can combine D’s memorability with B’s negative-space intelligence, while feeling like a real Understory brand mark before any U/Q explanation.</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Family B</p>
+            <h2>Hidden U inside Q refinement</h2>
+          </div>
+          <p>Three attempts to reduce badge, seal, and “U inside circle” associations while keeping discovery through negative space.</p>
+        </div>
+        <div class="variant-grid" id="family-b"></div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Family D</p>
+            <h2>Interlocking U/Q refinement</h2>
+          </div>
+          <p>Three attempts to keep D’s compact silhouette while reducing square tech-icon stiffness and attached-tail feeling.</p>
+        </div>
+        <div class="variant-grid" id="family-d"></div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Hybrid Exploration</p>
+            <h2>Convergence studies</h2>
+          </div>
+          <p>Two probes that deliberately test whether B and D can converge into one mature visual structure.</p>
+        </div>
+        <div class="variant-grid" id="family-h"></div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Header Mockup</p>
+            <h2>Current website environment</h2>
+          </div>
+          <p>Desktop and mobile previews use the current lowercase serif identity and restrained navigation scale. These are mockups only.</p>
+        </div>
+        <div class="mock-grid" id="headers"></div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Silhouette / Blur Test</p>
+            <h2>Do they survive a glance?</h2>
+          </div>
+          <p>Silhouette-only and slight-blur views test memory, redrawability, and whether the mark has presence before concept explanation.</p>
+        </div>
+        <div class="test-grid" id="tests"></div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Primary Evaluation</p>
+            <h2>Which marks feel like a real brand first?</h2>
+          </div>
+          <p>This is the main judgment: not which mark explains U/Q most clearly, but which has standalone identity before the concept is explained.</p>
+        </div>
+        <div class="ranking-grid" id="ranking"></div>
+      </section>
+    </main>
+
+    <script>
+      const variants = [
+        {
+          family: "b",
+          code: "B1",
+          name: "Open Q",
+          file: "b1-open-q.svg",
+          concept: "Open the Q-like structure to reduce badge feeling while keeping a discovered inner U.",
+          strength: "Best B correction against closed seal/app icon associations.",
+          risk: "A little less compact than R3-B.",
+          distinctiveness: "Medium-high",
+          favicon: "Good 32, acceptable 24, moderate 16",
+          brandFirst: "Moderate-high",
+        },
+        {
+          family: "b",
+          code: "B2",
+          name: "Offset U",
+          file: "b2-offset-u.svg",
+          concept: "Shift the internal U optically so the structure feels discovered, not centered and inserted.",
+          strength: "Quietly breaks institutional symmetry.",
+          risk: "Still close to U-inside-Q if viewed literally.",
+          distinctiveness: "Medium",
+          favicon: "Good 32/24, moderate 16",
+          brandFirst: "Moderate",
+        },
+        {
+          family: "b",
+          code: "B3",
+          name: "Asymmetric Q",
+          file: "b3-asymmetric-q.svg",
+          concept: "Stretch and weight the outer Q into a less perfect, more editorial silhouette.",
+          strength: "Best B-family move away from badge/seal feeling.",
+          risk: "Slightly less stable at 16px.",
+          distinctiveness: "High",
+          favicon: "Good 32, acceptable 24, moderate 16",
+          brandFirst: "High",
+        },
+        {
+          family: "d",
+          code: "D1",
+          name: "Softer Interlock",
+          file: "d1-softer-interlock.svg",
+          concept: "Soften the compact interlock and let the Q tail grow from the curve.",
+          strength: "Best D correction against rigid tech-square feeling.",
+          risk: "Loses a little crispness versus R3-D.",
+          distinctiveness: "Medium-high",
+          favicon: "Strong 32/24, acceptable 16",
+          brandFirst: "High",
+        },
+        {
+          family: "d",
+          code: "D2",
+          name: "Negative-Space Interlock",
+          file: "d2-negative-space-interlock.svg",
+          concept: "Let the U emerge through a shared internal channel instead of explicit letter drawing.",
+          strength: "Strongest D-family bridge toward B’s hidden-structure logic.",
+          risk: "Internal U can become too obvious if widened.",
+          distinctiveness: "High",
+          favicon: "Strong 32/24, acceptable 16",
+          brandFirst: "High",
+        },
+        {
+          family: "d",
+          code: "D3",
+          name: "Open Corner Interlock",
+          file: "d3-open-corner-interlock.svg",
+          concept: "Open one outer corner to imply continuation without a question mark.",
+          strength: "Adds unresolved quality while staying compact.",
+          risk: "Open corner may read as construction if over-emphasized.",
+          distinctiveness: "Medium-high",
+          favicon: "Strong 32, good 24, acceptable 16",
+          brandFirst: "Medium-high",
+        },
+        {
+          family: "h",
+          code: "H1",
+          name: "D Silhouette + B Negative Space",
+          file: "h1-d-silhouette-b-negative-space.svg",
+          concept: "Use D’s compact body with B’s hidden negative-space logic.",
+          strength: "Most promising convergence candidate.",
+          risk: "Negative space may still read as literal U if not tuned.",
+          distinctiveness: "High",
+          favicon: "Strong 32/24, acceptable 16",
+          brandFirst: "High",
+        },
+        {
+          family: "h",
+          code: "H2",
+          name: "Editorial U/Q Hybrid",
+          file: "h2-editorial-uq-hybrid.svg",
+          concept: "A less rigid, publishing-adjacent hybrid with asymmetry and a discovered inner U.",
+          strength: "Best editorial temperament; least tech-app feeling.",
+          risk: "More complex silhouette than H1 or D2.",
+          distinctiveness: "High",
+          favicon: "Good 32, acceptable 24, moderate 16",
+          brandFirst: "High",
+        },
+      ];
+
+      const finalistOrder = ["H1", "D2", "B3", "D1", "H2", "D3", "B1", "B2"];
+
+      const img = (v, attrs = "") => `<img src="${v.file}" alt="${v.code} ${v.name}" ${attrs} />`;
+
+      const card = (v) => `
+        <article class="variant">
+          <p class="meta">${v.code}</p>
+          <h3>${v.name}</h3>
+          <div class="stage">${img(v)}</div>
+          <div class="tone-row">
+            <div class="tone tone--black">${img(v)}</div>
+            <div class="tone tone--white">${img(v)}</div>
+            <div class="tone tone--green">${img(v)}</div>
+            <div class="tone tone--deep">${img(v)}</div>
+          </div>
+          <div class="size-row">
+            <div class="size-box"><span>${img(v, 'width="16" height="16"')}<small>16</small></span></div>
+            <div class="size-box"><span>${img(v, 'width="24" height="24"')}<small>24</small></span></div>
+            <div class="size-box"><span>${img(v, 'width="32" height="32"')}<small>32</small></span></div>
+            <div class="size-box"><span>${img(v, 'width="48" height="48"')}<small>48</small></span></div>
+          </div>
+          <div class="wordmark">${img(v)}understory</div>
+          <div class="notes">
+            <p><strong>Concept:</strong> ${v.concept}</p>
+            <p><strong>Strength:</strong> ${v.strength}</p>
+            <p><strong>Risk:</strong> ${v.risk}</p>
+            <p><strong>Brand distinctiveness:</strong> ${v.distinctiveness}. <strong>Favicon:</strong> ${v.favicon}.</p>
+            <p><strong>Real brand before U/Q:</strong> ${v.brandFirst}.</p>
+          </div>
+        </article>
+      `;
+
+      const headerMock = (v) => `
+        <article class="mock">
+          <p class="meta">${v.code}</p>
+          <div class="desktop-shell">
+            <div class="site-header">
+              <div class="site-nav">
+                <span class="site-identity">${img(v)}understory</span>
+                <span class="nav-links">Cases Topics Concepts Method About</span>
+              </div>
+            </div>
+          </div>
+          <div class="mobile-shell">
+            <div class="site-header">
+              <div class="site-nav">
+                <span class="site-identity">${img(v)}understory</span>
+                <span class="menu-word">Menu</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      `;
+
+      const testCard = (v) => `
+        <article class="test">
+          <p class="meta">${v.code} — ${v.name}</p>
+          <div class="test-pair">
+            <div class="silhouette silhouette-box">${img(v)}</div>
+            <div class="blur-box">${img(v)}</div>
+          </div>
+        </article>
+      `;
+
+      const rankingCard = (v, index) => `
+        <article class="ranking-card">
+          <p class="meta">${String(index + 1).padStart(2, "0")} / ${v.code}</p>
+          ${img(v)}
+          <p><strong>${v.name}</strong></p>
+          <p>${v.brandFirst}. ${v.strength}</p>
+          <p>Watch-out: ${v.risk}</p>
+        </article>
+      `;
+
+      document.getElementById("family-b").innerHTML = variants.filter((v) => v.family === "b").map(card).join("");
+      document.getElementById("family-d").innerHTML = variants.filter((v) => v.family === "d").map(card).join("");
+      document.getElementById("family-h").innerHTML = variants.filter((v) => v.family === "h").map(card).join("");
+      document.getElementById("headers").innerHTML = variants.map(headerMock).join("");
+      document.getElementById("tests").innerHTML = variants.map(testCard).join("");
+      document.getElementById("ranking").innerHTML = finalistOrder.map((code, i) => rankingCard(variants.find((v) => v.code === code), i)).join("");
+    </script>
+  </body>
+</html>

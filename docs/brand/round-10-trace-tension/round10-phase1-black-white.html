@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Understory Round 10 - Phase 1 Black & White</title>
+    <style>
+      :root { --page:#f7f4ee; --surface:#fffdf8; --text:#191714; --secondary:#55514a; --border:#ded7ca; --green:#174d3c; }
+      *{box-sizing:border-box} body{margin:0;background:var(--page);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif} main{max-width:78rem;margin:0 auto;padding:2.5rem 1.25rem 4.5rem} h1,h2,h3,p{margin:0}.eyebrow{color:var(--green);font-size:.72rem;font-weight:760;letter-spacing:.16em;line-height:1.4;text-transform:uppercase}.intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(20rem,.72fr);gap:clamp(2rem,5vw,4rem);align-items:end;border-bottom:1px solid var(--border);padding-block:1.7rem 2rem}h1{max-width:11ch;margin-top:.8rem;font-family:Georgia,"Times New Roman",serif;font-size:clamp(3rem,6.4vw,6rem);font-weight:600;line-height:.96}.intro aside{border-top:2px solid var(--green);padding-top:1rem}.intro p:not(.eyebrow){color:var(--secondary);line-height:1.7}.section{margin-top:2.5rem}.section-head{display:grid;grid-template-columns:minmax(0,.9fr) minmax(20rem,.6fr);gap:2rem;align-items:end;border-top:1px solid var(--green);padding-top:.9rem}h2{margin-top:.55rem;font-family:Georgia,"Times New Roman",serif;font-size:clamp(2rem,4vw,3.35rem);font-weight:600;line-height:1.03}.section-head>p{color:var(--secondary);font-size:.95rem;line-height:1.6}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:1.15rem}.candidate{border:1px solid var(--border);background:var(--surface)}.candidate-head{min-height:8rem;border-bottom:1px solid var(--border);padding:.9rem}.candidate-head h3{margin-top:.4rem;font-family:Georgia,"Times New Roman",serif;font-size:1.42rem;line-height:1.06}.candidate-head p:last-child{margin-top:.45rem;color:var(--secondary);font-size:.84rem;line-height:1.5}.bw{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border)}.stage{display:grid;place-items:center;min-height:11rem}.stage.dark{background:#111}.stage.dark img{filter:invert(1)}.symbol{width:7.8rem;height:7.8rem;object-fit:contain}.sizes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.45rem;padding:.8rem;border-bottom:1px solid var(--border)}.sizes div{display:grid;place-items:center;min-height:4.4rem;background:color-mix(in srgb,var(--page) 72%,transparent)}.sizes img:nth-child(1){width:4.8rem}.sizes img:nth-child(2){width:3.2rem}.sizes img:nth-child(3){width:1.8rem}.tests{display:grid;gap:.6rem;padding:.9rem}.tests p{color:var(--secondary);font-size:.83rem;line-height:1.48}.tests strong{color:var(--text)}.score-table{width:100%;margin-top:1.1rem;border-collapse:collapse;background:color-mix(in srgb,var(--surface) 80%,transparent)}.score-table th,.score-table td{border-bottom:1px solid var(--border);padding:.55rem .45rem;text-align:left;vertical-align:top}.score-table th{color:var(--text);font-size:.68rem;letter-spacing:.11em;text-transform:uppercase}.score-table td{color:var(--secondary);font-size:.82rem;line-height:1.4}@media(max-width:980px){.intro,.section-head{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:640px){.grid{grid-template-columns:1fr}}
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="intro">
+        <div><p class="eyebrow">Understory / Round 10 / Phase 1</p><h1>Trace and tension in black and white.</h1></div>
+        <aside><p class="eyebrow">Preference-led refinement</p><p>This round follows the user's preference for B2 and C3. No green, no mockup polish: only form, silhouette, memory, trace, and unresolved tension.</p></aside>
+      </section>
+      <section class="section">
+        <div class="section-head"><div><p class="eyebrow">Seven Candidates</p><h2>Can trace and tension feel alive before the story?</h2></div><p>The goal is not maturity alone. The mark should create attraction, attachment, and a silhouette that can be remembered tomorrow.</p></div>
+        <div class="grid" id="candidateGrid"></div>
+      </section>
+      <section class="section">
+        <div class="section-head"><div><p class="eyebrow">Scoring</p><h2>Top three selected for application testing.</h2></div><p>Scores use the Round 10 criteria, with extra attention to emotional tension and whether the user is likely to love the mark rather than merely approve it.</p></div>
+        <table class="score-table" id="scoreTable"></table>
+      </section>
+    </main>
+    <script>
+      const candidates = [
+        {id:"B1",name:"Deeper Embedded Trace",file:"phase-1/b1-deeper-embedded-trace.svg",story:"The trace is more buried and discovered through controlled negative space.",memory:"solid slab with one hidden inner route",stop:7,tomorrow:8,scores:[7,8,8,9,7,9,8,8,8,8,8,7]},
+        {id:"B2",name:"Interrupted Embedded Trace",file:"phase-1/b2-interrupted-embedded-trace.svg",story:"The thread disappears and reappears as if passing beneath the surface.",memory:"compact slab with separated trace windows",stop:8,tomorrow:8,scores:[8,8,8,9,8,9,9,8,9,8,8,8]},
+        {id:"B3",name:"Returning Trace",file:"phase-1/b3-returning-trace.svg",story:"The path returns inward without becoming a loop, arrow, or refresh sign.",memory:"slab with an inner return and lower ledge",stop:7,tomorrow:7,scores:[7,8,7,8,7,9,8,8,8,8,8,7]},
+        {id:"C1",name:"Integrated Missing Piece",file:"phase-1/c1-integrated-missing-piece.svg",story:"The separated element belongs to the whole instead of feeling fallen off.",memory:"open angular body with nested lower piece",stop:8,tomorrow:8,scores:[8,8,8,8,9,8,8,8,8,8,8,8]},
+        {id:"C2",name:"Offset Completion",file:"phase-1/c2-offset-completion.svg",story:"The answer is present, but not where the viewer first expects it.",memory:"open body with upper and lower completion blocks",stop:7,tomorrow:7,scores:[7,8,7,8,8,8,8,8,7,8,7,7]},
+        {id:"C3",name:"Tension Gap",file:"phase-1/c3-tension-gap.svg",story:"Two structures nearly meet; the gap creates continuation instead of damage.",memory:"main angular body and tense lower near-join",stop:8,tomorrow:8,scores:[8,8,8,8,10,8,9,8,8,8,8,9]},
+        {id:"H1",name:"Hidden Trace + Unresolved Join",file:"phase-1/h1-hidden-trace-unresolved-join.svg",story:"What appears incomplete may be where the thread continues.",memory:"trace-slab with a tense lower continuation",stop:9,tomorrow:9,scores:[9,9,9,10,10,10,10,9,9,9,9,9]},
+      ];
+      const labels=["Attraction","Silhouette","Memory","Story","Tension","问溯","About","Site","No startup","Durable","Hard rename","Alive"];
+      function card(c){return `<article class="candidate"><div class="candidate-head"><p class="eyebrow">${c.id}</p><h3>${c.name}</h3><p>${c.story}</p></div><div class="bw"><div class="stage"><img class="symbol" src="${c.file}" alt=""></div><div class="stage dark"><img class="symbol" src="${c.file}" alt=""></div></div><div class="sizes"><div><img src="${c.file}" alt=""></div><div><img src="${c.file}" alt=""></div><div><img src="${c.file}" alt=""></div></div><div class="tests"><p><strong>3-second redraw:</strong> ${c.memory}.</p><p><strong>Stop-scroll:</strong> ${c.stop}/10. <strong>Tomorrow:</strong> ${c.tomorrow}/10.</p><p><strong>Story after attraction:</strong> ${c.scores[3] >= 9 ? "strong" : "present, but needs refinement"}.</p></div></article>`}
+      document.querySelector("#candidateGrid").innerHTML = candidates.map(card).join("");
+      const ranked = [...candidates].sort((a,b)=>b.scores.reduce((x,y)=>x+y,0)-a.scores.reduce((x,y)=>x+y,0));
+      document.querySelector("#scoreTable").innerHTML = `<thead><tr><th>Rank</th><th>Candidate</th>${labels.map(l=>`<th>${l}</th>`).join("")}<th>Total</th></tr></thead><tbody>${ranked.map((c,i)=>`<tr><td>${i+1}</td><td><strong>${c.id} ${c.name}</strong></td>${c.scores.map(s=>`<td>${s}</td>`).join("")}<td><strong>${c.scores.reduce((x,y)=>x+y,0)}</strong></td></tr>`).join("")}</tbody>`;
+    </script>
+  </body>
+</html>

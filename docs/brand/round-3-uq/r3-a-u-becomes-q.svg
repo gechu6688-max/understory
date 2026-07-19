@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">R3-A: U Becomes Q</title>
+  <desc id="desc">A compact U structure whose right side naturally continues into a restrained Q-like tail.</desc>
+  <path
+    fill="#174D3C"
+    d="M14 10h10v24.2c0 7.9 4.5 12.8 11.3 12.8 6.7 0 10.7-4.9 10.7-12.8V10h9v24.1c0 7.2-2.4 12.9-6.5 16.7L58 58.2 52.3 64 41.8 52.6c-2 .6-4.2.9-6.6.9C22.9 53.5 14 45.8 14 34.1V10Z"
+  />
+</svg>

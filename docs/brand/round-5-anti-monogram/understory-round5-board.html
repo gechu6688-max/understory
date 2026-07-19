@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Understory Round 5 Anti-Monogram Reset</title>
+    <style>
+      :root {
+        --page: #f7f4ee;
+        --surface: #fffdf8;
+        --surface-muted: #f1eee7;
+        --text: #191714;
+        --secondary: #55514a;
+        --muted: #7a746b;
+        --border: #ded7ca;
+        --green: #174d3c;
+        --deep: #0f352b;
+        --tint: #e8f0ea;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        max-width: 1480px;
+        margin: 0 auto;
+        padding: 40px 28px 72px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+        gap: 56px;
+        align-items: end;
+        padding-bottom: 34px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .eyebrow,
+      .meta {
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 760;
+        letter-spacing: 0.15em;
+        line-height: 1.45;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 11ch;
+        margin-top: 12px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(54px, 6vw, 80px);
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 0.98;
+      }
+
+      .intro-copy,
+      .pattern-list {
+        display: grid;
+        gap: 12px;
+        color: var(--secondary);
+        font-size: 16px;
+        line-height: 1.62;
+      }
+
+      .intro-copy {
+        max-width: 720px;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-top: 36px;
+        border-top: 2px solid var(--green);
+        padding-top: 13px;
+      }
+
+      .section-title h2 {
+        margin-top: 7px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 34px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 1.08;
+      }
+
+      .section-title p:last-child {
+        max-width: 58ch;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+        text-align: right;
+      }
+
+      .patterns {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 40px;
+        margin-top: 18px;
+      }
+
+      .pattern-list {
+        border-top: 1px solid var(--border);
+        padding-top: 14px;
+      }
+
+      .pattern-list p::before {
+        content: "";
+        display: inline-block;
+        width: 0.48rem;
+        height: 0.48rem;
+        margin-right: 0.55rem;
+        border: 1px solid var(--green);
+        transform: translateY(-0.06rem) rotate(45deg);
+      }
+
+      .variant-grid,
+      .mock-grid,
+      .test-grid,
+      .explain-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 18px;
+      }
+
+      .variant,
+      .mock,
+      .test,
+      .explain {
+        min-width: 0;
+        border-top: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 76%, transparent);
+        padding-top: 13px;
+      }
+
+      .variant h3 {
+        margin-top: 8px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 1.1;
+      }
+
+      .stage {
+        display: grid;
+        min-height: 198px;
+        margin-top: 15px;
+        place-items: center;
+        border-block: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 68%, transparent);
+      }
+
+      .stage img {
+        width: 136px;
+        height: 136px;
+      }
+
+      .tone-row,
+      .size-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 7px;
+        margin-top: 11px;
+      }
+
+      .tone,
+      .size-box {
+        display: grid;
+        min-height: 58px;
+        place-items: center;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .tone img {
+        width: 32px;
+        height: 32px;
+      }
+
+      .tone--black img,
+      .silhouette img,
+      .memory svg {
+        filter: brightness(0);
+      }
+
+      .tone--white {
+        background: var(--text);
+      }
+
+      .tone--white img {
+        filter: brightness(0) invert(1);
+      }
+
+      .tone--green {
+        background: var(--tint);
+      }
+
+      .tone--deep {
+        border-color: var(--deep);
+        background: var(--deep);
+      }
+
+      .tone--deep img {
+        filter: brightness(0) invert(1);
+      }
+
+      .size-box {
+        min-height: 66px;
+      }
+
+      .size-box small {
+        display: block;
+        margin-top: 7px;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 760;
+        letter-spacing: 0.1em;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .wordmark {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 12px;
+        border-block: 1px solid var(--border);
+        padding: 12px 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 23px;
+        font-weight: 600;
+      }
+
+      .wordmark img {
+        width: 32px;
+        height: 32px;
+      }
+
+      .notes {
+        display: grid;
+        gap: 7px;
+        margin-top: 12px;
+        color: var(--secondary);
+        font-size: 12.1px;
+        line-height: 1.48;
+      }
+
+      .notes strong,
+      .explain strong {
+        color: var(--text);
+      }
+
+      .desktop-shell,
+      .mobile-shell {
+        margin-top: 10px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .mobile-shell {
+        max-width: 318px;
+      }
+
+      .site-header {
+        border-bottom: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
+        background: color-mix(in srgb, var(--surface) 92%, transparent);
+      }
+
+      .site-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 13px 12px;
+      }
+
+      .site-identity {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 17px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .site-identity img {
+        width: 25px;
+        height: 25px;
+      }
+
+      .nav-links {
+        color: var(--secondary);
+        font-size: 9.4px;
+        white-space: nowrap;
+      }
+
+      .menu-word {
+        color: var(--green);
+        font-size: 12.5px;
+        font-weight: 700;
+      }
+
+      .test-pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .silhouette-box,
+      .blur-box,
+      .memory {
+        display: grid;
+        min-height: 126px;
+        place-items: center;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .blur-box {
+        background: var(--surface-muted);
+      }
+
+      .silhouette-box img {
+        width: 86px;
+        height: 86px;
+      }
+
+      .blur-box img {
+        width: 74px;
+        height: 74px;
+        filter: brightness(0) blur(1.45px);
+        opacity: 0.78;
+      }
+
+      .explain {
+        display: grid;
+        gap: 10px;
+      }
+
+      .explain p {
+        color: var(--secondary);
+        font-size: 12.5px;
+        line-height: 1.5;
+      }
+
+      .memory svg {
+        width: 86px;
+        height: 86px;
+      }
+
+      @media (max-width: 1280px) {
+        .variant-grid,
+        .mock-grid,
+        .test-grid,
+        .explain-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 860px) {
+        .intro,
+        .patterns {
+          grid-template-columns: 1fr;
+        }
+
+        .variant-grid,
+        .mock-grid,
+        .test-grid,
+        .explain-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 620px) {
+        main {
+          padding-inline: 20px;
+        }
+
+        .variant-grid,
+        .mock-grid,
+        .test-grid,
+        .explain-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .section-title {
+          align-items: start;
+          flex-direction: column;
+        }
+
+        .section-title p:last-child {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">Understory / Round 5</p>
+          <h1>Anti-monogram reset.</h1>
+        </div>
+        <div class="intro-copy">
+          <p>This round stops beginning with U, Q, or “how do they combine?” The question becomes: what visual form could belong uniquely to Understory?</p>
+          <p>Letter readings are now secondary. Distinctiveness, ownership, editorial fit, strong silhouette, and hidden intelligence carry the evaluation.</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Process Note</p>
+            <h2>Patterns we must stop repeating</h2>
+          </div>
+          <p>The prior rounds were productive, but the visual logic kept collapsing into compact U/Q-bearing containers.</p>
+        </div>
+        <div class="patterns">
+          <div class="pattern-list">
+            <p>Enclosing U inside Q-like shells.</p>
+            <p>Adding tails to force Q readability.</p>
+            <p>Optimizing too heavily for favicon geometry.</p>
+          </div>
+          <div class="pattern-list">
+            <p>Overusing thick closed silhouettes.</p>
+            <p>Making small variations of the same monogram logic.</p>
+            <p>Treating explicit U/Q readability as the destination.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Comparison Board</p>
+            <h2>Five independent directions</h2>
+          </div>
+          <p>Each direction uses different silhouette logic, negative space, rhythm, and visual tension. Favicon is tested, but not allowed to dominate.</p>
+        </div>
+        <div class="variant-grid" id="variants"></div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Header Mockup</p>
+            <h2>Current website context</h2>
+          </div>
+          <p>Desktop and mobile mockups use the current serif identity, warm surface, and restrained navigation scale. No live site files are changed.</p>
+        </div>
+        <div class="mock-grid" id="headers"></div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Blur / Silhouette Test</p>
+            <h2>Does the shape hold?</h2>
+          </div>
+          <p>These views strip away color and fine detail to test the mark’s own silhouette and quick-glance memory.</p>
+        </div>
+        <div class="test-grid" id="tests"></div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Meaning After Shape</p>
+            <h2>Negative space and memory redraw</h2>
+          </div>
+          <p>The explanations are secondary review aids. A strong direction should work even if these notes are never read.</p>
+        </div>
+        <div class="explain-grid" id="explain"></div>
+      </section>
+    </main>
+
+    <script>
+      const variants = [
+        {
+          code: "R5-A",
+          name: "Negative Space First",
+          file: "r5-a-negative-space-first.svg",
+          concept: "A plain field whose intelligence sits in the interruption and hidden lower aperture.",
+          strength: "Best negative-space intelligence; strong second-look behavior.",
+          risk: "Rectangular field can feel institutional if overused.",
+          fit: "Surface / beneath / discovered meaning.",
+          explanation: "The outer contour is deliberately quiet. The cutout does the conceptual work: a structure is missing, and the missing part becomes the second layer.",
+          memory: '<svg viewBox="0 0 64 64"><rect x="15" y="9" width="36" height="46" fill="#174D3C"/><rect x="25" y="18" width="7" height="24" fill="#fff"/><rect x="36" y="18" width="9" height="14" fill="#fff"/><path d="M31 42h12v5H31z" fill="#fff"/></svg>',
+        },
+        {
+          code: "R5-B",
+          name: "Editorial Mark",
+          file: "r5-b-editorial-mark.svg",
+          concept: "A cropped publishing-imprint mark built from planes, pauses, and editorial tension.",
+          strength: "Best match beside the current serif wordmark.",
+          risk: "Less conventionally icon-like; gains power through repetition.",
+          fit: "Publishing / research / cultural platform.",
+          explanation: "The mark behaves like a marginal device: cropped column, interrupted rules, and one heavier side. It asks to live near text rather than inside an app tile.",
+          memory: '<svg viewBox="0 0 64 64"><rect x="14" y="8" width="10" height="48" fill="#174D3C"/><rect x="30" y="8" width="22" height="9" fill="#174D3C"/><rect x="24" y="28" width="25" height="8" fill="#174D3C"/><rect x="30" y="47" width="27" height="9" fill="#174D3C"/></svg>',
+        },
+        {
+          code: "R5-C",
+          name: "Layer / Cut / Descent",
+          file: "r5-c-layer-cut-descent.svg",
+          concept: "Shifted planes reveal a lower structure without stairs, arrows, cards, roots, or literal descent.",
+          strength: "Most direct expression of depth and underlying layers.",
+          risk: "Can become too abstract without precise spacing.",
+          fit: "Go beneath / structural depth / second layer.",
+          explanation: "Three planes descend and shift. The cuts between them are the idea: surface, lower plane, and structure underneath.",
+          memory: '<svg viewBox="0 0 64 64"><rect x="12" y="11" width="38" height="13" fill="#174D3C"/><rect x="18" y="28" width="34" height="12" fill="#174D3C"/><rect x="25" y="44" width="27" height="10" fill="#174D3C"/></svg>',
+        },
+        {
+          code: "R5-D",
+          name: "Custom Understory Initial",
+          file: "r5-d-custom-understory-initial.svg",
+          concept: "A proprietary structural initial inspired by Understory, but not drawn as a standard U.",
+          strength: "Most practical bridge from symbol to identity.",
+          risk: "Closest to the old lettermark habit; must stay structural.",
+          fit: "Understory as a unique identity, not a puzzle.",
+          explanation: "The underlying initial is present, but interrupted by a counterform and offset terminal so the mark becomes proprietary rather than typographic.",
+          memory: '<svg viewBox="0 0 64 64"><path d="M14 8h11v26c0 8 4 12 11 12s10-4 10-12V8h10v26c0 13-8 21-20 21S14 47 14 34V8z" fill="#174D3C"/><rect x="33" y="18" width="6" height="21" fill="#fff"/></svg>',
+        },
+        {
+          code: "R5-E",
+          name: "Wild Card",
+          file: "r5-e-wild-card.svg",
+          concept: "A literary interruption mark: inquiry spine, cross-plane, and unresolved lower slash.",
+          strength: "Most decisive break from the monogram trap.",
+          risk: "Most polarizing; needs system support.",
+          fit: "Interruption / continuation / marginalia.",
+          explanation: "The symbol is not a container. It behaves like a note in the margin: a vertical thought interrupted, then continued below at a different angle.",
+          memory: '<svg viewBox="0 0 64 64"><rect x="29" y="7" width="10" height="22" fill="#174D3C"/><rect x="14" y="30" width="36" height="8" fill="#174D3C"/><rect x="29" y="38" width="10" height="19" fill="#174D3C"/><path d="M42 38h9L40 57h-9z" fill="#174D3C"/></svg>',
+        },
+      ];
+
+      const img = (v, attrs = "") => `<img src="${v.file}" alt="${v.code} ${v.name}" ${attrs} />`;
+
+      const variantCard = (v) => `
+        <article class="variant">
+          <p class="meta">${v.code}</p>
+          <h3>${v.name}</h3>
+          <div class="stage">${img(v)}</div>
+          <div class="tone-row">
+            <div class="tone tone--black">${img(v)}</div>
+            <div class="tone tone--white">${img(v)}</div>
+            <div class="tone tone--green">${img(v)}</div>
+            <div class="tone tone--deep">${img(v)}</div>
+          </div>
+          <div class="size-row">
+            <div class="size-box"><span>${img(v, 'width="16" height="16"')}<small>16</small></span></div>
+            <div class="size-box"><span>${img(v, 'width="24" height="24"')}<small>24</small></span></div>
+            <div class="size-box"><span>${img(v, 'width="32" height="32"')}<small>32</small></span></div>
+            <div class="size-box"><span>${img(v, 'width="48" height="48"')}<small>48</small></span></div>
+          </div>
+          <div class="wordmark">${img(v)}understory</div>
+          <div class="notes">
+            <p><strong>Concept:</strong> ${v.concept}</p>
+            <p><strong>Strength:</strong> ${v.strength}</p>
+            <p><strong>Risk:</strong> ${v.risk}</p>
+            <p><strong>Territory:</strong> ${v.fit}</p>
+          </div>
+        </article>
+      `;
+
+      const headerMock = (v) => `
+        <article class="mock">
+          <p class="meta">${v.code}</p>
+          <div class="desktop-shell">
+            <div class="site-header">
+              <div class="site-nav">
+                <span class="site-identity">${img(v)}understory</span>
+                <span class="nav-links">Cases Topics Concepts Method About</span>
+              </div>
+            </div>
+          </div>
+          <div class="mobile-shell">
+            <div class="site-header">
+              <div class="site-nav">
+                <span class="site-identity">${img(v)}understory</span>
+                <span class="menu-word">Menu</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      `;
+
+      const testCard = (v) => `
+        <article class="test">
+          <p class="meta">${v.code} — ${v.name}</p>
+          <div class="test-pair">
+            <div class="silhouette silhouette-box">${img(v)}</div>
+            <div class="blur-box">${img(v)}</div>
+          </div>
+        </article>
+      `;
+
+      const explainCard = (v) => `
+        <article class="explain">
+          <p class="meta">${v.code}</p>
+          <p><strong>Negative-space explanation:</strong> ${v.explanation}</p>
+          <div class="memory" aria-label="${v.code} simplified memory redraw">${v.memory}</div>
+          <p><strong>3-second memory redraw:</strong> ${v.name.toLowerCase()} in its simplest repeatable form.</p>
+        </article>
+      `;
+
+      document.getElementById("variants").innerHTML = variants.map(variantCard).join("");
+      document.getElementById("headers").innerHTML = variants.map(headerMock).join("");
+      document.getElementById("tests").innerHTML = variants.map(testCard).join("");
+      document.getElementById("explain").innerHTML = variants.map(explainCard).join("");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">H1: D Silhouette + B Negative Space</title>
+  <desc id="desc">A compact D-like silhouette using negative space to reveal a hidden U within a Q-like structure.</desc>
+  <path
+    fill="#174D3C"
+    fill-rule="evenodd"
+    d="M13.4 9h31.1c7.7 0 12.6 4.9 12.6 12.2v13.1c0 6.2-2.2 11.2-6.1 14.8l7.5 7.1-5.4 6-9.4-9.3c-2.6.8-5.5 1.2-8.8 1.2-12.8 0-21.5-7.7-21.5-20.1V9Zm9.8 9.1v15.6c0 7.2 4.4 11.4 11.7 11.4 7 0 11.4-4.2 11.4-11.4v-9.6c0-3.7-2.1-6-5.7-6h-4.3v15.7c0 3.4-.8 5-2.4 5-1.7 0-2.5-1.6-2.5-5V18.1h-8.2Z"
+  />
+</svg>

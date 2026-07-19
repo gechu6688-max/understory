@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Understory Round 14 - Final C Refinement</title>
+    <style>
+      :root {
+        --page: #f7f4ee;
+        --surface: #fffdf8;
+        --muted-surface: #f1eee7;
+        --ink: #191714;
+        --muted: #655f57;
+        --line: #ded7ca;
+        --green: #174d3c;
+        --dark: #151310;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      main {
+        width: min(1460px, calc(100vw - 48px));
+        margin: 0 auto;
+        padding: 42px 0 70px;
+      }
+      header {
+        display: grid;
+        grid-template-columns: 1fr 0.82fr;
+        gap: 36px;
+        align-items: end;
+        padding-bottom: 26px;
+        border-bottom: 1px solid var(--line);
+      }
+      .eyebrow {
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 760;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      h1, h2, h3 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 600;
+        letter-spacing: 0;
+      }
+      h1 {
+        margin-top: 6px;
+        font-size: clamp(44px, 5.3vw, 84px);
+        line-height: 0.92;
+      }
+      h2 { font-size: 31px; }
+      h3 { font-size: 25px; line-height: 1.05; }
+      p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.62;
+      }
+      .intro { max-width: 630px; }
+      .refs {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        margin: 28px 0;
+      }
+      .ref,
+      .card,
+      .decision {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: color-mix(in srgb, var(--surface) 90%, white);
+      }
+      .ref {
+        display: grid;
+        grid-template-columns: 104px 1fr;
+        gap: 18px;
+        align-items: center;
+        min-height: 138px;
+        padding: 18px;
+      }
+      .ref img { width: 94px; height: 94px; object-fit: contain; }
+      .ref h2 { margin: 5px 0 6px; font-size: 24px; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .card { overflow: hidden; }
+      .card-head {
+        min-height: 128px;
+        padding: 16px;
+        border-bottom: 1px solid var(--line);
+      }
+      .card-head h3 { margin-top: 5px; }
+      .stage {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 218px 126px 108px;
+      }
+      .pane {
+        position: relative;
+        display: grid;
+        place-items: center;
+        border-right: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+      .pane:nth-child(2n) { border-right: 0; }
+      .pane.large { grid-column: span 2; }
+      .pane.dark { background: var(--dark); }
+      .pane img { width: 118px; height: 118px; object-fit: contain; }
+      .pane.large img { width: 166px; height: 166px; }
+      .pane.dark img { filter: invert(1); }
+      .pane.green img { filter: sepia(1) saturate(4) hue-rotate(98deg) brightness(0.42); }
+      .pane.silhouette img { filter: blur(3px) contrast(1.35); opacity: 0.92; }
+      .label {
+        position: absolute;
+        top: 9px;
+        left: 10px;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 720;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .dark .label { color: #d9d0c2; }
+      .favicons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        background: var(--line);
+      }
+      .fav {
+        display: grid;
+        place-items: center;
+        min-height: 76px;
+        background: var(--surface);
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.1;
+      }
+      .fav img { object-fit: contain; margin-bottom: 6px; }
+      .story {
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+      }
+      .story b {
+        display: block;
+        margin-bottom: 3px;
+        color: var(--green);
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .story span {
+        display: block;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      .decision {
+        margin-top: 28px;
+        padding: 22px;
+      }
+      .decision h2 { margin-bottom: 8px; }
+      @media (max-width: 1080px) {
+        main { width: min(100vw - 28px, 820px); }
+        header, .refs, .grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <div class="eyebrow">Round 14 / Final C Direction Refinement</div>
+          <h1>Suspended Continuation</h1>
+        </div>
+        <p class="intro">
+          This is not a new logo exploration. These four variants preserve the C11-B emotional identity and refine only maturity, silhouette, optical balance, editorial tone, and long-term recognition.
+        </p>
+      </header>
+
+      <section class="refs">
+        <article class="ref">
+          <img src="../round-11-suspended-continuation/phase-2/finalist-1.svg" alt="Round 11 C11-B" />
+          <div>
+            <div class="eyebrow">Primary Reference</div>
+            <h2>Round 11 C11-B</h2>
+            <p>The chosen identity: separated but inevitable. The lower piece remains the soul.</p>
+          </div>
+        </article>
+        <article class="ref">
+          <img src="../round-11-suspended-continuation/reference/round9-c3-original-reference.svg" alt="Round 9 C3" />
+          <div>
+            <div class="eyebrow">Emotional Reference</div>
+            <h2>Round 9 C3</h2>
+            <p>The raw unresolved join. Useful as a reminder not to polish away the tension.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid" id="variant-grid"></section>
+
+      <section class="decision">
+        <div class="eyebrow">Phase 1 Read</div>
+        <h2>Top 2: C-F2 and C-F4</h2>
+        <p>
+          C-F1 is the current lead because its main-body / detached-element relationship carries the right emotional identity with the least conceptual drift. C-F2 remains useful as a suspension comparison, and C-F4 remains useful as a hidden-layer comparison.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      const variants = [
+        {
+          id: "C-F1",
+          name: "Minimal Optical Refinement",
+          src: "c-f1-minimal-optical-refinement.svg",
+          first: "Recognizable C11-B with quieter balance.",
+          second: "The piece sits closer to the transition while staying suspended.",
+          story: "Current lead: the relationship feels inevitable without redesign.",
+        },
+        {
+          id: "C-F2",
+          name: "More Suspended",
+          src: "c-f2-more-suspended.svg",
+          first: "The lower piece feels alive and memorable.",
+          second: "A continuation appears, not a fallen fragment.",
+          story: "Strongest emotional version of 未合，不等于终止。",
+        },
+        {
+          id: "C-F3",
+          name: "More Editorial",
+          src: "c-f3-more-editorial.svg",
+          first: "Calmer, more publication-like silhouette.",
+          second: "The relationship is quieter and less aggressive.",
+          story: "Good archive/research tone, but slightly less magnetic.",
+        },
+        {
+          id: "C-F4",
+          name: "Hidden Layer",
+          src: "c-f4-hidden-layer.svg",
+          first: "A compact symbol with stronger lower gravity.",
+          second: "The inner pause and lower state create hidden depth.",
+          story: "Best connection to Understory: visible layer is not the whole structure.",
+        },
+      ];
+
+      const root = document.querySelector("#variant-grid");
+      for (const item of variants) {
+        root.insertAdjacentHTML("beforeend", `
+          <article class="card">
+            <div class="card-head">
+              <div class="eyebrow">${item.id}</div>
+              <h3>${item.name}</h3>
+            </div>
+            <div class="stage">
+              <div class="pane large"><span class="label">Black</span><img src="${item.src}" alt="${item.id} ${item.name}" /></div>
+              <div class="pane dark"><span class="label">White</span><img src="${item.src}" alt="" /></div>
+              <div class="pane green"><span class="label">Green</span><img src="${item.src}" alt="" /></div>
+              <div class="pane silhouette"><span class="label">Silhouette</span><img src="${item.src}" alt="" /></div>
+              <div class="pane"><span class="label">Memory</span><img src="${item.src}" alt="" /></div>
+            </div>
+            <div class="favicons">
+              ${[16,24,32,48].map(size => `<div class="fav"><img src="${item.src}" style="width:${size}px;height:${size}px" alt="" /><span>${size}px</span></div>`).join("")}
+            </div>
+            <div class="story">
+              <div><b>First glance</b><span>${item.first}</span></div>
+              <div><b>Second glance</b><span>${item.second}</span></div>
+              <div><b>Brand story</b><span>${item.story}</span></div>
+            </div>
+          </article>
+        `);
+      }
+    </script>
+  </body>
+</html>

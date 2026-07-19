@@ -1,0 +1,31 @@
+---
+interface Props {
+  href: string;
+  company: string;
+  eyebrow: string;
+  headline: string;
+  summary: string;
+  cta: string;
+  image: string;
+}
+
+const { href, company, eyebrow, headline, summary, cta, image } = Astro.props;
+---
+
+<section class="editorial-hero" aria-labelledby="featured-case-title" data-featured-slider data-slide-count="1">
+  <a class="editorial-hero__link" href={href} aria-label={`${cta}: ${company} — ${headline}`}>
+    <img class="editorial-hero__image" src={image} alt="A vast logistics system of conveyor lines and shelving inside a warehouse" fetchpriority="high" />
+    <span class="editorial-hero__shade" aria-hidden="true"></span>
+    <span class="editorial-hero__rail" aria-hidden="true">
+      <span>Understory / Featured research</span>
+      <span>01 / 01</span>
+    </span>
+    <span class="editorial-hero__content">
+      <span class="editorial-hero__eyebrow">{eyebrow}</span>
+      <span class="editorial-hero__company">{company}</span>
+      <span class="editorial-hero__headline" id="featured-case-title">{headline}</span>
+      <span class="editorial-hero__summary">{summary}</span>
+      <span class="editorial-hero__cta">{cta}<span aria-hidden="true">↗</span></span>
+    </span>
+  </a>
+</section>

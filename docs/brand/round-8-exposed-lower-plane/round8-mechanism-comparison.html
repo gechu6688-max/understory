@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Understory Round 8 - Exposed Lower Plane Mechanism Study</title>
+    <style>
+      :root {
+        --page: #f7f4ee;
+        --surface: #fffdf8;
+        --surface-muted: #f1eee7;
+        --text: #191714;
+        --secondary: #55514a;
+        --muted: #7a746b;
+        --border: #ded7ca;
+        --green: #174d3c;
+        --dark-green: #0f352b;
+        --tint: #e8f0ea;
+        --evidence: #2d6b65;
+        --counter: #8a4b32;
+        --uncertain: #9b6b20;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        max-width: 78rem;
+        margin: 0 auto;
+        padding: 2.5rem 1.25rem 4.5rem;
+      }
+
+      h1, h2, h3, h4, p, ul { margin: 0; }
+
+      .eyebrow, .meta {
+        color: var(--green);
+        font-size: 0.72rem;
+        font-weight: 760;
+        letter-spacing: 0.16em;
+        line-height: 1.4;
+        text-transform: uppercase;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.75fr);
+        gap: clamp(2rem, 5vw, 4rem);
+        align-items: end;
+        border-bottom: 1px solid var(--border);
+        padding-block: 1.7rem 2rem;
+      }
+
+      h1 {
+        max-width: 11ch;
+        margin-top: 0.8rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(3.1rem, 6.5vw, 6.2rem);
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 0.96;
+      }
+
+      .intro aside {
+        border-top: 2px solid var(--green);
+        padding-top: 1rem;
+      }
+
+      .intro aside p:not(.eyebrow),
+      .section-head > p {
+        color: var(--secondary);
+        font-size: 1rem;
+        line-height: 1.68;
+      }
+
+      .section {
+        margin-top: 2.7rem;
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(19rem, 0.62fr);
+        gap: 2rem;
+        align-items: end;
+        border-top: 1px solid var(--green);
+        padding-top: 0.9rem;
+      }
+
+      h2 {
+        margin-top: 0.55rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        font-weight: 600;
+        line-height: 1.03;
+      }
+
+      .diagnostic-grid,
+      .overview-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 1.15rem;
+      }
+
+      .card {
+        min-width: 0;
+        border-top: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 80%, transparent);
+        padding: 0.9rem 0 0;
+      }
+
+      .card h3 {
+        margin-top: 0.4rem;
+        font-size: 1.02rem;
+        line-height: 1.25;
+      }
+
+      .card p,
+      .card li,
+      .rank-table td {
+        color: var(--secondary);
+        font-size: 0.84rem;
+        line-height: 1.55;
+      }
+
+      .card p { margin-top: 0.45rem; }
+
+      .study {
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .study-head {
+        min-height: 7.2rem;
+        border-bottom: 1px solid var(--border);
+        padding: 0.85rem;
+      }
+
+      .study-head h3 {
+        margin-top: 0.4rem;
+        font-size: 1.05rem;
+        line-height: 1.25;
+      }
+
+      .study-head p:last-child {
+        margin-top: 0.45rem;
+        color: var(--secondary);
+        font-size: 0.82rem;
+        line-height: 1.48;
+      }
+
+      .fragment-strip {
+        display: grid;
+        grid-template-columns: 1fr 0.72fr 0.44fr;
+        gap: 0.65rem;
+        align-items: center;
+        padding: 0.9rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .fragment-box {
+        display: grid;
+        place-items: center;
+        min-height: 5.2rem;
+        background: color-mix(in srgb, var(--surface-muted) 54%, transparent);
+      }
+
+      .fragment {
+        position: relative;
+        width: var(--s, 5.2rem);
+        height: var(--s, 5.2rem);
+      }
+
+      .fragment.medium { --s: 3.5rem; }
+      .fragment.small { --s: 1.55rem; }
+
+      .frag-edge {
+        border-bottom: calc(var(--s) * 0.08) solid var(--text);
+      }
+      .frag-edge::after {
+        content: "";
+        position: absolute;
+        left: 18%;
+        right: 38%;
+        bottom: calc(var(--s) * -0.14);
+        height: calc(var(--s) * 0.12);
+        background: var(--green);
+      }
+
+      .frag-offset::before,
+      .frag-offset::after {
+        content: "";
+        position: absolute;
+        border: calc(var(--s) * 0.07) solid var(--text);
+      }
+      .frag-offset::before { inset: 17% 18% 21% 12%; }
+      .frag-offset::after {
+        inset: 30% 8% 10% 26%;
+        border-color: var(--green);
+        background: color-mix(in srgb, var(--tint) 72%, transparent);
+      }
+
+      .frag-slit {
+        border-top: calc(var(--s) * 0.08) solid var(--text);
+      }
+      .frag-slit::after {
+        content: "";
+        position: absolute;
+        top: calc(var(--s) * -0.08);
+        left: 42%;
+        width: 22%;
+        height: calc(var(--s) * 0.18);
+        background: var(--green);
+      }
+
+      .frag-undercut {
+        border-left: calc(var(--s) * 0.08) solid var(--text);
+        border-bottom: calc(var(--s) * 0.08) solid var(--text);
+      }
+      .frag-undercut::after {
+        content: "";
+        position: absolute;
+        left: calc(var(--s) * -0.08);
+        bottom: 30%;
+        width: 28%;
+        height: 18%;
+        background: var(--surface-muted);
+        border-top: calc(var(--s) * 0.06) solid var(--green);
+      }
+
+      .frag-cross {
+        border-top: calc(var(--s) * 0.08) solid var(--text);
+      }
+      .frag-cross::after {
+        content: "";
+        position: absolute;
+        left: 34%;
+        right: 12%;
+        top: 46%;
+        height: calc(var(--s) * 0.08);
+        background: var(--green);
+      }
+
+      .frag-interrupt::before,
+      .frag-interrupt::after {
+        content: "";
+        position: absolute;
+        top: 46%;
+        height: calc(var(--s) * 0.08);
+        background: var(--text);
+      }
+      .frag-interrupt::before { left: 0; right: 58%; }
+      .frag-interrupt::after { left: 66%; right: 0; top: 58%; }
+
+      .frag-asym {
+        border-bottom: calc(var(--s) * 0.08) solid var(--text);
+      }
+      .frag-asym::before {
+        content: "";
+        position: absolute;
+        left: 7%;
+        bottom: calc(var(--s) * -0.16);
+        width: 22%;
+        height: calc(var(--s) * 0.14);
+        background: var(--green);
+      }
+      .frag-asym::after {
+        content: "";
+        position: absolute;
+        right: 17%;
+        bottom: calc(var(--s) * -0.09);
+        width: 34%;
+        height: calc(var(--s) * 0.08);
+        background: color-mix(in srgb, var(--green) 42%, var(--border));
+      }
+
+      .frag-baseline::before,
+      .frag-baseline::after {
+        content: "";
+        position: absolute;
+        height: calc(var(--s) * 0.08);
+      }
+      .frag-baseline::before {
+        left: 0;
+        right: 16%;
+        top: 38%;
+        background: var(--text);
+      }
+      .frag-baseline::after {
+        left: 34%;
+        right: 0;
+        top: 58%;
+        background: var(--green);
+      }
+
+      .study-body {
+        display: grid;
+        gap: 0.6rem;
+        padding: 0.85rem;
+      }
+
+      .mini-row {
+        border-top: 1px solid var(--border);
+        padding-top: 0.55rem;
+      }
+
+      .mini-row strong {
+        display: block;
+        color: var(--text);
+        font-size: 0.83rem;
+        line-height: 1.35;
+      }
+
+      .mini-row span {
+        display: block;
+        margin-top: 0.25rem;
+        color: var(--secondary);
+        font-size: 0.78rem;
+        line-height: 1.45;
+      }
+
+      .context-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.85rem;
+        margin-top: 1.1rem;
+      }
+
+      .context-card {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        padding: 0.8rem;
+      }
+
+      .mock-title {
+        margin-top: 0.45rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+        line-height: 1.1;
+      }
+
+      .mock-copy {
+        margin-top: 0.5rem;
+        color: var(--secondary);
+        font-size: 0.82rem;
+        line-height: 1.5;
+      }
+
+      .mechanism-demo {
+        position: relative;
+        margin-top: 0.65rem;
+        min-height: 3.2rem;
+        border-top: 1px solid var(--border);
+        padding-top: 0.6rem;
+      }
+
+      .mechanism-demo.edge::after,
+      .mechanism-demo.asym::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -0.32rem;
+        width: 42%;
+        height: 0.32rem;
+        background: var(--green);
+      }
+
+      .mechanism-demo.asym::after {
+        left: 7%;
+        width: 23%;
+      }
+
+      .mechanism-demo.asym::before {
+        content: "";
+        position: absolute;
+        right: 18%;
+        bottom: -0.21rem;
+        width: 34%;
+        height: 0.21rem;
+        background: color-mix(in srgb, var(--green) 38%, var(--border));
+      }
+
+      .mechanism-demo.offset {
+        border-top-color: var(--text);
+      }
+      .mechanism-demo.offset::after {
+        content: "";
+        position: absolute;
+        left: 0.75rem;
+        right: -0.55rem;
+        top: 1.35rem;
+        bottom: 0.2rem;
+        border-top: 2px solid var(--green);
+        background: color-mix(in srgb, var(--tint) 50%, transparent);
+        z-index: 0;
+      }
+      .mechanism-demo.offset > * { position: relative; z-index: 1; }
+
+      .mechanism-demo.slit {
+        border-top: 0;
+      }
+      .mechanism-demo.slit::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, var(--border) 0 42%, var(--green) 42% 58%, var(--border) 58% 100%);
+      }
+
+      .mechanism-demo.undercut::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: -1px;
+        width: 1.55rem;
+        height: 0.82rem;
+        background: var(--surface);
+        border-bottom: 2px solid var(--green);
+      }
+
+      .mechanism-demo.cross::after {
+        content: "";
+        position: absolute;
+        left: 28%;
+        right: -0.5rem;
+        top: 1.6rem;
+        height: 2px;
+        background: var(--green);
+      }
+
+      .mechanism-demo.interrupt {
+        border-top: 0;
+      }
+      .mechanism-demo.interrupt::before,
+      .mechanism-demo.interrupt::after {
+        content: "";
+        position: absolute;
+        height: 1px;
+        background: var(--border);
+      }
+      .mechanism-demo.interrupt::before { left: 0; right: 62%; top: 0; }
+      .mechanism-demo.interrupt::after { left: 70%; right: 0; top: 0.42rem; }
+
+      .mechanism-demo.baseline p:last-child {
+        display: inline-block;
+        margin-top: 0.25rem;
+        border-bottom: 1px solid var(--green);
+        color: var(--secondary);
+        transform: translateY(0.28rem);
+      }
+
+      .rank-table {
+        width: 100%;
+        margin-top: 1.15rem;
+        border-collapse: collapse;
+        background: color-mix(in srgb, var(--surface) 80%, transparent);
+      }
+
+      .rank-table th,
+      .rank-table td {
+        border-bottom: 1px solid var(--border);
+        padding: 0.55rem 0.45rem;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .rank-table th {
+        color: var(--text);
+        font-size: 0.68rem;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+      }
+
+      .answers {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0.8rem;
+        margin-top: 1rem;
+      }
+
+      .answers div {
+        border-top: 1px solid var(--border);
+        padding-top: 0.75rem;
+      }
+
+      .answers strong {
+        display: block;
+        color: var(--text);
+        font-size: 0.92rem;
+        line-height: 1.25;
+      }
+
+      .answers span {
+        display: block;
+        margin-top: 0.35rem;
+        color: var(--secondary);
+        font-size: 0.82rem;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 980px) {
+        .intro,
+        .section-head {
+          grid-template-columns: 1fr;
+        }
+
+        .diagnostic-grid,
+        .overview-grid,
+        .context-grid,
+        .answers {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 640px) {
+        .diagnostic-grid,
+        .overview-grid,
+        .context-grid,
+        .answers {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">Understory / Round 8</p>
+          <h1>Exposed lower plane mechanism study.</h1>
+        </div>
+        <aside>
+          <p class="eyebrow">Boundary</p>
+          <p>This is not logo design. The study isolates a recurring visual behavior: a surface remains primary while a lower analytical layer becomes visible through edge, slit, cut, crossing, interruption, asymmetry, or baseline shift.</p>
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">01 / Diagnostic</p>
+            <h2>Keep the mechanism. Remove the callout-box feeling.</h2>
+          </div>
+          <p>Round 7 proved that a lower layer feels native to Understory when it reveals structure beneath a claim. The weak point was the boxiness: the exposed layer could read like a note card or UI callout. Round 8 reduces the idea into edges, cuts, rules, and baselines.</p>
+        </div>
+        <div class="diagnostic-grid">
+          <div class="card"><p class="meta">Natural</p><h3>Surface claim plus underlying condition.</h3><p>It directly maps to the existing case flow: central question, thesis, evidence, counterargument, judgement.</p></div>
+          <div class="card"><p class="meta">Too box-like</p><h3>Large tinted rectangles become callouts.</h3><p>The lower layer should be visible without becoming another card or dashboard module.</p></div>
+          <div class="card"><p class="meta">Preserve</p><h3>Current rules, measure, green, serif voice.</h3><p>The site already has enough structure. The mechanism should use existing grammar.</p></div>
+          <div class="card"><p class="meta">Avoid</p><h3>Badges, app icons, perfect symmetry.</h3><p>The behavior must first work as editorial layout, not compact symbol geometry.</p></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">02 / M1-M8 Overview</p>
+            <h2>Eight ways for the lower plane to become visible.</h2>
+          </div>
+          <p>Each mechanism is shown as a large, medium, and header-scale primitive fragment. These are fragments, not logo candidates.</p>
+        </div>
+        <div class="overview-grid" id="overview"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">03 / Case Header</p>
+            <h2>The mechanism around claim and thesis.</h2>
+          </div>
+          <p>Use real Understory case logic: the headline stays primary; the lower plane only exposes the condition beneath the thesis.</p>
+        </div>
+        <div class="context-grid" id="caseContext"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">04 / Divider</p>
+            <h2>Section transitions without new page architecture.</h2>
+          </div>
+          <p>The current site already uses editorial rules. The question is whether a lower plane can make those rules feel more proprietary.</p>
+        </div>
+        <div class="context-grid" id="dividerContext"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">05 / Evidence & Source</p>
+            <h2>Evidence beneath the visible claim.</h2>
+          </div>
+          <p>These applications test source notes, hidden assumptions, and counterarguments without turning the article into annotated clutter.</p>
+        </div>
+        <div class="context-grid" id="sourceContext"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">06 / Caption & Metadata</p>
+            <h2>Lower planes inside editorial metadata.</h2>
+          </div>
+          <p>Caption, date, category, source label, and verification status are ideal places to test subtle exposure without interrupting reading.</p>
+        </div>
+        <div class="context-grid" id="metaContext"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">07 / Repeatability & Ownership</p>
+            <h2>Can this become a system, not a one-off trick?</h2>
+          </div>
+          <p>Each mechanism is judged on repeatability, risk of annoyance, fit across content types, and whether it could belong too easily to another category.</p>
+        </div>
+        <table class="rank-table" id="testTable"></table>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">08 / Final Ranking</p>
+            <h2>Website behavior first. Symbol potential second.</h2>
+          </div>
+          <p>Scores are directional. A high symbol score does not mean the fragment is ready to become a logo; it means the behavior may later support one.</p>
+        </div>
+        <table class="rank-table" id="rankTable"></table>
+        <div class="answers">
+          <div><strong>Reject</strong><span>M2 Offset Reveal as a primary system. It drifts fastest toward stacked-card UI and dashboard logic.</span></div>
+          <div><strong>Strongest behaviors</strong><span>M1 Edge Reveal and M8 Baseline Shift. They are subtle, repeatable, and native to editorial layouts.</span></div>
+          <div><strong>Most uniquely Understory</strong><span>M1 Edge Reveal: a tiny lower edge can make the visible claim feel incomplete in the right way.</span></div>
+          <div><strong>Best future fragment</strong><span>M3 Slit Reveal has the most memorable primitive mark, but should remain a mechanism for now.</span></div>
+          <div><strong>Ready for logo?</strong><span>None are fully ready. M1 and M3 deserve another applied round before symbol development resumes.</span></div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const mechanisms = [
+        {
+          id: "M1",
+          name: "Edge Reveal",
+          cls: "edge",
+          fragment: "frag-edge",
+          premise: "A lower layer becomes visible only along one edge.",
+          header: "Thesis edge exposes a short underlying condition.",
+          divider: "A section rule carries a small lower edge at the transition.",
+          source: "A source note appears as an edge beneath the evidence line.",
+          meta: "Verification status sits as a quiet edge under date/category.",
+          repeat: "High. It can appear often if the exposed edge stays tiny.",
+          ownership: "Could be magazine-like, but Understory owns it through claim/evidence structure.",
+          scores: [10, 8, 10, 10, 9, 9, 10, 8, 9, 8],
+        },
+        {
+          id: "M2",
+          name: "Offset Reveal",
+          cls: "offset",
+          fragment: "frag-offset",
+          premise: "The lower plane is slightly shifted from the upper surface.",
+          header: "Quick Thesis sits over a shifted analytical underside.",
+          divider: "The lower rule starts later and ends beyond the main rule.",
+          source: "A source layer is optically displaced under a claim.",
+          meta: "Source metadata slips right and down beneath the caption.",
+          repeat: "Medium-low. Repetition quickly feels like stacked UI.",
+          ownership: "Weakest; it can belong to SaaS dashboards unless extremely restrained.",
+          scores: [6, 6, 6, 7, 6, 5, 5, 6, 6, 6],
+        },
+        {
+          id: "M3",
+          name: "Slit Reveal",
+          cls: "slit",
+          fragment: "frag-slit",
+          premise: "A narrow opening exposes the layer beneath.",
+          header: "A thin interruption in the thesis rule reveals the premise below.",
+          divider: "A divider includes one controlled gap, not a decorative break.",
+          source: "Evidence source appears through a cropped opening in the rule.",
+          meta: "Caption and source share a narrow revealed slit.",
+          repeat: "Medium-high. Strong if reserved for key analytical turns.",
+          ownership: "Memorable; risk is menu/loading-bar association if over-linear.",
+          scores: [8, 9, 9, 9, 8, 7, 8, 9, 8, 9],
+        },
+        {
+          id: "M4",
+          name: "Undercut",
+          cls: "undercut",
+          fragment: "frag-undercut",
+          premise: "Absence in the upper surface exposes the lower layer.",
+          header: "A small cut in the question block reveals a hidden assumption.",
+          divider: "The section rule is notched where evidence enters.",
+          source: "The source label occupies a cut-out in the evidence boundary.",
+          meta: "A caption notch reveals verification state.",
+          repeat: "Medium. Effective sparingly; notches get gimmicky fast.",
+          ownership: "Can feel generic if the cut is too icon-like or ticket-like.",
+          scores: [7, 8, 8, 8, 7, 6, 7, 8, 7, 8],
+        },
+        {
+          id: "M5",
+          name: "Lower Plane Crossing",
+          cls: "cross",
+          fragment: "frag-cross",
+          premise: "The lower layer crosses beyond the primary surface.",
+          header: "An underlying structure line escapes the thesis boundary.",
+          divider: "A lower line passes through the transition as an active layer.",
+          source: "Counterargument crosses under the evidence claim.",
+          meta: "A source line extends past the caption boundary.",
+          repeat: "Medium. Distinctive but must avoid arrows or tails.",
+          ownership: "Strong conceptually; needs care to avoid Q-tail memories.",
+          scores: [8, 8, 8, 9, 8, 6, 7, 8, 8, 8],
+        },
+        {
+          id: "M6",
+          name: "Interrupted Surface",
+          cls: "interrupt",
+          fragment: "frag-interrupt",
+          premise: "A continuous surface is displaced or missing in one section.",
+          header: "The thesis rule breaks where the hidden condition appears.",
+          divider: "A shifted segment makes the section line visibly incomplete.",
+          source: "A missing segment marks where source context changes the claim.",
+          meta: "Metadata uses a displaced baseline to mark uncertainty.",
+          repeat: "High. It can become part of rule grammar without new components.",
+          ownership: "Editorially strong; may be too quiet unless applied consistently.",
+          scores: [9, 7, 10, 8, 9, 9, 10, 7, 8, 7],
+        },
+        {
+          id: "M7",
+          name: "Asymmetric Exposure",
+          cls: "asym",
+          fragment: "frag-asym",
+          premise: "The lower plane is revealed unevenly and non-centrally.",
+          header: "Uneven exposure makes the thesis feel discovered, not inserted.",
+          divider: "The lower edge appears in two unequal places.",
+          source: "Evidence and uncertainty expose different lower traces.",
+          meta: "Caption exposure is one-sided, avoiding badge symmetry.",
+          repeat: "Medium. Human and memorable, but consistency is harder.",
+          ownership: "Good Understory fit if asymmetry follows content logic.",
+          scores: [8, 8, 8, 8, 8, 6, 9, 8, 8, 8],
+        },
+        {
+          id: "M8",
+          name: "Baseline Shift",
+          cls: "baseline",
+          fragment: "frag-baseline",
+          premise: "The lower layer appears through typographic or metadata rhythm.",
+          header: "An analytical phrase slips beneath the main thesis baseline.",
+          divider: "The lower caption aligns to a second editorial rhythm.",
+          source: "Source status drops below the claim without becoming a box.",
+          meta: "Date/category stays surface; source condition drops underneath.",
+          repeat: "Very high. It lives inside typography and metadata.",
+          ownership: "Most editorial; less symbol-ready, but highly native to the site.",
+          scores: [10, 7, 10, 9, 10, 10, 10, 6, 9, 7],
+        },
+      ];
+
+      const scoreLabels = ["Native", "Distinctive", "Editorial", "Beneath", "Durable", "Repeatable", "No app icon", "Symbol potential", "No explanation", "Memory"];
+
+      function fragment(cls, size = "") {
+        return `<div class="fragment ${size} ${cls}"></div>`;
+      }
+
+      function studyCard(m) {
+        return `
+          <article class="study">
+            <div class="study-head">
+              <p class="eyebrow">${m.id}</p>
+              <h3>${m.name}</h3>
+              <p>${m.premise}</p>
+            </div>
+            <div class="fragment-strip">
+              <div class="fragment-box">${fragment(m.fragment)}</div>
+              <div class="fragment-box">${fragment(m.fragment, "medium")}</div>
+              <div class="fragment-box">${fragment(m.fragment, "small")}</div>
+            </div>
+            <div class="study-body">
+              <div class="mini-row"><strong>Repeatability</strong><span>${m.repeat}</span></div>
+              <div class="mini-row"><strong>Ownership risk</strong><span>${m.ownership}</span></div>
+            </div>
+          </article>
+        `;
+      }
+
+      function contextCard(m, text, label) {
+        return `
+          <article class="context-card">
+            <p class="eyebrow">${m.id} / ${m.name}</p>
+            <h3 class="mock-title">${label}</h3>
+            <div class="mechanism-demo ${m.cls}">
+              <p class="mock-copy">${text}</p>
+              ${m.cls === "baseline" ? `<p class="mock-copy">Underlying condition: competition must still discipline convenience.</p>` : ""}
+            </div>
+          </article>
+        `;
+      }
+
+      document.querySelector("#overview").innerHTML = mechanisms.map(studyCard).join("");
+      document.querySelector("#caseContext").innerHTML = mechanisms.map((m) => contextCard(m, m.header, "What does convenience cost?")).join("");
+      document.querySelector("#dividerContext").innerHTML = mechanisms.map((m) => contextCard(m, m.divider, "Evidence")).join("");
+      document.querySelector("#sourceContext").innerHTML = mechanisms.map((m) => contextCard(m, m.source, "Verified source note")).join("");
+      document.querySelector("#metaContext").innerHTML = mechanisms.map((m) => contextCard(m, m.meta, "SEC filing / FTC complaint")).join("");
+
+      document.querySelector("#testTable").innerHTML = `
+        <thead><tr><th>Mechanism</th><th>Repeatability</th><th>Brand ownership</th><th>Use more than once?</th><th>Works without explanation?</th></tr></thead>
+        <tbody>
+          ${mechanisms.map((m) => `<tr><td><strong>${m.id} ${m.name}</strong></td><td>${m.repeat}</td><td>${m.ownership}</td><td>${m.scores[5] >= 8 ? "Yes" : "Only sparingly"}</td><td>${m.scores[8] >= 8 ? "Yes" : "Needs context"}</td></tr>`).join("")}
+        </tbody>
+      `;
+
+      const ranked = [...mechanisms].sort((a, b) => b.scores.reduce((x, y) => x + y, 0) - a.scores.reduce((x, y) => x + y, 0));
+      document.querySelector("#rankTable").innerHTML = `
+        <thead><tr><th>Rank</th><th>Mechanism</th>${scoreLabels.map((s) => `<th>${s}</th>`).join("")}<th>Total</th></tr></thead>
+        <tbody>
+          ${ranked.map((m, i) => `<tr><td>${i + 1}</td><td><strong>${m.id} ${m.name}</strong></td>${m.scores.map((s) => `<td>${s}</td>`).join("")}<td><strong>${m.scores.reduce((x, y) => x + y, 0)}</strong></td></tr>`).join("")}
+        </tbody>
+      `;
+    </script>
+  </body>
+</html>

@@ -1,7 +1,10 @@
 ---
 import { getCollection } from "astro:content";
+import "@fontsource/instrument-serif/400.css";
+import "@fontsource-variable/source-sans-3";
+import FeaturedCaseHero from "../../components/home/FeaturedCaseHero.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { formatCaseType, formatDate, getCaseDisplayData, getTaxonomyItems, sortCasesByDate } from "../../lib/cases";
+import { getCaseDisplayData, getTaxonomyItems, sortCasesByDate } from "../../lib/cases";
 import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../lib/siteCopy";
 
 export function getStaticPaths() {
@@ -11,232 +14,240 @@ export function getStaticPaths() {
 const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
 const copy = getSiteCopy(locale);
 const publishedCases = sortCasesByDate(await getCollection("cases", ({ data }) => data.status === "published"));
-const localizedCases = locale === "zh" ? publishedCases.filter((caseEntry) => hasCaseLocale(locale, caseEntry.id)) : publishedCases;
-const featuredCase = localizedCases.find((caseEntry) => caseEntry.data.featured) ?? localizedCases[0];
+const localizedCases = locale === "zh" ? publishedCases.filter((entry) => hasCaseLocale(locale, entry.id)) : publishedCases;
+const researchCases = localizedCases.filter((entry) => entry.id !== "sample-foundation-case");
+const featuredCase = researchCases.find((entry) => entry.data.featured) ?? researchCases[0];
 const featuredDisplay = featuredCase ? getCaseDisplayData(featuredCase, locale) : null;
-const topics = getTaxonomyItems(localizedCases, "topics");
-const concepts = getTaxonomyItems(localizedCases, "concepts");
-const searchIndex = localizedCases.map((caseEntry) => {
-  const displayData = getCaseDisplayData(caseEntry, locale);
+const concepts = getTaxonomyItems(researchCases, "concepts").slice(0, 4);
+const featuredHref = featuredCase ? localizedPath(locale, `/cases/${featuredCase.id}/`) : localizedPath(locale, "/cases/");
 
+const searchIndex = researchCases.map((entry) => {
+  const display = getCaseDisplayData(entry, locale);
   return {
-    title: displayData.title,
-    summary: displayData.summary,
-    centralQuestion: displayData.centralQuestion,
-    url: localizedPath(locale, `/cases/${caseEntry.id}/`),
-    caseType: formatCaseType(caseEntry.data.caseType, locale),
-    entities: displayData.entities,
-    topics: displayData.topics,
-    concepts: displayData.concepts,
-    searchableText: [
-      displayData.title,
-      displayData.summary,
-      displayData.centralQuestion,
-      formatCaseType(caseEntry.data.caseType, locale),
-      ...displayData.entities,
-      ...displayData.topics,
-      ...displayData.concepts,
-    ]
+    title: display.title,
+    summary: display.summary,
+    centralQuestion: display.centralQuestion,
+    url: localizedPath(locale, `/cases/${entry.id}/`),
+    meta: [...display.entities, ...display.topics, ...display.concepts].slice(0, 4),
+    searchableText: [display.title, display.summary, display.centralQuestion, ...display.entities, ...display.topics, ...display.concepts]
       .join(" ")
       .toLowerCase(),
   };
 });
-const methodSteps = copy.method.steps;
+
+const home = locale === "zh"
+  ? {
+      caseLabel: "案例 001",
+      heroHeadline: "便利之后",
+      heroSummary: "世界上最便利的市场之后，隐藏着怎样的取舍？",
+      exploreCase: "阅读案例",
+      explore: "探索 Understory",
+      question: "你的下一个问题是什么？",
+      searchDescription: "在商业案例、核心概念和分析框架中寻找答案，或从一个问题开始新的探索。",
+      searchPlaceholder: "搜索案例、概念与洞察",
+      searchScope: "案例 / 概念 / 主题 / 洞察",
+      brandTitle: "UNDERSTORY",
+      brandDescription: "一个独立的商业研究档案，探索企业、市场与决策背后的隐藏结构。",
+      brandPurpose: "我们沿着证据、取舍与激励继续追问，理解那些看得见的结果为何发生。",
+      brandCategories: [
+        { title: "案例", text: "以证据为基础，研究真实企业与关键决策。", href: "/cases/" },
+        { title: "概念", text: "解释市场力量、竞争与消费者行为的核心机制。", href: "/concepts/" },
+        { title: "框架", text: "把问题、背景、证据与判断连接起来的分析方法。", href: "/method/" },
+      ],
+      selected: "精选研究",
+      archive: "进入研究档案",
+      concepts: "商业概念",
+      conceptsLead: "用可重复使用的分析视角，理解表面之下的机制。",
+      method: "研究方法",
+      methodLead: "一条从好奇心到有边界判断的路径。",
+      methodSteps: [
+        { title: "问题", text: "我们真正试图理解的是什么？" },
+        { title: "背景", text: "这个决定发生在怎样的市场与竞争环境中？" },
+        { title: "证据", text: "哪些事实能够支持、限制或改变分析？" },
+        { title: "分析", text: "结构、激励与取舍如何共同作用？" },
+        { title: "洞察", text: "现有证据允许我们得出怎样有边界的判断？" },
+      ],
+      readMethod: "了解我们的方法",
+      footerLine: "一个独立的商业研究档案。",
+      footerNote: "往下看。再问一个问题。",
+    }
+  : {
+      caseLabel: "Case 001",
+      heroHeadline: "Beyond Convenience",
+      heroSummary: "The hidden trade-offs behind the world’s most convenient marketplace.",
+      exploreCase: "Explore Case",
+      explore: "Explore Understory",
+      question: "What is your one more question?",
+      searchDescription: "Search through business cases, core concepts, and analytical frameworks—or begin with a question of your own.",
+      searchPlaceholder: "Search cases, concepts, and insights",
+      searchScope: "Cases / Concepts / Topics / Insights",
+      brandTitle: "UNDERSTORY",
+      brandDescription: "An independent business research archive exploring the hidden structures behind companies, markets, and decisions.",
+      brandPurpose: "We follow evidence, trade-offs, and incentives to understand why visible outcomes take shape.",
+      brandCategories: [
+        { title: "Cases", text: "Evidence-led investigations into real businesses and consequential decisions.", href: "/cases/" },
+        { title: "Concepts", text: "Core mechanisms for understanding markets, competition, and behavior.", href: "/concepts/" },
+        { title: "Frameworks", text: "Structured ways to connect questions, context, evidence, and judgement.", href: "/method/" },
+      ],
+      selected: "Selected Research",
+      archive: "Enter the research archive",
+      concepts: "Business Concepts",
+      conceptsLead: "Reusable lenses for understanding the mechanisms beneath the surface.",
+      method: "Method",
+      methodLead: "A path from curiosity to a bounded, evidence-led judgement.",
+      methodSteps: [
+        { title: "Question", text: "What problem are we actually trying to understand?" },
+        { title: "Context", text: "Where does this decision sit within its market and competitive environment?" },
+        { title: "Evidence", text: "What facts support, limit, or could change the analysis?" },
+        { title: "Analysis", text: "How do structures, incentives, and trade-offs interact?" },
+        { title: "Insight", text: "What bounded judgement does the available evidence allow?" },
+      ],
+      readMethod: "Read our method",
+      footerLine: "An independent business research archive.",
+      footerNote: "Look beneath. Ask one more question.",
+    };
 ---
 
 <BaseLayout title={copy.brand.name} description={copy.brand.descriptor} locale={locale}>
-  <div class="home-page">
-    <section class="home-hero" aria-labelledby="home-heading">
-      <div>
-        <p class="home-eyebrow">{locale === "zh" ? copy.brand.localName : copy.brand.name}</p>
-        <h1 id="home-heading">
-          {
-            locale === "zh" ? (
-              <>
-                <span>问有所起，</span>
-                <span>思有所往</span>
-              </>
-            ) : (
-              <>
-                <span>{copy.brand.heroLines[0]}</span>
-                {" "}
-                <span>{copy.brand.heroLines[1]}</span>
-              </>
-            )
-          }
-        </h1>
-      </div>
-      <div class="home-hero__aside">
-        <p>{copy.brand.descriptor}</p>
-        {
-          featuredCase && (
-            <p class="home-latest">
-              {copy.labels.latestCase}: <a href={localizedPath(locale, `/cases/${featuredCase.id}/`)}>{featuredDisplay?.title}</a>
-            </p>
-          )
-        }
-        <a class="home-inline-link cta-link" href={localizedPath(locale, "/cases/")}>{copy.labels.exploreCases}</a>
-      </div>
-    </section>
-
-    <section class="home-discovery" aria-labelledby="discovery-heading">
-      <div>
-        <p class="home-eyebrow">Discovery</p>
-        <h2 id="discovery-heading">
-          {
-            locale === "zh" ? (
-              <>
-                <span>还有什么，</span>
-                <span>让你好奇？</span>
-              </>
-            ) : (
-              copy.search.heading
-            )
-          }
-        </h2>
-        <p>{copy.search.helper}</p>
-      </div>
-      <div class="home-search" data-search-root data-search-idle={copy.search.idle} data-search-empty={copy.search.empty} data-locale={locale}>
-        <label class="sr-only" for="home-search-input">{copy.search.label}</label>
-        <div class="home-search__field">
-          <span class="home-search__icon" aria-hidden="true"></span>
-          <input id="home-search-input" type="search" placeholder={copy.search.placeholder} autocomplete="off" data-search-input />
-        </div>
-        <div class="home-search__meta" aria-live="polite" data-search-status>{copy.search.idle}</div>
-        <ol class="home-search__results" data-search-results></ol>
-      </div>
-    </section>
-
+  <div class="editorial-home">
     {
       featuredCase && (
-        <section class="home-featured" id="cases" aria-labelledby="featured-heading">
-          <div class="home-section-kicker" id="cases">
-            <span>{copy.labels.featuredCase}</span>
-            <span>{formatDate(featuredCase.data.publishedDate)}</span>
-          </div>
-          <div class="home-featured__layout">
-            <div>
-              <p class="home-meta">{formatCaseType(featuredCase.data.caseType, locale)} {copy.labels.case}</p>
-              <h2 id="featured-heading">
-                <a href={localizedPath(locale, `/cases/${featuredCase.id}/`)}>{featuredDisplay?.title}</a>
-              </h2>
-            </div>
-            <div class="home-featured__summary">
-              <p class="home-question">{featuredDisplay?.centralQuestion}</p>
-              <p>{featuredDisplay?.quickThesis || featuredDisplay?.summary}</p>
-              <div class="home-tagline" aria-label="Featured case taxonomy">
-                {[...(featuredDisplay?.topics ?? []), ...(featuredDisplay?.concepts ?? [])].map((item) => <span>{item}</span>)}
-              </div>
-              <a class="home-read-link cta-link" href={localizedPath(locale, `/cases/${featuredCase.id}/`)}>{copy.labels.read}</a>
-            </div>
-          </div>
-        </section>
+        <FeaturedCaseHero
+          href={featuredHref}
+          company={featuredDisplay?.entities[0] ?? "Amazon"}
+          eyebrow={home.caseLabel}
+          headline={home.heroHeadline}
+          summary={home.heroSummary}
+          cta={home.exploreCase}
+          image="/images/amazon-logistics-hero.png"
+        />
       )
     }
 
-    <section class="home-explore" aria-label="Explore the case library">
-      <div id="topics" class="home-explore__group">
-        <p class="home-eyebrow">{copy.pages.topics.eyebrow}</p>
-        <h2>{locale === "zh" ? "案例所在的领域" : "What the case is about"}</h2>
-        <p class="home-term-note">{locale === "zh" ? "未来的中文案例，会在这里慢慢形成自己的主题脉络。" : "Current topics represented by published cases."}</p>
-        <div class="home-term-list">{topics.map((topic) => <a href={localizedPath(locale, `/topics/${topic.slug}/`)}>{topic.name}</a>)}</div>
-        {topics.length === 0 && locale === "zh" && <p class="home-term-empty">在那之前，可以先去英文版看看已有的探索领域。</p>}
-        <a class="home-section-link cta-link" href={localizedPath(locale, "/topics/")}>{locale === "zh" ? "浏览全部主题 ->" : "Explore all topics ->"}</a>
+    <section class="brand-introduction" aria-labelledby="brand-introduction-title">
+      <div class="brand-introduction__identity">
+        <p class="editorial-kicker">Independent research archive</p>
+        <h1 id="brand-introduction-title">{home.brandTitle}</h1>
       </div>
-      <div id="concepts" class="home-explore__group">
-        <p class="home-eyebrow">{copy.pages.concepts.eyebrow}</p>
-        <h2>{locale === "zh" ? "案例背后的分析概念" : "The ideas underneath the case"}</h2>
-        <p class="home-term-note">{locale === "zh" ? "概念会跟着案例一起出现，用来解释现象背后的机制。" : "Current concepts represented by published cases."}</p>
-        <div class="home-term-list">{concepts.map((concept) => <a href={localizedPath(locale, `/concepts/${concept.slug}/`)}>{concept.name}</a>)}</div>
-        {concepts.length === 0 && locale === "zh" && <p class="home-term-empty">中文概念索引会随着真实完成的中文案例慢慢长出来。</p>}
-        <a class="home-section-link cta-link" href={localizedPath(locale, "/concepts/")}>{locale === "zh" ? "浏览全部概念 ->" : "Explore all concepts ->"}</a>
+      <div class="brand-introduction__definition">
+        <p class="brand-introduction__description">{home.brandDescription}</p>
+        <p class="brand-introduction__purpose">{home.brandPurpose}</p>
       </div>
-    </section>
-
-    <section class="home-thinking" id="method" aria-labelledby="thinking-heading">
-      <div class="home-thinking__intro">
-        <p class="home-eyebrow">{locale === "zh" ? "思考方式" : "How We Think"}</p>
-        <h2 id="thinking-heading">{copy.brand.principle}</h2>
-      </div>
-      <ol class="home-method-list">
-        {methodSteps.map((step, index) => (
-          <li>
+      <nav class="brand-introduction__categories" aria-label={locale === "zh" ? "探索 Understory" : "Explore Understory"}>
+        {home.brandCategories.map((category, index) => (
+          <a href={localizedPath(locale, category.href)}>
             <span>{String(index + 1).padStart(2, "0")}</span>
-            <div><h3>{step.label}</h3><p>{step.text}</p></div>
-          </li>
+            <strong>{category.title}</strong>
+            <p>{category.text}</p>
+            <i aria-hidden="true">↗</i>
+          </a>
         ))}
-      </ol>
-      <a class="home-method-link cta-link" href={localizedPath(locale, "/method/")}>{locale === "zh" ? "阅读方法 ->" : "Read the method ->"}</a>
+      </nav>
     </section>
 
-    <section class="home-recent" aria-labelledby="recent-heading">
-      <div class="home-section-kicker">
-        <span>{copy.labels.publishedAnalysis}</span>
-        <span>{copy.pages.cases.count(localizedCases.length)}</span>
+    <section class="question-search" id="one-more-question" aria-labelledby="question-search-heading">
+      <div class="question-search__heading">
+        <p class="editorial-kicker">{home.explore}</p>
+        <h2 id="question-search-heading">{home.question}</h2>
+        <p>{home.searchDescription}</p>
       </div>
-      <h2 id="recent-heading">{copy.labels.publishedAnalysis}</h2>
-      <ol>
-        {localizedCases.map((caseEntry) => {
-          const displayData = getCaseDisplayData(caseEntry, locale);
+      <div class="question-search__tool" data-search-root data-search-idle={copy.search.idle} data-search-empty={copy.search.empty}>
+        <label class="sr-only" for="editorial-search-input">{copy.search.label}</label>
+        <div class="question-search__field">
+          <span class="question-search__mark" aria-hidden="true"></span>
+          <input id="editorial-search-input" type="search" placeholder={home.searchPlaceholder} autocomplete="off" data-search-input />
+          <span aria-hidden="true">↵</span>
+        </div>
+        <div class="question-search__underbar">
+          <span>{home.searchScope}</span>
+          <span aria-live="polite" data-search-status>{copy.search.idle}</span>
+        </div>
+        <ol class="question-search__results" data-search-results></ol>
+      </div>
+    </section>
 
+    <section class="research-preview" aria-labelledby="research-preview-title">
+      <div class="section-masthead">
+        <div><p class="editorial-kicker">Archive / 01</p><h2 id="research-preview-title">{home.selected}</h2></div>
+        <a href={localizedPath(locale, "/cases/")}>{home.archive}<span aria-hidden="true">↗</span></a>
+      </div>
+      <ol class="research-list">
+        {researchCases.map((entry, index) => {
+          const display = getCaseDisplayData(entry, locale);
           return (
             <li>
-              <time datetime={caseEntry.data.publishedDate.toISOString()}>{formatDate(caseEntry.data.publishedDate)}</time>
-              <div><h3><a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{displayData.title}</a></h3><p>{displayData.centralQuestion}</p></div>
-              <a class="cta-link" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
+              <a href={localizedPath(locale, `/cases/${entry.id}/`)}>
+                <span class="research-list__number">{String(index + 1).padStart(2, "0")}</span>
+                <span class="research-list__company">{display.entities[0]}</span>
+                <span class="research-list__title">{entry.id === featuredCase?.id ? home.heroHeadline : display.title}</span>
+                <span class="research-list__arrow" aria-hidden="true">↗</span>
+              </a>
             </li>
           );
         })}
       </ol>
-      {localizedCases.length === 0 && locale === "zh" && <p class="library-empty">{copy.pages.cases.empty}</p>}
     </section>
 
-    <footer class="home-footer" id="about">
-      <p>{copy.brand.name}{locale === "zh" ? " / 问溯" : ""}</p>
-      <p>{copy.brand.line}</p>
+    <section class="concepts-preview" aria-labelledby="concepts-preview-title">
+      <div class="concepts-preview__intro">
+        <p class="editorial-kicker">Index / 02</p>
+        <h2 id="concepts-preview-title">{home.concepts}</h2>
+        <p>{home.conceptsLead}</p>
+      </div>
+      <ol class="concept-index-home">
+        {concepts.map((concept, index) => (
+          <li><a href={localizedPath(locale, `/concepts/${concept.slug}/`)}><span>{String(index + 1).padStart(2, "0")}</span>{concept.name}<i aria-hidden="true">↗</i></a></li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="method-preview-v2" aria-labelledby="method-preview-title">
+      <div class="method-preview-v2__intro">
+        <p class="editorial-kicker">Process / 03</p>
+        <h2 id="method-preview-title">{home.method}</h2>
+        <p>{home.methodLead}</p>
+        <a href={localizedPath(locale, "/method/")}>{home.readMethod}<span aria-hidden="true">↗</span></a>
+      </div>
+      <ol class="method-path">
+        {home.methodSteps.map((step, index) => (
+          <li>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <div><strong>{step.title}</strong><p>{step.text}</p></div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <footer class="editorial-footer">
+      <div class="editorial-footer__brand"><img src="/brand/understory-symbol.svg" alt="" /><span>understory</span></div>
+      <p>{home.footerLine}</p>
+      <div class="editorial-footer__bottom"><span>{home.footerNote}</span><span>© {new Date().getFullYear()} Understory</span></div>
     </footer>
   </div>
+
   <script is:inline type="application/json" id="published-search-index" set:html={JSON.stringify(searchIndex)} />
   <script is:inline>
     // @ts-nocheck
-    const indexElement = document.getElementById("published-search-index");
     const searchRoot = document.querySelector("[data-search-root]");
     const input = searchRoot?.querySelector("[data-search-input]");
     const status = searchRoot?.querySelector("[data-search-status]");
     const results = searchRoot?.querySelector("[data-search-results]");
-    const idleText = searchRoot?.dataset.searchIdle ?? "Search is limited to published cases.";
-    const emptyText = searchRoot?.dataset.searchEmpty ?? "No matching published content was found.";
-    const searchIndex = indexElement?.textContent ? JSON.parse(indexElement.textContent) : [];
+    const indexElement = document.getElementById("published-search-index");
+    const data = indexElement?.textContent ? JSON.parse(indexElement.textContent) : [];
     const renderResults = (query) => {
-      if (!(input instanceof HTMLInputElement) || !status || !results) return;
-      const normalizedQuery = query.trim().toLowerCase();
+      const normalized = query.trim().toLowerCase();
       results.innerHTML = "";
-      if (normalizedQuery.length < 2) {
-        status.textContent = idleText;
-        return;
-      }
-      const matches = searchIndex.filter((item) => item.searchableText.includes(normalizedQuery)).slice(0, 5);
-      const locale = searchRoot?.dataset.locale ?? "en";
-      status.textContent = matches.length
-        ? locale === "zh"
-          ? `找到 ${matches.length} 个已发布案例。`
-          : `${matches.length} published ${matches.length === 1 ? "case" : "cases"} found.`
-        : emptyText;
-      for (const item of matches) {
-        const result = document.createElement("li");
+      if (normalized.length < 2) { status.textContent = searchRoot.dataset.searchIdle; return; }
+      const matches = data.filter((item) => item.searchableText.includes(normalized)).slice(0, 5);
+      status.textContent = matches.length ? `${matches.length} ${matches.length === 1 ? "result" : "results"}` : searchRoot.dataset.searchEmpty;
+      matches.forEach((item) => {
+        const li = document.createElement("li");
         const link = document.createElement("a");
-        const title = document.createElement("span");
-        const meta = document.createElement("small");
         link.href = item.url;
-        title.textContent = item.title;
-        meta.textContent = `${item.caseType} · ${[...item.entities, ...item.topics, ...item.concepts].slice(0, 4).join(" · ")}`;
-        link.append(title, meta);
-        result.append(link);
-        results.append(result);
-      }
+        link.innerHTML = `<span>${item.title}</span><small>${item.meta.join(" · ")}</small>`;
+        li.append(link); results.append(li);
+      });
     };
-    input?.addEventListener("input", (event) => {
-      if (event.target instanceof HTMLInputElement) renderResults(event.target.value);
-    });
+    input?.addEventListener("input", (event) => renderResults(event.target.value));
   </script>
 </BaseLayout>

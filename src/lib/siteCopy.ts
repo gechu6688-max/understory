@@ -89,7 +89,7 @@ export const siteCopy = {
       heroLines: ["Look beneath.", "Ask one more question."],
     },
     nav: [
-      { label: "Cases", href: "/cases/", section: "/cases/" },
+      { label: "Archive", href: "/cases/", section: "/cases/" },
       { label: "Topics", href: "/topics/", section: "/topics/" },
       { label: "Concepts", href: "/concepts/", section: "/concepts/" },
       { label: "Method", href: "/method/", section: "/method/" },
@@ -193,7 +193,7 @@ export const siteCopy = {
       heroLines: ["问有所起，", "思有所往"],
     },
     nav: [
-      { label: "案例", href: "/cases/", section: "/cases/" },
+      { label: "档案", href: "/cases/", section: "/cases/" },
       { label: "主题", href: "/topics/", section: "/topics/" },
       { label: "概念", href: "/concepts/", section: "/concepts/" },
       { label: "方法", href: "/method/", section: "/method/" },
@@ -310,12 +310,14 @@ export const conceptDescriptions: Record<Locale, Record<string, string>> = {
     "Switching Costs": "The friction that makes it harder for customers, sellers, or users to move from one option to another.",
     "Network Effects": "A mechanism where a product or platform becomes more valuable as more people or sellers use it.",
     "Market Competition": "The pressure created when rivals can meaningfully challenge a firm's price, quality, or service.",
+    "Competitive Constraint": "The discipline rivals place on a firm's ability to raise prices, reduce quality, or narrow consumer choice.",
   },
   zh: {
     "Pricing Power": "企业在不流失过多需求的情况下，持续维持更高价格的能力。",
     "Switching Costs": "让消费者、卖家或用户不容易从一种选择转向另一种选择的摩擦。",
     "Network Effects": "当使用者或卖家越多，产品或平台本身就越有价值的机制。",
     "Market Competition": "当竞争者能够真正挑战一家公司的价格、质量或服务时形成的压力。",
+    "Competitive Constraint": "竞争者对企业涨价、降低质量或缩小消费者选择空间形成的约束。",
   },
 };
 

@@ -14,19 +14,17 @@ entities:
 topics:
   - Market Power
   - Competition
-  - Consumer Choice
 concepts:
   - Pricing Power
-  - Network Effects
   - Switching Costs
-  - Market Competition
+  - Competitive Constraint
 caseType: strategy
 featured: true
 counterargumentSummary: "Amazon's prices and convenience may come from efficiency, scale, logistics, and marketplace competition rather than harmful market power."
 whatWouldChangeMyMind: "The concern would weaken if product-level evidence showed that Amazon's prices stayed disciplined after rival exit, or that price increases were better explained by costs, quality, seasonality, or product mix."
 localized:
   zh:
-    title: "亚马逊与竞争消失后的隐藏成本"
+    title: "竞争减少之后：亚马逊、价格与消费者选择"
     subtitle: "一个关于竞争者退出后市场力量如何变化的案例"
     summary: "亚马逊常常因为低价、配送速度和便利性而显得很有利于消费者。但这个案例想问的是：当竞争变弱之后，这些好处还会以同样的方式存在吗？"
     centralQuestion: "当竞争者离开市场后，亚马逊的市场力量会不会改变消费者的结果？"
@@ -38,12 +36,10 @@ localized:
     topics:
       - 市场力量
       - 竞争
-      - 消费者选择
     concepts:
       - 定价权
-      - 网络效应
       - 转换成本
-      - 市场竞争
+      - 竞争约束
     counterargumentSummary: "亚马逊的低价和便利，也可能来自效率、规模、物流能力和平台内卖家竞争，而不一定来自有害的市场力量。"
     whatWouldChangeMyMind: "如果产品层面的证据显示，竞争者退出后亚马逊价格仍然受到约束，或者涨价主要由成本、质量、季节性和产品组合解释，那么这个担忧就会变弱。"
 sources:
@@ -102,24 +98,13 @@ sources:
     relevanceNoteZh: "用于确认 Toys \"R\" Us 美国门店关闭的时间和背景。"
 ---
 
-import EvidenceBlock from "../../components/mdx/EvidenceBlock.astro";
+import EvidenceHighlight from "../../components/mdx/EvidenceHighlight.astro";
 import KeyInsight from "../../components/mdx/KeyInsight.astro";
 import OneMoreQuestion from "../../components/mdx/OneMoreQuestion.astro";
+import Timeline from "../../components/mdx/Timeline.astro";
 import TradeoffBlock from "../../components/mdx/TradeoffBlock.astro";
 
 <div data-case-lang="en">
-
-## Research Question
-
-When competitors leave, does Amazon's market power change consumer outcomes?
-
-This question matters because Amazon is not an obvious consumer-harm story. For many shoppers, Amazon means lower search costs, fast delivery, broad selection, easy returns, and a familiar checkout flow. Those are real benefits. A serious case should not pretend otherwise.
-
-The more interesting question sits underneath the convenience. If a major competitor disappears, does Amazon still need to keep prices as low as before? Or does weaker competition give Amazon more freedom to raise prices and influence the market while still looking convenient?
-
-<KeyInsight title="Case judgement">
-  Amazon may appear consumer-friendly because it offers low prices and convenience, but reduced competition can increase its ability to raise prices or shape outcomes. The claim is not that Amazon always harms consumers. The claim is that competition is one condition that keeps consumer-friendly behavior disciplined.
-</KeyInsight>
 
 ## Background
 
@@ -135,9 +120,49 @@ The key empirical evidence comes from He, Reimers, and Shiller's 2022 paper, "Wh
 
 The important pattern is not simply "prices went up." The more useful finding is comparative. Amazon's U.S. prices rose more after the Toys "R" Us exit than comparable prices in Canada, where Toys "R" Us remained active for longer. The increase was especially notable among popular products, which are the products where a large retailer's competitive pressure should matter most.
 
-<EvidenceBlock label="Evidence note">
-  The U.S.-Canada comparison is useful because it avoids treating every price change as proof of market power. It asks whether prices moved differently where the competitive shock was stronger.
-</EvidenceBlock>
+<EvidenceHighlight
+  title="Pricing after a major rival exits"
+  finding={'Amazon toy prices increased approximately 4% after Toys "R" Us exited the U.S. market.'}
+  comparison={'The study compares the U.S. market with Canada, where Toys "R" Us remained active for longer. It does not assign an unsupported numeric value to the Canadian pattern.'}
+  caveat="This is evidence of a pricing pattern after competitive pressure changed, not proof of every causal mechanism or every individual price change."
+  source="He, Reimers & Shiller (2022)"
+/>
+
+<Timeline
+  title="Amazon, rival exit, and the evidence record"
+  events={[
+    {
+      year: "1994",
+      title: "Amazon is founded",
+      description: "The company begins as an online bookseller before expanding into a multi-part retail and platform business.",
+      type: "company",
+    },
+    {
+      year: "2018",
+      title: 'Toys "R" Us closes its remaining U.S. stores',
+      description: "A major category-specific competitor leaves the U.S. toy market while its Canadian presence continues for longer.",
+      type: "market",
+    },
+    {
+      year: "2022",
+      title: "Research on post-exit pricing effects is published",
+      description: "He, Reimers, and Shiller examine Amazon pricing after the rival's disappearance using the U.S.–Canada comparison.",
+      type: "academic",
+    },
+    {
+      year: "2023",
+      title: "FTC and state attorneys general file an Amazon complaint",
+      description: "The filing sets out regulatory allegations about monopoly power; it is not a final court finding.",
+      type: "regulatory",
+    },
+    {
+      year: "2026",
+      title: "Understory publishes this case",
+      description: "The case evaluates the post-exit pricing evidence alongside company disclosures and regulatory claims.",
+      type: "publication",
+    },
+  ]}
+/>
 
 This evidence fits a broader concern in antitrust debates about Amazon. The FTC and state attorneys general allege that Amazon uses exclusionary conduct to maintain monopoly power in online superstore and marketplace-service markets. Those claims remain allegations, not final court findings. They do, however, show why regulators are interested in the difference between visible consumer convenience and deeper market structure.
 
@@ -228,7 +253,9 @@ Evidence that would strengthen the concern:
 
 当竞争者离开市场后，亚马逊的市场力量会不会改变消费者的结果？
 
-这个问题之所以有意思，是因为亚马逊并不是一个简单的“消费者受害”故事。对很多人来说，亚马逊意味着更容易搜索、更快收到货、更多选择、更方便退换，也不用每次都重新熟悉一个网站。这些好处是真实存在的。
+这个问题之所以有意思，是因为亚马逊并不是一个简单的“消费者受害”故事。
+
+对很多人来说，亚马逊意味着更容易搜索、更快收到货、更多选择、更方便退换，也不用每次都重新熟悉一个网站。这些好处是真实存在的。
 
 但问题也正藏在这里：如果一个重要竞争者离开了，亚马逊还需要像以前一样努力压低价格吗？还是说，竞争变弱以后，它即使仍然很方便，也拥有了更多涨价和影响市场的空间？
 
@@ -238,23 +265,47 @@ Evidence that would strengthen the concern:
 
 ## 背景
 
-亚马逊不只是一个网店。它同时是第三方卖家的平台、物流系统、广告业务、会员体系，也常常是消费者开始搜索商品的默认入口。正因为它覆盖的层面很多，判断它的市场力量不能只看一个指标。
+亚马逊不只是一个网店。它同时是第三方卖家的平台、物流系统、广告业务和会员体系，也常常是消费者开始搜索商品的默认入口。
 
-传统上，判断消费者是否受益，常常会先看价格是不是低。这当然重要。但平台型公司会让问题变得更复杂：消费者眼前可能得到了很好的体验，可是卖家、竞争者，甚至消费者自己，也可能在长期里越来越依赖这个平台。
+正因为它覆盖的层面很多，判断它的市场力量不能只看一个指标。
 
-Toys "R" Us 是一个很有用的观察对象。它在美国关闭了门店，但加拿大业务在更长时间里继续存在。这个差异让研究者可以比较：在一个重要玩具零售竞争者退出的市场里，亚马逊的价格变化，是否和竞争者仍然存在的市场不一样。
+传统上，判断消费者是否受益，常常会先看价格是不是低。这当然重要。
 
-## 证据
+但平台型公司会让问题变得更复杂：消费者眼前可能得到了很好的体验，可是卖家、竞争者，甚至消费者自己，也可能在长期里越来越依赖这个平台。
+
+Toys "R" Us 是一个很有用的观察对象。它在美国关闭了门店，但加拿大业务在更长时间里继续存在。
+
+这个差异让研究者可以比较：在一个重要玩具零售竞争者退出的市场里，亚马逊的价格变化，是否和竞争者仍然存在的市场不一样。
+
+## 关键证据
 
 关键证据来自 He、Reimers 和 Shiller 在 2022 年的研究《What Happens When Competition Disappears?》。这篇研究把 Toys "R" Us 退出美国市场作为一个观察窗口，分析竞争者消失以后亚马逊的价格变化。
 
-真正重要的地方，不只是“价格上涨了”这么简单。更有价值的是比较：Toys "R" Us 退出以后，美国亚马逊上的相关商品价格上涨幅度，高于加拿大可比市场中的变化。在热门商品上，这种差异尤其明显。热门商品通常更能体现一个大型竞争者原本带来的价格约束。
+真正重要的地方，不只是“价格上涨了”这么简单。更有价值的是美国与加拿大之间的比较。
 
-<EvidenceBlock label="证据说明">
-  美国和加拿大的比较很重要，因为它没有把所有涨价都直接归因于市场力量，而是在问：竞争冲击更强的地方，价格变化是不是也更明显。
-</EvidenceBlock>
+Toys "R" Us 退出以后，美国亚马逊上的相关商品价格上涨幅度，高于加拿大可比市场中的变化。在热门商品上，这种差异尤其明显，也更能体现一个大型竞争者原本带来的价格约束。
 
-这个发现也和更大的反垄断讨论有关。美国 FTC 和多个州在 2023 年起诉亚马逊，指控它通过排他性行为维持在线零售和平台服务中的垄断力量。这里要很小心：这些是监管方的指控，不是法院已经确认的事实。但它们说明，为什么监管者会关注“表面的消费者便利”和“底层的市场结构”之间的差别。
+<EvidenceHighlight
+  label="证据重点"
+  title={'Toys "R" Us 退出市场之后'}
+  items={[
+    {
+      value: "约 4%",
+      label: "美国亚马逊玩具价格",
+      detail: "主要竞争者退出后观察到的近似涨幅。",
+    },
+    {
+      value: "变化模式不同",
+      label: "加拿大对照",
+      detail: 'Toys "R" Us 在加拿大继续经营了更长时间。',
+    },
+  ]}
+  note="这组比较说明竞争压力的变化可能很重要，但不能单独证明每一次价格变化的原因。"
+/>
+
+这个发现也和更大的反垄断讨论有关。美国 FTC 和多个州在 2023 年起诉亚马逊，指控它通过排他性行为维持在线零售和平台服务中的垄断力量。
+
+这里要很小心：这些是监管方的指控，不是法院已经确认的事实。但它们说明，为什么监管者会关注“表面的消费者便利”和“底层的市场结构”之间的差别。
 
 亚马逊自己的公开文件也提醒我们，事情并不单向。亚马逊在零售、广告、订阅、设备、数字内容和技术服务等领域都面对竞争。换句话说，亚马逊很强，但并不是在所有市场里都完全没有约束。
 
@@ -262,9 +313,15 @@ Toys "R" Us 是一个很有用的观察对象。它在美国关闭了门店，�
 
 最简单的说法会是：竞争者离开，亚马逊涨价，所以亚马逊有市场力量。这个推理太快了。
 
-更好的理解应该是有条件的。竞争可以约束一家公司，即使这家公司已经很大。只要消费者可以容易地转去别的零售商，卖家可以在别处接触顾客，竞争对手可以持续压住价格和服务质量，亚马逊就没有那么大的空间随意利用规模优势。可是，当这些外部选择变弱，同一个便利的平台就会变得更难避开。
+更好的理解应该是有条件的。竞争可以约束一家公司，即使这家公司已经很大。
 
-Toys "R" Us 的例子正好说明这一点。它的关闭并不意味着亚马逊成了唯一卖玩具的地方。沃尔玛、Target、其他网店和专业零售商仍然存在。但失去一个重要的玩具零售竞争者，仍然可能减少某些商品上的价格压力。
+只要消费者可以容易地转去别的零售商，卖家可以在别处接触顾客，竞争对手可以持续压住价格和服务质量，亚马逊就没有那么大的空间随意利用规模优势。
+
+可是，当这些外部选择变弱，同一个便利的平台就会变得更难避开。
+
+Toys "R" Us 的例子正好说明这一点。它的关闭并不意味着亚马逊成了唯一卖玩具的地方。沃尔玛、Target、其他网店和专业零售商仍然存在。
+
+但失去一个重要的玩具零售竞争者，仍然可能减少某些商品上的价格压力。
 
 热门商品尤其值得看。如果一个主要竞争者退出后，热门玩具的价格上涨更明显，这说明那个竞争者过去可能确实在约束价格。它不能证明每一次涨价都来自市场力量，却能提醒我们：竞争消失以后，消费者面对的结果可能会改变。
 
@@ -287,21 +344,29 @@ Toys "R" Us 的例子正好说明这一点。它的关闭并不意味着亚马�
   ]}
 />
 
-## 另一种解释
+## 其他可能解释
 
 亚马逊价格上涨，也可能有很多和有害市场力量无关的原因。
 
-成本可能上升了。商品组合可能变了。热门玩具可能遇到供应紧张、季节性需求，或者品牌方自己的定价变化。亚马逊也可能改善了服务，让更高的价格对应了更高的价值，而不是竞争减少。
+成本可能上升了，商品组合也可能变了。热门玩具还可能遇到供应紧张、季节性需求，或者品牌方自己的定价变化。
 
-亚马逊的规模也确实可能带来效率。更好的物流、技术、库存管理，以及平台内部卖家之间的竞争，都可能降低成本、改善消费者体验。如果这些才是主要原因，那么把亚马逊的成功简单看成可疑，反而可能伤害消费者。
+亚马逊也可能改善了服务，让更高的价格对应了更高的价值，而不是竞争减少。
+
+亚马逊的规模也确实可能带来效率。更好的物流、技术、库存管理，以及平台内部卖家之间的竞争，都可能降低成本、改善消费者体验。
+
+如果这些才是主要原因，那么把亚马逊的成功简单看成可疑，反而可能伤害消费者。
 
 这是最有力的反方解释：低价和便利不一定是市场力量的伪装。有时候，它们就是有效竞争本身的结果。
 
-## 局限
+## 判断边界
 
-这个案例不能证明亚马逊进行了掠夺性定价。要证明掠夺性定价，需要证明它曾经低于成本定价、帮助排挤竞争者，然后再通过后来的涨价收回损失。Toys "R" Us 的证据更适合说明竞争者消失后可能发生什么，而不是证明谁导致了这个竞争者消失。
+这个案例不能证明亚马逊进行了掠夺性定价。要证明掠夺性定价，需要证明它曾经低于成本定价、帮助排挤竞争者，然后再通过后来的涨价收回损失。
 
-它也不能证明每一次价格上涨都来自市场力量。价格会受到成本、需求、供应、质量、季节性和产品替代的影响。最稳妥的结论应该更窄：竞争减少可能让亚马逊拥有更大的定价空间，而部分证据和这个可能性相一致。
+Toys "R" Us 的证据更适合说明竞争者消失后可能发生什么，而不是证明谁导致了这个竞争者消失。
+
+它也不能证明每一次价格上涨都来自市场力量。价格会受到成本、需求、供应、质量、季节性和产品替代的影响。
+
+最稳妥的结论应该更窄：竞争减少可能让亚马逊拥有更大的定价空间，而部分证据和这个可能性相一致。
 
 最后，这个证据主要来自玩具品类。亚马逊在图书、食品杂货、电子产品、云计算、广告和平台服务里的市场力量，可能会呈现出不同的样子。
 
@@ -309,13 +374,17 @@ Toys "R" Us 的例子正好说明这一点。它的关闭并不意味着亚马�
 
 亚马逊的便利性是真实的。也正因为它真实，这个问题才更难。
 
-如果只看表面，亚马逊很容易显得只是更好：更快、更省事、选择更多，也经常更便宜。但 Toys "R" Us 的例子提醒我们，当竞争变弱以后，消费者结果可能会改变。一个平台可以继续很好用，同时也变得不那么受约束。
+如果只看表面，亚马逊很容易显得只是更好：更快、更省事、选择更多，也经常更便宜。
 
-所以，这个案例的结论不是“亚马逊总是伤害消费者”。更准确地说：低价和便利最有价值的时候，是它们仍然受到竞争约束的时候。当竞争者离开，隐藏的成本可能是，平台拥有了更多空间去决定消费者、卖家和竞争者需要接受什么。
+但 Toys "R" Us 的例子提醒我们，当竞争变弱以后，消费者结果可能会改变。一个平台可以继续很好用，同时也变得不那么受约束。
+
+所以，这个案例的结论不是“亚马逊总是伤害消费者”。
+
+更准确地说：低价和便利最有价值的时候，是它们仍然受到竞争约束的时候。当竞争者离开，隐藏的成本可能是，平台拥有了更多空间去决定消费者、卖家和竞争者需要接受什么。
 
 <section class="case-uncertainty">
 
-## 什么会让我改变判断？
+## 什么证据会改变我的判断？
 
 会削弱这个担忧的证据：
 

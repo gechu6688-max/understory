@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Understory Round 6 — Brand Territory Before Symbol</title>
+    <style>
+      :root {
+        --page: #f7f4ee;
+        --surface: #fffdf8;
+        --muted-surface: #f1eee7;
+        --text: #191714;
+        --secondary: #55514a;
+        --muted: #7a746b;
+        --border: #ded7ca;
+        --green: #174d3c;
+        --deep: #0f352b;
+        --evidence: #2d6b65;
+        --counter: #8a4b32;
+        --uncertain: #9b6b20;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        max-width: 1520px;
+        margin: 0 auto;
+        padding: 40px 28px 72px;
+      }
+
+      h1, h2, h3, p { margin: 0; }
+
+      .eyebrow, .meta {
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 760;
+        letter-spacing: 0.15em;
+        line-height: 1.45;
+        text-transform: uppercase;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+        gap: 56px;
+        align-items: end;
+        padding-bottom: 34px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      h1 {
+        max-width: 11ch;
+        margin-top: 12px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(54px, 6vw, 80px);
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 0.98;
+      }
+
+      .intro-copy {
+        display: grid;
+        gap: 13px;
+        max-width: 760px;
+        color: var(--secondary);
+        font-size: 17px;
+        line-height: 1.62;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-top: 38px;
+        border-top: 2px solid var(--green);
+        padding-top: 13px;
+      }
+
+      .section-title h2 {
+        margin-top: 7px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 34px;
+        font-weight: 600;
+        line-height: 1.08;
+      }
+
+      .section-title p:last-child {
+        max-width: 60ch;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+        text-align: right;
+      }
+
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .card {
+        min-width: 0;
+        border-top: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 76%, transparent);
+        padding-top: 14px;
+      }
+
+      .card h3 {
+        margin-top: 8px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 25px;
+        font-weight: 600;
+        line-height: 1.12;
+      }
+
+      .card p, .card li, .matrix td {
+        color: var(--secondary);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .card strong { color: var(--text); }
+
+      .diagnostic {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .diagnostic .card {
+        padding: 14px 0 0;
+      }
+
+      .territory-preview {
+        min-height: 330px;
+        margin-top: 14px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        overflow: hidden;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .brand {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .links {
+        color: var(--secondary);
+        font-size: 11px;
+        white-space: nowrap;
+      }
+
+      .mobile .links { color: var(--green); font-weight: 700; }
+
+      .territory-inner { padding: 18px; }
+
+      .field-notes {
+        display: grid;
+        grid-template-columns: 56px 1fr 88px;
+        gap: 14px;
+      }
+
+      .field-notes .rail {
+        border-right: 1px solid var(--border);
+        color: var(--green);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        line-height: 1.8;
+      }
+
+      .field-notes h4, .surface h4, .second h4, .editorial h4 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 28px;
+        line-height: 1.02;
+      }
+
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 14px;
+      }
+
+      .tag {
+        border-bottom: 1px solid color-mix(in srgb, var(--green) 45%, var(--border));
+        color: var(--secondary);
+        font-size: 11px;
+        line-height: 1.5;
+      }
+
+      .note-box {
+        margin-top: 14px;
+        border-left: 2px solid var(--green);
+        padding-left: 10px;
+        color: var(--secondary);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .surface {
+        position: relative;
+        padding-bottom: 26px;
+      }
+
+      .surface .lower {
+        margin: 12px 0 0 24px;
+        border-top: 1px solid var(--green);
+        background: var(--muted-surface);
+        padding: 12px;
+      }
+
+      .surface .claim {
+        position: relative;
+        z-index: 1;
+        margin-right: 30px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 14px;
+      }
+
+      .second {
+        display: grid;
+        gap: 12px;
+      }
+
+      .second .dual {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        border-block: 1px solid var(--border);
+        padding-block: 12px;
+      }
+
+      .second .dual div:last-child {
+        border-left: 1px solid var(--border);
+        padding-left: 12px;
+      }
+
+      .editorial {
+        display: grid;
+        grid-template-columns: 0.75fr 1.25fr;
+        gap: 18px;
+      }
+
+      .editorial .index {
+        border-right: 1px solid var(--border);
+        padding-right: 12px;
+        color: var(--green);
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .type-sample {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .type-sample .headline {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 29px;
+        font-weight: 600;
+        line-height: 1.03;
+      }
+
+      .type-sample .sub { color: var(--secondary); font-size: 15px; line-height: 1.45; }
+      .type-sample .body { color: var(--secondary); font-size: 13px; line-height: 1.65; }
+      .type-sample .caption { color: var(--muted); font-size: 11px; line-height: 1.45; }
+      .type-sample .citation { color: var(--green); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
+
+      .color-behavior {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .swatch-line {
+        display: grid;
+        grid-template-columns: 72px 1fr;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .bar {
+        height: 12px;
+        border: 1px solid var(--border);
+        background: var(--green);
+      }
+
+      .image-placeholder {
+        display: grid;
+        min-height: 120px;
+        margin-top: 14px;
+        place-items: center;
+        border: 1px solid var(--border);
+        background:
+          linear-gradient(135deg, color-mix(in srgb, var(--green) 10%, transparent) 25%, transparent 25% 50%, color-mix(in srgb, var(--green) 10%, transparent) 50% 75%, transparent 75%),
+          var(--surface);
+        background-size: 18px 18px;
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+
+      .case-opener {
+        display: grid;
+        gap: 12px;
+        margin-top: 14px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        padding: 14px;
+      }
+
+      .case-opener h4 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 30px;
+        line-height: 1.02;
+      }
+
+      .cue-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+
+      .cue {
+        border-top: 2px solid var(--green);
+        padding-top: 6px;
+        color: var(--secondary);
+        font-size: 11px;
+        line-height: 1.4;
+      }
+
+      .article-body {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+      }
+
+      .argument {
+        color: var(--text);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 19px;
+        line-height: 1.32;
+      }
+
+      .device-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .device {
+        min-height: 60px;
+        border-top: 1px solid var(--green);
+        padding-top: 6px;
+        color: var(--secondary);
+        font-size: 11px;
+        line-height: 1.35;
+      }
+
+      .share-card {
+        display: grid;
+        min-height: 220px;
+        margin-top: 14px;
+        align-content: space-between;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        padding: 16px;
+      }
+
+      .share-card h4 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 31px;
+        line-height: 1.02;
+      }
+
+      .matrix-wrap {
+        overflow-x: auto;
+        margin-top: 18px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .matrix {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 980px;
+      }
+
+      .matrix th, .matrix td {
+        border-bottom: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+        padding: 10px;
+        text-align: left;
+      }
+
+      .matrix th {
+        color: var(--text);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+
+      .answers {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      @media (max-width: 1180px) {
+        .grid-4, .answers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .diagnostic { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 720px) {
+        main { padding-inline: 20px; }
+        .intro, .grid-4, .answers { grid-template-columns: 1fr; }
+        .section-title { align-items: start; flex-direction: column; }
+        .section-title p:last-child { text-align: left; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">Understory / Round 6</p>
+          <h1>Brand territory before symbol.</h1>
+        </div>
+        <div class="intro-copy">
+          <p>Phase one contains no logo design. This board explores the visual worlds that could make Understory feel ownable before a future symbol emerges naturally from the system.</p>
+          <p>All territories use the existing Understory content language: cases, evidence, counterargument, judgement, hidden costs, and one more question.</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div><p class="eyebrow">A. Diagnostic</p><h2>Why Rounds 1-5 did not fully land</h2></div>
+          <p>The previous work improved craft, but it stayed inside symbol semantics rather than defining a full editorial system.</p>
+        </div>
+        <div class="diagnostic">
+          <article class="card"><p><strong>Symbol-first thinking:</strong> Most rounds began with U, Q, tails, hidden U, or layer geometry before a broader visual world existed.</p></article>
+          <article class="card"><p><strong>Construction over identity:</strong> Many outputs were variations of a compact glyph container rather than a system for cases, evidence, counterargument, and long-form reading.</p></article>
+          <article class="card"><p><strong>Favicon pressure too early:</strong> Small-size optimization encouraged thick closed silhouettes and app/SaaS associations before the brand territory was mature.</p></article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div><p class="eyebrow">B. Territory Overview</p><h2>Four distinct visual worlds</h2></div>
+          <p>Different typography logic, grid behavior, image treatment, device language, green behavior, and interaction ideas.</p>
+        </div>
+        <div class="grid-4">
+          <article class="card">
+            <p class="meta">A / Field Notes</p>
+            <h3>Living analytical notebook</h3>
+            <div class="territory-preview field-notes territory-inner">
+              <div class="rail">01<br />EV<br />CA<br />J</div>
+              <div><h4>What does convenience cost?</h4><div class="tag-row"><span class="tag">Verified source</span><span class="tag">Counterargument</span></div><p class="note-box">Margin note: convenience is not the same as consumer welfare.</p></div>
+              <aside class="note-box">One more question: what keeps convenience disciplined?</aside>
+            </div>
+          </article>
+          <article class="card">
+            <p class="meta">B / Beneath The Surface</p>
+            <h3>Reveal what sits underneath</h3>
+            <div class="territory-preview territory-inner surface">
+              <div class="claim"><h4>Convenience is visible. Dependence is underneath.</h4><p class="tag">Primary claim layer</p></div>
+              <div class="lower"><p class="meta">Underlying structure</p><p>Seller fees, rival weakness, search defaults, and long-term choice.</p></div>
+            </div>
+          </article>
+          <article class="card">
+            <p class="meta">C / The Second Reading</p>
+            <h3>Look once. Then again.</h3>
+            <div class="territory-preview territory-inner second">
+              <h4>Low prices are not the whole answer.</h4>
+              <div class="dual"><div><p class="meta">First reading</p><p>Consumers gain speed, price, selection.</p></div><div><p class="meta">Second reading</p><p>Market power can form inside convenience.</p></div></div>
+            </div>
+          </article>
+          <article class="card">
+            <p class="meta">D / Editorial Understory</p>
+            <h3>Analytical publication system</h3>
+            <div class="territory-preview territory-inner editorial">
+              <div class="index">Case 001<br />Strategy<br />Trade-offs</div>
+              <div><h4>What does convenience cost?</h4><p class="note-box">A contemporary case opening with citation-led authority and controlled green.</p></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="typography">
+        <div class="section-title">
+          <div><p class="eyebrow">C. Typography</p><h2>Type systems</h2></div>
+          <p>All use currently available system fonts: Georgia for editorial gravity and installed sans/mono stacks for structure. No font files are installed.</p>
+        </div>
+        <div class="grid-4" data-render="type"></div>
+      </section>
+
+      <section id="color">
+        <div class="section-title">
+          <div><p class="eyebrow">D. Color Behavior</p><h2>How green behaves</h2></div>
+          <p>Green is not merely a swatch: each territory gives it a different job.</p>
+        </div>
+        <div class="grid-4" data-render="color"></div>
+      </section>
+
+      <section id="grid">
+        <div class="section-title">
+          <div><p class="eyebrow">E. Grid / Spacing</p><h2>Different reading architectures</h2></div>
+          <p>The territories vary density, margin logic, column count, and vertical rhythm.</p>
+        </div>
+        <div class="grid-4" data-render="grid"></div>
+      </section>
+
+      <section id="case-openers">
+        <div class="section-title">
+          <div><p class="eyebrow">F. Case Study Opener</p><h2>Same case, four interpretations</h2></div>
+          <p>Each opener uses the same content language: category, headline, deck, evidence cue, counterargument cue, one-more-question cue.</p>
+        </div>
+        <div class="grid-4" data-render="opener"></div>
+      </section>
+
+      <section id="body">
+        <div class="section-title">
+          <div><p class="eyebrow">G. Article Body</p><h2>Reading, evidence, counterargument, judgement</h2></div>
+          <p>The brand has to work inside real case analysis, not just in hero compositions.</p>
+        </div>
+        <div class="grid-4" data-render="body"></div>
+      </section>
+
+      <section id="headers">
+        <div class="section-title">
+          <div><p class="eyebrow">H. Header / Mobile</p><h2>Navigation without new logos</h2></div>
+          <p>Existing wordmark only. These test territory atmosphere, not symbol design.</p>
+        </div>
+        <div class="grid-4" data-render="headers"></div>
+      </section>
+
+      <section id="devices">
+        <div class="section-title">
+          <div><p class="eyebrow">I. Editorial Devices</p><h2>Recurring system parts</h2></div>
+          <p>Evidence, counterargument, source, judgement, and one-more-question devices for each territory.</p>
+        </div>
+        <div class="grid-4" data-render="devices"></div>
+      </section>
+
+      <section id="social">
+        <div class="section-title">
+          <div><p class="eyebrow">J. Social / Share Card</p><h2>Outside the website</h2></div>
+          <p>Each territory must survive as a shareable case card without needing a logo symbol.</p>
+        </div>
+        <div class="grid-4" data-render="social"></div>
+      </section>
+
+      <section id="motion">
+        <div class="section-title">
+          <div><p class="eyebrow">K. Interaction</p><h2>Understated motion principles</h2></div>
+          <p>Defined as behavior concepts only; no heavy animation is needed for this phase.</p>
+        </div>
+        <div class="grid-4" data-render="motion"></div>
+      </section>
+
+      <section id="seeds">
+        <div class="section-title">
+          <div><p class="eyebrow">L. Future Symbol Seeds</p><h2>Mechanisms, not logos</h2></div>
+          <p>These are recurring visual mechanisms that could later generate a symbol. They are intentionally not finished marks.</p>
+        </div>
+        <div class="grid-4" data-render="seeds"></div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div><p class="eyebrow">M. Final Evaluation Matrix</p><h2>Scores and answers</h2></div>
+          <p>Scored for long-term territory potential, not short-term logo readiness.</p>
+        </div>
+        <div class="matrix-wrap">
+          <table class="matrix" id="matrix"></table>
+        </div>
+        <div class="answers" id="answers"></div>
+      </section>
+    </main>
+    <script>
+      const territories = [
+        {
+          id: "A",
+          name: "Field Notes",
+          type: "Analytical notebook",
+          headline: "What does convenience cost?",
+          deck: "Evidence accumulates in the margin: lower prices now, dependence later, and the question that remains open.",
+          color: "Green is structural notation: rails, source markers, section numbers, and active evidence states. Mostly neutral page.",
+          grid: "Desktop uses a three-column reading field: narrow annotation rail, article body, right-side question margin. Dense but breathable.",
+          image: "Evidence image sits as a source object with a small provenance label and margin note; neutral placeholder until real source image exists.",
+          devices: ["EV evidence pin", "CA counter-note", "SRC citation rail", "J judgement underline"],
+          motion: ["Margin notes fade in after paragraph settles", "Evidence blocks expand from rail", "One-more-question appears as a side note"],
+          seed: "A proprietary margin interruption or citation marker could later become the symbol source.",
+          scores: [8, 9, 8, 8, 8, 8, 9, 9, 9, 8],
+        },
+        {
+          id: "B",
+          name: "Beneath The Surface",
+          type: "Reveal system",
+          headline: "Convenience is visible. Dependence is underneath.",
+          deck: "Primary claims slide aside to expose source, mechanism, or hidden cost beneath the surface.",
+          color: "Green is an exposed lower plane: rarely used on top, stronger in revealed captions and structural rules.",
+          grid: "Offset two-layer grid: primary content sits high and left; secondary metadata peeks below or behind. More spatial and open.",
+          image: "Images are cropped as surfaces, with analytical captions partially exposed underneath rather than placed below as decoration.",
+          devices: ["lower-plane caption", "surface shift", "hidden metadata", "under-rule"],
+          motion: ["Hover reveals lower evidence line", "Scroll shifts claim layer slightly upward", "Captions expose from beneath image crop"],
+          seed: "An exposed lower plane, cut, or reveal edge could later generate a symbol.",
+          scores: [9, 8, 9, 8, 7, 7, 8, 8, 9, 9],
+        },
+        {
+          id: "C",
+          name: "The Second Reading",
+          type: "Dual-reading system",
+          headline: "Low prices are not the whole answer.",
+          deck: "Every major claim is paired with a second reading: what appears beneficial and what might be structurally true.",
+          color: "Green marks second-reading alignment and interpretive turns. Counterargument uses warm brown sparingly.",
+          grid: "Paired columns and reversible dividers. Medium density, with tension between claim and counterclaim.",
+          image: "Images are split by caption logic: first impression label on one side, analytical reading on the other.",
+          devices: ["first / second split", "counterclaim embed", "reversal divider", "echo caption"],
+          motion: ["Second reading appears on hover or focus", "Counterargument aligns into view", "Divider flips label from claim to question"],
+          seed: "A true figure-ground or reversible divider mechanism could later generate a symbol.",
+          scores: [8, 9, 9, 7, 7, 7, 8, 9, 8, 8],
+        },
+        {
+          id: "D",
+          name: "Editorial Understory",
+          type: "Contemporary publication",
+          headline: "What does convenience cost?",
+          deck: "A controlled editorial system for readable case openings, citation-led credibility, and strong long-form analysis.",
+          color: "Green is highly controlled: index markers, active section rule, and selected metadata only. Most authority comes from type and spacing.",
+          grid: "Wide editorial grid: index column, large serif opener, article measure, and structured modules. Most open and durable.",
+          image: "Images behave like publication evidence plates: framed, captioned, source-labeled, and never decorative.",
+          devices: ["case index", "source plate", "argument map", "section sign"],
+          motion: ["Index highlights current section", "Source plates reveal citation on focus", "Argument map pins as reader scrolls"],
+          seed: "An index marker, section sign, or publication imprint device could later become the symbol source.",
+          scores: [8, 10, 8, 9, 10, 9, 9, 9, 9, 8],
+        },
+      ];
+
+      const renderCard = (t, html) => `<article class="card"><p class="meta">${t.id} / ${t.name}</p>${html}</article>`;
+      const opener = (t) => renderCard(t, `<div class="case-opener"><p class="meta">Company Case</p><h4>${t.headline}</h4><p>${t.deck}</p><div class="cue-row"><div class="cue">Evidence cue<br />FTC complaint is allegation, not finding.</div><div class="cue">Counterargument<br />Efficiency may explain benefits.</div><div class="cue">One more question<br />What disciplines convenience?</div></div></div>`);
+      const body = (t) => renderCard(t, `<div class="article-body"><p class="argument">Argument: convenience can lower friction while also increasing dependence.</p><p><strong>Evidence:</strong> Amazon’s filings describe a multi-part business; regulators allege exclusionary conduct.</p><p><strong>Source:</strong> FTC complaint, Amazon 2024 10-K, Yale Law Journal analysis.</p><p><strong>Counterargument:</strong> lower prices may come from logistics, scale, and seller competition.</p><p><strong>Judgement:</strong> convenience is a real benefit, but not complete proof of long-term consumer welfare.</p></div>`);
+      const headers = (t) => renderCard(t, `<div class="territory-preview"><div class="nav"><span class="brand">understory</span><span class="links">Cases Topics Concepts Method About</span></div><div class="territory-inner"><p class="meta">${t.type}</p><h3>${t.name}</h3><p>${t.grid}</p></div><div class="nav mobile"><span class="brand">understory</span><span class="links">Menu</span></div></div>`);
+      const type = (t) => renderCard(t, `<div class="type-sample"><p class="headline">${t.headline}</p><p class="sub">${t.deck}</p><p class="body">Body text must carry long-form reasoning without becoming institutional or sterile.</p><p class="citation">SRC / FTC complaint / accessed 2026-07-09</p><p class="caption">Caption: neutral evidence image placeholder, source-labeled.</p></div>`);
+      const color = (t) => renderCard(t, `<div class="color-behavior"><div class="swatch-line"><span class="bar"></span><p>${t.color}</p></div><p>Background remains warm paper. Text hierarchy uses black, secondary gray, border tan, and restrained green.</p></div>`);
+      const grid = (t) => renderCard(t, `<p>${t.grid}</p><div class="image-placeholder">Image treatment placeholder</div><p>${t.image}</p>`);
+      const devices = (t) => renderCard(t, `<div class="device-row">${t.devices.map((d) => `<div class="device">${d}</div>`).join("")}</div>`);
+      const social = (t) => renderCard(t, `<div class="share-card"><p class="meta">${t.name}</p><h4>What does convenience cost?</h4><p>${t.deck}</p><p class="meta">understory / Go beneath. Ask again.</p></div>`);
+      const motion = (t) => renderCard(t, `<ul>${t.motion.map((m) => `<li>${m}</li>`).join("")}</ul>`);
+      const seeds = (t) => renderCard(t, `<p><strong>Potential symbol seed:</strong> ${t.seed}</p><div class="image-placeholder">fragment only / no logo</div>`);
+
+      const sections = { type, color, grid, opener, body, headers, devices, social, motion, seeds };
+      document.querySelectorAll("[data-render]").forEach((node) => {
+        const key = node.dataset.render;
+        node.innerHTML = territories.map(sections[key]).join("");
+      });
+
+      const criteria = [
+        "Feels uniquely like Understory",
+        "Editorial intelligence",
+        "Distinctiveness",
+        "Long-term durability",
+        "Reading usability",
+        "Fit with current site",
+        "Supports business case analysis",
+        "Supports evidence / counterargument / judgement",
+        "Avoids generic startup feeling",
+        "Future symbol potential",
+      ];
+      const matrix = document.getElementById("matrix");
+      matrix.innerHTML = `<thead><tr><th>Criterion</th>${territories.map((t) => `<th>${t.id} / ${t.name}</th>`).join("")}</tr></thead><tbody>${criteria.map((c, i) => `<tr><td>${c}</td>${territories.map((t) => `<td>${t.scores[i]}</td>`).join("")}</tr>`).join("")}</tbody>`;
+
+      const answers = [
+        ["Hardest to rename", "Beneath The Surface", "Its reveal logic most directly owns the Understory premise."],
+        ["Best expresses the phrase", "Beneath The Surface", "It shows the move beneath without illustrating the phrase literally."],
+        ["Strongest 5-second memory", "The Second Reading", "The paired claim/counterclaim rhythm is easy to recall."],
+        ["Best long-form reading", "Editorial Understory", "It is the most durable and least distracting for serious case bodies."],
+        ["Best for future contribution layer", "Field Notes", "Annotations and margin rails can naturally expand to curated reader contributions."],
+      ];
+      document.getElementById("answers").innerHTML = answers.map(([q, a, why]) => `<article class="card"><p class="meta">${q}</p><h3>${a}</h3><p>${why}</p></article>`).join("");
+    </script>
+  </body>
+</html>

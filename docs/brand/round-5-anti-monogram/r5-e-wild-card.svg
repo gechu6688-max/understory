@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">R5-E: Wild Card</title>
+  <desc id="desc">A literary interruption mark: a vertical inquiry spine crossed by an unresolved lower plane.</desc>
+  <path fill="#174D3C" d="M29 7h10v22H29V7Z" />
+  <path fill="#174D3C" d="M29 38h10v19H29V38Z" />
+  <path fill="#174D3C" d="M14 30h36v8H14v-8Z" />
+  <path fill="#174D3C" d="M42 38h9l-11 19h-9l11-19Z" />
+</svg>

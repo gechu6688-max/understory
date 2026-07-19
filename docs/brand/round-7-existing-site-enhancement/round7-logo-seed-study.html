@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Understory Round 7 - Logo Seed Study</title>
+    <style>
+      :root {
+        --page: #f7f4ee;
+        --surface: #fffdf8;
+        --muted-surface: #f1eee7;
+        --text: #191714;
+        --secondary: #55514a;
+        --muted: #7a746b;
+        --border: #ded7ca;
+        --green: #174d3c;
+        --deep: #0f352b;
+        --tint: #e8f0ea;
+        --evidence: #2d6b65;
+        --counter: #8a4b32;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: 2.5rem 1.25rem 4.5rem;
+      }
+
+      h1, h2, h3, p { margin: 0; }
+
+      .eyebrow {
+        color: var(--green);
+        font-size: 0.72rem;
+        font-weight: 760;
+        letter-spacing: 0.16em;
+        line-height: 1.4;
+        text-transform: uppercase;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.75fr);
+        gap: clamp(1.75rem, 5vw, 4rem);
+        align-items: end;
+        border-bottom: 1px solid var(--border);
+        padding-block: 1.7rem 2rem;
+      }
+
+      h1 {
+        max-width: 11ch;
+        margin-top: 0.8rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(3rem, 6vw, 5.5rem);
+        font-weight: 600;
+        line-height: 0.98;
+      }
+
+      .intro aside {
+        border-top: 2px solid var(--green);
+        padding-top: 1rem;
+      }
+
+      .intro p:not(.eyebrow),
+      .section-note {
+        color: var(--secondary);
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+
+      .section {
+        margin-top: 2.7rem;
+        border-top: 1px solid var(--green);
+        padding-top: 1rem;
+      }
+
+      h2 {
+        margin-top: 0.55rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        font-weight: 600;
+        line-height: 1.04;
+      }
+
+      .section-note {
+        max-width: 46rem;
+        margin-top: 0.65rem;
+      }
+
+      .seed-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 1.2rem;
+      }
+
+      .seed {
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .seed-head {
+        border-bottom: 1px solid var(--border);
+        padding: 0.75rem 0.85rem;
+      }
+
+      .seed h3 {
+        margin-top: 0.35rem;
+        font-size: 1.05rem;
+        line-height: 1.24;
+      }
+
+      .fragment-stage {
+        display: grid;
+        place-items: center;
+        min-height: 12rem;
+        border-bottom: 1px solid var(--border);
+        background:
+          linear-gradient(90deg, color-mix(in srgb, var(--border) 38%, transparent) 1px, transparent 1px),
+          linear-gradient(color-mix(in srgb, var(--border) 30%, transparent) 1px, transparent 1px);
+        background-size: 42px 42px;
+      }
+
+      .fragment {
+        position: relative;
+        width: 7.5rem;
+        height: 7.5rem;
+      }
+
+      .frag-reveal {
+        border-top: 6px solid var(--text);
+        border-left: 6px solid var(--text);
+      }
+
+      .frag-reveal::after {
+        content: "";
+        position: absolute;
+        left: 1.2rem;
+        bottom: 1.55rem;
+        width: 5.1rem;
+        height: 1.65rem;
+        background: var(--tint);
+        border-left: 5px solid var(--green);
+        border-bottom: 1px solid color-mix(in srgb, var(--green) 28%, var(--border));
+      }
+
+      .frag-rule {
+        height: 4.5rem;
+      }
+
+      .frag-rule::before,
+      .frag-rule::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: var(--text);
+      }
+
+      .frag-rule::before { top: 1.4rem; right: 42%; }
+      .frag-rule::after { top: 1.4rem; left: 66%; }
+
+      .frag-rule span {
+        position: absolute;
+        top: 0.95rem;
+        left: 45%;
+        width: 1.25rem;
+        height: 1.25rem;
+        border-left: 5px solid var(--green);
+        border-bottom: 5px solid var(--green);
+      }
+
+      .frag-notch {
+        border-left: 6px solid var(--text);
+        border-bottom: 6px solid var(--text);
+      }
+
+      .frag-notch::before {
+        content: "";
+        position: absolute;
+        left: -6px;
+        top: 2.1rem;
+        width: 1.65rem;
+        height: 1rem;
+        background: var(--surface);
+        border-top: 4px solid var(--evidence);
+      }
+
+      .frag-offset::before,
+      .frag-offset::after {
+        content: "";
+        position: absolute;
+        border: 5px solid var(--text);
+      }
+
+      .frag-offset::before {
+        inset: 0.8rem 1.2rem 1.35rem 0.8rem;
+      }
+
+      .frag-offset::after {
+        inset: 2.3rem 0.55rem 0.65rem 2rem;
+        border-color: var(--green);
+        background: color-mix(in srgb, var(--tint) 70%, transparent);
+      }
+
+      .frag-margin {
+        border-left: 5px solid var(--text);
+      }
+
+      .frag-margin::before {
+        content: "";
+        position: absolute;
+        left: -5px;
+        top: 2rem;
+        width: 4rem;
+        height: 5px;
+        background: var(--green);
+      }
+
+      .frag-margin::after {
+        content: "";
+        position: absolute;
+        left: 2.25rem;
+        top: 2rem;
+        bottom: 0.8rem;
+        width: 1px;
+        background: var(--border);
+      }
+
+      .frag-crossing::before,
+      .frag-crossing::after {
+        content: "";
+        position: absolute;
+        background: var(--text);
+      }
+
+      .frag-crossing::before {
+        left: 0.7rem;
+        right: 0.9rem;
+        top: 2rem;
+        height: 5px;
+      }
+
+      .frag-crossing::after {
+        left: 3.6rem;
+        top: 0.7rem;
+        width: 5px;
+        height: 5.8rem;
+        background: var(--counter);
+        transform: rotate(18deg);
+        transform-origin: center;
+      }
+
+      .seed-body {
+        padding: 0.9rem;
+      }
+
+      .seed-body dl {
+        display: grid;
+        gap: 0.65rem;
+        margin: 0;
+      }
+
+      .seed-body dt {
+        color: var(--green);
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .seed-body dd {
+        margin: 0.2rem 0 0;
+        color: var(--secondary);
+        font-size: 0.85rem;
+        line-height: 1.55;
+      }
+
+      .score {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 0.6rem;
+        margin-top: 1rem;
+      }
+
+      .score div {
+        border-top: 1px solid var(--border);
+        padding-top: 0.65rem;
+      }
+
+      .score strong {
+        display: block;
+        color: var(--text);
+        font-size: 0.86rem;
+        line-height: 1.3;
+      }
+
+      .score span {
+        display: block;
+        margin-top: 0.25rem;
+        color: var(--secondary);
+        font-size: 0.78rem;
+        line-height: 1.45;
+      }
+
+      @media (max-width: 900px) {
+        .intro,
+        .seed-grid,
+        .score {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">Understory / Round 7</p>
+          <h1>Potential logo seeds from site behavior.</h1>
+        </div>
+        <aside>
+          <p class="eyebrow">Strict boundary</p>
+          <p>
+            These are not logos, not U/Q monograms, and not favicon studies. Each fragment is a primitive mechanism extracted from the Round 7 site experiments.
+          </p>
+        </aside>
+      </section>
+
+      <section class="section">
+        <p class="eyebrow">Seed fragments</p>
+        <h2>Four to six primitive fragments, unresolved on purpose.</h2>
+        <p class="section-note">
+          A future symbol should not be invented separately from the website. It should come from a repeated behavior readers already understand: reveal, interruption, evidence, offset, continuation, or second reading.
+        </p>
+
+        <div class="seed-grid">
+          <article class="seed">
+            <div class="seed-head"><p class="eyebrow">Seed 01</p><h3>Exposed lower plane</h3></div>
+            <div class="fragment-stage"><div class="fragment frag-reveal"></div></div>
+            <div class="seed-body">
+              <dl>
+                <div><dt>Source mechanism</dt><dd>Experiment A / Beneath Reveal.</dd></div>
+                <div><dt>Where it appears</dt><dd>Quick Thesis lower layer; section divider with a visible analytical underside.</dd></div>
+                <div><dt>Why native</dt><dd>It expresses Understory's behavior: surface claim first, structure underneath second.</dd></div>
+                <div><dt>Could become symbol?</dt><dd>Yes. Strongest candidate, if kept more like a reveal cut than an app badge.</dd></div>
+              </dl>
+            </div>
+          </article>
+
+          <article class="seed">
+            <div class="seed-head"><p class="eyebrow">Seed 02</p><h3>Interrupted editorial rule</h3></div>
+            <div class="fragment-stage"><div class="fragment frag-rule"><span></span></div></div>
+            <div class="seed-body">
+              <dl>
+                <div><dt>Source mechanism</dt><dd>Experiment D / Editorial Refinement.</dd></div>
+                <div><dt>Where it appears</dt><dd>Source strip, case opener rules, section transitions.</dd></div>
+                <div><dt>Why native</dt><dd>The current site already relies on rules; interruption can become proprietary without changing the system.</dd></div>
+                <div><dt>Could become symbol?</dt><dd>Maybe. It is elegant, but may need more distinctiveness before symbol work.</dd></div>
+              </dl>
+            </div>
+          </article>
+
+          <article class="seed">
+            <div class="seed-head"><p class="eyebrow">Seed 03</p><h3>Evidence notch</h3></div>
+            <div class="fragment-stage"><div class="fragment frag-notch"></div></div>
+            <div class="seed-body">
+              <dl>
+                <div><dt>Source mechanism</dt><dd>Experiment B / Evidence Annotation.</dd></div>
+                <div><dt>Where it appears</dt><dd>Evidence, counterargument, judgement, and one-more-question markers.</dd></div>
+                <div><dt>Why native</dt><dd>Understory's method is evidence-led; a notch can mark a claim that has been checked.</dd></div>
+                <div><dt>Could become symbol?</dt><dd>Possibly. Better as a system mark than as the main brand symbol.</dd></div>
+              </dl>
+            </div>
+          </article>
+
+          <article class="seed">
+            <div class="seed-head"><p class="eyebrow">Seed 04</p><h3>Offset second layer</h3></div>
+            <div class="fragment-stage"><div class="fragment frag-offset"></div></div>
+            <div class="seed-body">
+              <dl>
+                <div><dt>Source mechanism</dt><dd>Experiment A plus Experiment C.</dd></div>
+                <div><dt>Where it appears</dt><dd>Claim followed by lower structure; first reading followed by complication.</dd></div>
+                <div><dt>Why native</dt><dd>It turns "ask again" into alignment behavior rather than punctuation.</dd></div>
+                <div><dt>Could become symbol?</dt><dd>Yes, but it risks becoming too diagrammatic if overbuilt.</dd></div>
+              </dl>
+            </div>
+          </article>
+
+          <article class="seed">
+            <div class="seed-head"><p class="eyebrow">Seed 05</p><h3>Margin continuation</h3></div>
+            <div class="fragment-stage"><div class="fragment frag-margin"></div></div>
+            <div class="seed-body">
+              <dl>
+                <div><dt>Source mechanism</dt><dd>Experiment B / Evidence Annotation.</dd></div>
+                <div><dt>Where it appears</dt><dd>Selective margin-side method markers and future contribution cues.</dd></div>
+                <div><dt>Why native</dt><dd>It suggests analysis continuing beyond a single paragraph or answer.</dd></div>
+                <div><dt>Could become symbol?</dt><dd>Maybe later. It is more useful as a contribution-layer device for now.</dd></div>
+              </dl>
+            </div>
+          </article>
+
+          <article class="seed">
+            <div class="seed-head"><p class="eyebrow">Seed 06</p><h3>Claim / counterclaim crossing</h3></div>
+            <div class="fragment-stage"><div class="fragment frag-crossing"></div></div>
+            <div class="seed-body">
+              <dl>
+                <div><dt>Source mechanism</dt><dd>Experiment C / Second Reading.</dd></div>
+                <div><dt>Where it appears</dt><dd>Paired first conclusion and second complication.</dd></div>
+                <div><dt>Why native</dt><dd>It visualizes a serious alternative explanation intersecting the initial claim.</dd></div>
+                <div><dt>Could become symbol?</dt><dd>Low priority. Conceptually strong, but more likely to feel invented than site-born.</dd></div>
+              </dl>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <p class="eyebrow">Evaluation</p>
+        <h2>Which seed is worth developing later?</h2>
+        <div class="score">
+          <div><strong>Site-born?</strong><span>Seed 01 clearly emerges from the tested case mechanism.</span></div>
+          <div><strong>Simple?</strong><span>Seed 02 is simplest, but not the most ownable yet.</span></div>
+          <div><strong>Ownable?</strong><span>Seed 01 and Seed 04 have the strongest proprietary potential.</span></div>
+          <div><strong>Works without U/Q?</strong><span>Seed 01 does; its meaning comes from reveal, not letters.</span></div>
+          <div><strong>Behavior link?</strong><span>Seed 03 best connects to evidence behavior, but may be secondary.</span></div>
+          <div><strong>Develop?</strong><span>Develop Seed 01 only after testing the reveal mechanism in a real case page.</span></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

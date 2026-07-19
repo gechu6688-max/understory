@@ -1,0 +1,76 @@
+---
+interface EvidenceItem {
+  value: string;
+  label: string;
+  detail?: string;
+}
+
+interface Props {
+  title?: string;
+  items?: EvidenceItem[];
+  label?: string;
+  note?: string;
+  finding?: string;
+  comparison?: string;
+  caveat?: string;
+  source?: string;
+}
+
+const {
+  title,
+  items = [],
+  label = "Evidence Highlight",
+  note,
+  finding,
+  comparison,
+  caveat,
+  source,
+} = Astro.props;
+const isEditorial = Boolean(finding && comparison && caveat && source);
+---
+
+{
+  isEditorial ? (
+    <aside class="evidence-highlight editorial-evidence-highlight" aria-label={label}>
+      <header class="editorial-evidence-highlight__header">
+        <p class="evidence-highlight__eyebrow">{label}</p>
+        <h3>{title}</h3>
+      </header>
+      <div class="editorial-evidence-highlight__finding">
+        <p class="editorial-evidence-highlight__term">Finding</p>
+        <p class="editorial-evidence-highlight__statement">{finding}</p>
+      </div>
+      <div class="editorial-evidence-highlight__support">
+        <div>
+          <p class="editorial-evidence-highlight__term">Comparison</p>
+          <p>{comparison}</p>
+        </div>
+        <div>
+          <p class="editorial-evidence-highlight__term">Caveat</p>
+          <p>{caveat}</p>
+        </div>
+      </div>
+      <footer class="editorial-evidence-highlight__source">
+        <span>Source</span>
+        <cite>{source}</cite>
+      </footer>
+    </aside>
+  ) : (
+    <aside class="evidence-highlight" aria-label={label}>
+      <header class="evidence-highlight__header">
+        <p class="evidence-highlight__eyebrow">{label}</p>
+        <h3>{title}</h3>
+      </header>
+      <div class="evidence-highlight__grid">
+        {items.map((item) => (
+          <div class="evidence-highlight__item">
+            <p class="evidence-highlight__value">{item.value}</p>
+            <p class="evidence-highlight__label">{item.label}</p>
+            {item.detail && <p class="evidence-highlight__detail">{item.detail}</p>}
+          </div>
+        ))}
+      </div>
+      {note && <p class="evidence-highlight__note">{note}</p>}
+    </aside>
+  )
+}

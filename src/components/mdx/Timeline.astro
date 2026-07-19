@@ -1,0 +1,44 @@
+---
+type TimelineEventType = "company" | "market" | "academic" | "regulatory" | "publication";
+
+interface TimelineEvent {
+  year: string;
+  title: string;
+  description: string;
+  type: TimelineEventType;
+}
+
+interface Props {
+  title?: string;
+  events: TimelineEvent[];
+}
+
+const { title = "Case Timeline", events } = Astro.props;
+const eventTypeLabels: Record<TimelineEventType, string> = {
+  company: "Company event",
+  market: "Market event",
+  academic: "Academic research",
+  regulatory: "Regulatory event",
+  publication: "Publication",
+};
+---
+
+<section class="case-timeline" aria-labelledby="case-timeline-title">
+  <header class="case-timeline__header">
+    <p>Chronology</p>
+    <h3 id="case-timeline-title">{title}</h3>
+    <p class="case-timeline__note">Events are labeled by source context; they do not carry equal evidentiary weight.</p>
+  </header>
+  <ol class="case-timeline__list">
+    {events.map((event) => (
+      <li class:list={["case-timeline__event", `case-timeline__event--${event.type}`]}>
+        <p class="case-timeline__year">{event.year}</p>
+        <div class="case-timeline__content">
+          <p class="case-timeline__type">{eventTypeLabels[event.type]}</p>
+          <h4>{event.title}</h4>
+          <p class="case-timeline__description">{event.description}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>

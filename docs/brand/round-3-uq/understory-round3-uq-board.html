@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Understory Round 3 U/Q Integration Study</title>
+    <style>
+      :root {
+        --page: #f7f4ee;
+        --surface: #fffdf8;
+        --surface-muted: #f1eee7;
+        --text: #191714;
+        --secondary: #55514a;
+        --muted: #7a746b;
+        --border: #ded7ca;
+        --green: #174d3c;
+        --deep: #0f352b;
+        --tint: #e8f0ea;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        max-width: 1480px;
+        margin: 0 auto;
+        padding: 40px 28px 68px;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      p {
+        margin: 0;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+        gap: 56px;
+        align-items: end;
+        padding-bottom: 34px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .eyebrow,
+      .meta {
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 760;
+        letter-spacing: 0.15em;
+        line-height: 1.45;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 12ch;
+        margin-top: 12px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(54px, 6vw, 82px);
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 0.98;
+      }
+
+      .intro-copy {
+        display: grid;
+        gap: 14px;
+        max-width: 670px;
+        color: var(--secondary);
+        font-size: 17px;
+        line-height: 1.65;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-top: 36px;
+        border-top: 2px solid var(--green);
+        padding-top: 13px;
+      }
+
+      .section-title h2 {
+        margin-top: 7px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 34px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 1.08;
+      }
+
+      .section-title p:last-child {
+        max-width: 54ch;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+        text-align: right;
+      }
+
+      .concept-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .concept {
+        min-width: 0;
+        border-top: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 78%, transparent);
+        padding-top: 14px;
+      }
+
+      .concept h3 {
+        margin-top: 8px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 1.08;
+      }
+
+      .symbol-stage {
+        display: grid;
+        min-height: 220px;
+        margin-top: 16px;
+        place-items: center;
+        border-block: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 66%, transparent);
+      }
+
+      .symbol-stage img {
+        width: 148px;
+        height: 148px;
+      }
+
+      .tone-row,
+      .size-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .tone,
+      .size-box {
+        display: grid;
+        min-height: 62px;
+        place-items: center;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .tone img {
+        width: 34px;
+        height: 34px;
+      }
+
+      .tone--black img,
+      .silhouette img {
+        filter: brightness(0);
+      }
+
+      .tone--white {
+        background: var(--text);
+      }
+
+      .tone--white img {
+        filter: brightness(0) invert(1);
+      }
+
+      .tone--green {
+        background: var(--tint);
+      }
+
+      .tone--deep {
+        border-color: var(--deep);
+        background: var(--deep);
+      }
+
+      .tone--deep img {
+        filter: brightness(0) invert(1);
+      }
+
+      .size-box {
+        min-height: 70px;
+      }
+
+      .size-box small {
+        display: block;
+        margin-top: 7px;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 760;
+        letter-spacing: 0.1em;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .wordmark {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 13px;
+        border-block: 1px solid var(--border);
+        padding: 13px 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 25px;
+        font-weight: 600;
+      }
+
+      .wordmark img {
+        width: 34px;
+        height: 34px;
+      }
+
+      .notes {
+        display: grid;
+        gap: 8px;
+        margin-top: 13px;
+        color: var(--secondary);
+        font-size: 12.6px;
+        line-height: 1.48;
+      }
+
+      .notes strong {
+        color: var(--text);
+      }
+
+      .mock-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .mock {
+        display: grid;
+        gap: 12px;
+      }
+
+      .mock h3 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 21px;
+        font-weight: 600;
+      }
+
+      .desktop-shell,
+      .mobile-shell {
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .mobile-shell {
+        max-width: 330px;
+      }
+
+      .site-header {
+        border-bottom: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
+        background: color-mix(in srgb, var(--surface) 92%, transparent);
+      }
+
+      .site-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 14px;
+      }
+
+      .site-identity {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 18px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .site-identity img {
+        width: 26px;
+        height: 26px;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 8px;
+        color: var(--secondary);
+        font-size: 10.5px;
+        white-space: nowrap;
+      }
+
+      .menu-word {
+        color: var(--green);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .silhouette-grid,
+      .reading-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .silhouette,
+      .reading {
+        border-top: 1px solid var(--border);
+        padding-top: 14px;
+      }
+
+      .silhouette-box {
+        display: grid;
+        min-height: 150px;
+        place-items: center;
+        background: var(--surface);
+        border: 1px solid var(--border);
+      }
+
+      .silhouette-box img {
+        width: 104px;
+        height: 104px;
+      }
+
+      .blur-box {
+        display: grid;
+        min-height: 86px;
+        margin-top: 8px;
+        place-items: center;
+        background: var(--surface-muted);
+        border: 1px solid var(--border);
+      }
+
+      .blur-box img {
+        width: 72px;
+        height: 72px;
+        filter: brightness(0) blur(1.4px);
+        opacity: 0.78;
+      }
+
+      .reading-board {
+        display: grid;
+        grid-template-columns: 0.85fr 1fr;
+        gap: 12px;
+        align-items: center;
+        min-height: 168px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        padding: 12px;
+      }
+
+      .reading-board img {
+        width: 84px;
+        height: 84px;
+      }
+
+      .reading-lines {
+        display: grid;
+        gap: 9px;
+        color: var(--secondary);
+        font-size: 12px;
+        line-height: 1.42;
+      }
+
+      .reading-lines span {
+        display: block;
+      }
+
+      .reading-lines b {
+        color: var(--text);
+        font-weight: 760;
+      }
+
+      @media (max-width: 1180px) {
+        .concept-grid,
+        .mock-grid,
+        .silhouette-grid,
+        .reading-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 720px) {
+        main {
+          padding-inline: 20px;
+        }
+
+        .intro,
+        .concept-grid,
+        .mock-grid,
+        .silhouette-grid,
+        .reading-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .section-title {
+          align-items: start;
+          flex-direction: column;
+        }
+
+        .section-title p:last-child {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">Understory / Round 3</p>
+          <h1>U and Q as one structure.</h1>
+        </div>
+        <div class="intro-copy">
+          <p>This round leaves the previous “U + subtle question gesture + dot” family behind. The target is a stronger standalone mark where Understory and Question are structurally fused, not placed side by side.</p>
+          <p>The tests here prioritize silhouette, blur memory, favicon performance, and compatibility with the current restrained editorial header.</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">1. Comparison Board</p>
+            <h2>Four U/Q integration strategies</h2>
+          </div>
+          <p>Large symbol, mono states, brand green, favicon sizes, wordmark pairing, and concise concept/risk analysis.</p>
+        </div>
+
+        <div class="concept-grid">
+          <article class="concept">
+            <p class="meta">R3-A</p>
+            <h3>U Becomes Q</h3>
+            <div class="symbol-stage"><img src="r3-a-u-becomes-q.svg" alt="R3-A U Becomes Q symbol" /></div>
+            <div class="tone-row">
+              <div class="tone tone--black"><img src="r3-a-u-becomes-q.svg" alt="R3-A black on white" /></div>
+              <div class="tone tone--white"><img src="r3-a-u-becomes-q.svg" alt="R3-A white on black" /></div>
+              <div class="tone tone--green"><img src="r3-a-u-becomes-q.svg" alt="R3-A brand green" /></div>
+              <div class="tone tone--deep"><img src="r3-a-u-becomes-q.svg" alt="R3-A white on deep green" /></div>
+            </div>
+            <div class="size-row">
+              <div class="size-box"><span><img src="r3-a-u-becomes-q.svg" alt="" width="16" height="16" /><small>16</small></span></div>
+              <div class="size-box"><span><img src="r3-a-u-becomes-q.svg" alt="" width="24" height="24" /><small>24</small></span></div>
+              <div class="size-box"><span><img src="r3-a-u-becomes-q.svg" alt="" width="32" height="32" /><small>32</small></span></div>
+              <div class="size-box"><span><img src="r3-a-u-becomes-q.svg" alt="" width="48" height="48" /><small>48</small></span></div>
+            </div>
+            <div class="wordmark"><img src="r3-a-u-becomes-q.svg" alt="" />understory</div>
+            <div class="notes">
+              <p><strong>Concept:</strong> A U form naturally exits as a restrained Q tail: Understory becomes the next question.</p>
+              <p><strong>Strength:</strong> Mature, direct, memorable silhouette.</p>
+              <p><strong>Risk:</strong> Can read as a literal lettermark if spacing gets too formal.</p>
+              <p><strong>Distinctiveness:</strong> Medium-high. <strong>Favicon:</strong> Strong.</p>
+              <p><strong>U:</strong> clear. <strong>Q:</strong> clear on second look. <strong>Letter readability needed:</strong> no.</p>
+            </div>
+          </article>
+
+          <article class="concept">
+            <p class="meta">R3-B</p>
+            <h3>Hidden U Inside Q</h3>
+            <div class="symbol-stage"><img src="r3-b-hidden-u-inside-q.svg" alt="R3-B Hidden U Inside Q symbol" /></div>
+            <div class="tone-row">
+              <div class="tone tone--black"><img src="r3-b-hidden-u-inside-q.svg" alt="R3-B black on white" /></div>
+              <div class="tone tone--white"><img src="r3-b-hidden-u-inside-q.svg" alt="R3-B white on black" /></div>
+              <div class="tone tone--green"><img src="r3-b-hidden-u-inside-q.svg" alt="R3-B brand green" /></div>
+              <div class="tone tone--deep"><img src="r3-b-hidden-u-inside-q.svg" alt="R3-B white on deep green" /></div>
+            </div>
+            <div class="size-row">
+              <div class="size-box"><span><img src="r3-b-hidden-u-inside-q.svg" alt="" width="16" height="16" /><small>16</small></span></div>
+              <div class="size-box"><span><img src="r3-b-hidden-u-inside-q.svg" alt="" width="24" height="24" /><small>24</small></span></div>
+              <div class="size-box"><span><img src="r3-b-hidden-u-inside-q.svg" alt="" width="32" height="32" /><small>32</small></span></div>
+              <div class="size-box"><span><img src="r3-b-hidden-u-inside-q.svg" alt="" width="48" height="48" /><small>48</small></span></div>
+            </div>
+            <div class="wordmark"><img src="r3-b-hidden-u-inside-q.svg" alt="" />understory</div>
+            <div class="notes">
+              <p><strong>Concept:</strong> A complete Q-like mass hides a U in negative space; the structure is discovered underneath.</p>
+              <p><strong>Strength:</strong> Best conceptual fit for hidden systems.</p>
+              <p><strong>Risk:</strong> The inner U may close up at 16px.</p>
+              <p><strong>Distinctiveness:</strong> High. <strong>Favicon:</strong> medium.</p>
+              <p><strong>U:</strong> subtle. <strong>Q:</strong> clear. <strong>Letter readability needed:</strong> no.</p>
+            </div>
+          </article>
+
+          <article class="concept">
+            <p class="meta">R3-C</p>
+            <h3>Shared Stroke U/Q</h3>
+            <div class="symbol-stage"><img src="r3-c-shared-stroke-uq.svg" alt="R3-C Shared Stroke U/Q symbol" /></div>
+            <div class="tone-row">
+              <div class="tone tone--black"><img src="r3-c-shared-stroke-uq.svg" alt="R3-C black on white" /></div>
+              <div class="tone tone--white"><img src="r3-c-shared-stroke-uq.svg" alt="R3-C white on black" /></div>
+              <div class="tone tone--green"><img src="r3-c-shared-stroke-uq.svg" alt="R3-C brand green" /></div>
+              <div class="tone tone--deep"><img src="r3-c-shared-stroke-uq.svg" alt="R3-C white on deep green" /></div>
+            </div>
+            <div class="size-row">
+              <div class="size-box"><span><img src="r3-c-shared-stroke-uq.svg" alt="" width="16" height="16" /><small>16</small></span></div>
+              <div class="size-box"><span><img src="r3-c-shared-stroke-uq.svg" alt="" width="24" height="24" /><small>24</small></span></div>
+              <div class="size-box"><span><img src="r3-c-shared-stroke-uq.svg" alt="" width="32" height="32" /><small>32</small></span></div>
+              <div class="size-box"><span><img src="r3-c-shared-stroke-uq.svg" alt="" width="48" height="48" /><small>48</small></span></div>
+            </div>
+            <div class="wordmark"><img src="r3-c-shared-stroke-uq.svg" alt="" />understory</div>
+            <div class="notes">
+              <p><strong>Concept:</strong> One continuous path holds both readings: a U that folds into Q logic and exits.</p>
+              <p><strong>Strength:</strong> Most integrated as one uninterrupted thought.</p>
+              <p><strong>Risk:</strong> Most vulnerable to feeling glyph-like.</p>
+              <p><strong>Distinctiveness:</strong> Medium. <strong>Favicon:</strong> mixed.</p>
+              <p><strong>U:</strong> clear. <strong>Q:</strong> partial. <strong>Letter readability needed:</strong> no.</p>
+            </div>
+          </article>
+
+          <article class="concept">
+            <p class="meta">R3-D</p>
+            <h3>Interlocking U/Q</h3>
+            <div class="symbol-stage"><img src="r3-d-interlocking-uq.svg" alt="R3-D Interlocking U/Q symbol" /></div>
+            <div class="tone-row">
+              <div class="tone tone--black"><img src="r3-d-interlocking-uq.svg" alt="R3-D black on white" /></div>
+              <div class="tone tone--white"><img src="r3-d-interlocking-uq.svg" alt="R3-D white on black" /></div>
+              <div class="tone tone--green"><img src="r3-d-interlocking-uq.svg" alt="R3-D brand green" /></div>
+              <div class="tone tone--deep"><img src="r3-d-interlocking-uq.svg" alt="R3-D white on deep green" /></div>
+            </div>
+            <div class="size-row">
+              <div class="size-box"><span><img src="r3-d-interlocking-uq.svg" alt="" width="16" height="16" /><small>16</small></span></div>
+              <div class="size-box"><span><img src="r3-d-interlocking-uq.svg" alt="" width="24" height="24" /><small>24</small></span></div>
+              <div class="size-box"><span><img src="r3-d-interlocking-uq.svg" alt="" width="32" height="32" /><small>32</small></span></div>
+              <div class="size-box"><span><img src="r3-d-interlocking-uq.svg" alt="" width="48" height="48" /><small>48</small></span></div>
+            </div>
+            <div class="wordmark"><img src="r3-d-interlocking-uq.svg" alt="" />understory</div>
+            <div class="notes">
+              <p><strong>Concept:</strong> U and Q share one structural body through a channel, curve, and negative-space cut.</p>
+              <p><strong>Strength:</strong> Compact, memorable, favicon-oriented.</p>
+              <p><strong>Risk:</strong> Can drift institutional if too rigid.</p>
+              <p><strong>Distinctiveness:</strong> Medium-high. <strong>Favicon:</strong> strong.</p>
+              <p><strong>U:</strong> readable. <strong>Q:</strong> readable. <strong>Letter readability needed:</strong> not fully.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">2. Website Header Mockup</p>
+            <h2>Current desktop and mobile context</h2>
+          </div>
+          <p>Mockups reproduce the current lowercase serif identity, restrained nav links, and mobile menu proportion. No live layout files are changed.</p>
+        </div>
+        <div class="mock-grid">
+          <article class="mock">
+            <h3>R3-A</h3>
+            <div class="desktop-shell"><div class="site-header"><div class="site-nav"><span class="site-identity"><img src="r3-a-u-becomes-q.svg" alt="" />understory</span><span class="nav-links">Cases Topics Concepts Method About</span></div></div></div>
+            <div class="mobile-shell"><div class="site-header"><div class="site-nav"><span class="site-identity"><img src="r3-a-u-becomes-q.svg" alt="" />understory</span><span class="menu-word">Menu</span></div></div></div>
+          </article>
+          <article class="mock">
+            <h3>R3-B</h3>
+            <div class="desktop-shell"><div class="site-header"><div class="site-nav"><span class="site-identity"><img src="r3-b-hidden-u-inside-q.svg" alt="" />understory</span><span class="nav-links">Cases Topics Concepts Method About</span></div></div></div>
+            <div class="mobile-shell"><div class="site-header"><div class="site-nav"><span class="site-identity"><img src="r3-b-hidden-u-inside-q.svg" alt="" />understory</span><span class="menu-word">Menu</span></div></div></div>
+          </article>
+          <article class="mock">
+            <h3>R3-C</h3>
+            <div class="desktop-shell"><div class="site-header"><div class="site-nav"><span class="site-identity"><img src="r3-c-shared-stroke-uq.svg" alt="" />understory</span><span class="nav-links">Cases Topics Concepts Method About</span></div></div></div>
+            <div class="mobile-shell"><div class="site-header"><div class="site-nav"><span class="site-identity"><img src="r3-c-shared-stroke-uq.svg" alt="" />understory</span><span class="menu-word">Menu</span></div></div></div>
+          </article>
+          <article class="mock">
+            <h3>R3-D</h3>
+            <div class="desktop-shell"><div class="site-header"><div class="site-nav"><span class="site-identity"><img src="r3-d-interlocking-uq.svg" alt="" />understory</span><span class="nav-links">Cases Topics Concepts Method About</span></div></div></div>
+            <div class="mobile-shell"><div class="site-header"><div class="site-nav"><span class="site-identity"><img src="r3-d-interlocking-uq.svg" alt="" />understory</span><span class="menu-word">Menu</span></div></div></div>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">3. Silhouette / Blur / Memory Test</p>
+            <h2>Can the mark survive a glance?</h2>
+          </div>
+          <p>The top row strips color and concept away. The lower row simulates slight blur to judge whether the form stays memorable.</p>
+        </div>
+        <div class="silhouette-grid">
+          <article class="silhouette">
+            <p class="meta">R3-A</p>
+            <div class="silhouette-box"><img src="r3-a-u-becomes-q.svg" alt="R3-A silhouette" /></div>
+            <div class="blur-box"><img src="r3-a-u-becomes-q.svg" alt="R3-A blurred silhouette" /></div>
+          </article>
+          <article class="silhouette">
+            <p class="meta">R3-B</p>
+            <div class="silhouette-box"><img src="r3-b-hidden-u-inside-q.svg" alt="R3-B silhouette" /></div>
+            <div class="blur-box"><img src="r3-b-hidden-u-inside-q.svg" alt="R3-B blurred silhouette" /></div>
+          </article>
+          <article class="silhouette">
+            <p class="meta">R3-C</p>
+            <div class="silhouette-box"><img src="r3-c-shared-stroke-uq.svg" alt="R3-C silhouette" /></div>
+            <div class="blur-box"><img src="r3-c-shared-stroke-uq.svg" alt="R3-C blurred silhouette" /></div>
+          </article>
+          <article class="silhouette">
+            <p class="meta">R3-D</p>
+            <div class="silhouette-box"><img src="r3-d-interlocking-uq.svg" alt="R3-D silhouette" /></div>
+            <div class="blur-box"><img src="r3-d-interlocking-uq.svg" alt="R3-D blurred silhouette" /></div>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">4. U / Q Reading Explanation</p>
+            <h2>Subtle construction notes</h2>
+          </div>
+          <p>These are not meant to explain the logo in use. They are only a review aid for seeing how each structure carries U and Q.</p>
+        </div>
+        <div class="reading-grid">
+          <article class="reading">
+            <p class="meta">R3-A</p>
+            <div class="reading-board">
+              <img src="r3-a-u-becomes-q.svg" alt="R3-A reading diagram" />
+              <div class="reading-lines">
+                <span><b>U:</b> left stem, bottom basin, right return.</span>
+                <span><b>Q:</b> right return exits as an inevitable tail.</span>
+              </div>
+            </div>
+          </article>
+          <article class="reading">
+            <p class="meta">R3-B</p>
+            <div class="reading-board">
+              <img src="r3-b-hidden-u-inside-q.svg" alt="R3-B reading diagram" />
+              <div class="reading-lines">
+                <span><b>U:</b> found in the negative-space channel.</span>
+                <span><b>Q:</b> outer mass and tail make the first-read silhouette.</span>
+              </div>
+            </div>
+          </article>
+          <article class="reading">
+            <p class="meta">R3-C</p>
+            <div class="reading-board">
+              <img src="r3-c-shared-stroke-uq.svg" alt="R3-C reading diagram" />
+              <div class="reading-lines">
+                <span><b>U:</b> opening descent and bottom return.</span>
+                <span><b>Q:</b> continuous fold and final exit stroke.</span>
+              </div>
+            </div>
+          </article>
+          <article class="reading">
+            <p class="meta">R3-D</p>
+            <div class="reading-board">
+              <img src="r3-d-interlocking-uq.svg" alt="R3-D reading diagram" />
+              <div class="reading-lines">
+                <span><b>U:</b> internal channel shares the same body.</span>
+                <span><b>Q:</b> shared bowl plus diagonal cut creates the tail logic.</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

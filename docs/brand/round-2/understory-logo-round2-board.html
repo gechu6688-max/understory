@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Understory Logo Round 2</title>
+    <style>
+      :root {
+        --page: #f7f4ee;
+        --surface: #fffdf8;
+        --surface-muted: #f1eee7;
+        --text: #191714;
+        --secondary: #55514a;
+        --muted: #7a746b;
+        --border: #ded7ca;
+        --green: #174d3c;
+        --green-dark: #0f352b;
+        --green-muted: #6f8b7e;
+        --tint: #e8f0ea;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 38px 28px 64px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+        gap: 56px;
+        align-items: end;
+        padding-bottom: 32px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .eyebrow,
+      .meta,
+      .case-label {
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 760;
+        letter-spacing: 0.15em;
+        line-height: 1.45;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 12ch;
+        margin-top: 12px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 76px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 0.98;
+      }
+
+      .intro-copy {
+        display: grid;
+        gap: 14px;
+        max-width: 620px;
+        color: var(--secondary);
+        font-size: 17px;
+        line-height: 1.68;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-top: 34px;
+        border-top: 2px solid var(--green);
+        padding-top: 13px;
+      }
+
+      .section-title h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 34px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 1.08;
+      }
+
+      .section-title p {
+        max-width: 52ch;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+        text-align: right;
+      }
+
+      .concept-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .concept {
+        min-width: 0;
+        border-top: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 78%, transparent);
+        padding-top: 15px;
+      }
+
+      .concept h3 {
+        margin-top: 8px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 1.1;
+      }
+
+      .display {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 88px;
+        gap: 16px;
+        align-items: stretch;
+        margin-top: 18px;
+      }
+
+      .hero-symbol {
+        display: grid;
+        min-height: 208px;
+        place-items: center;
+        border-block: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 64%, transparent);
+      }
+
+      .hero-symbol img {
+        width: 136px;
+        height: 136px;
+      }
+
+      .tone-stack {
+        display: grid;
+        gap: 8px;
+      }
+
+      .tone {
+        display: grid;
+        min-height: 64px;
+        place-items: center;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .tone img {
+        width: 36px;
+        height: 36px;
+      }
+
+      .tone--black img {
+        filter: brightness(0);
+      }
+
+      .tone--dark {
+        border-color: color-mix(in srgb, var(--green-dark) 74%, black);
+        background: var(--green-dark);
+      }
+
+      .tone--dark img,
+      .tone--white img {
+        filter: brightness(0) invert(1);
+      }
+
+      .tone--white {
+        background: var(--text);
+      }
+
+      .tone--green {
+        background: var(--tint);
+      }
+
+      .size-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .size-box {
+        display: grid;
+        min-height: 72px;
+        place-items: center;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .size-box img {
+        image-rendering: auto;
+      }
+
+      .size-box small {
+        display: block;
+        margin-top: 7px;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+
+      .wordmark {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 14px;
+        border-block: 1px solid var(--border);
+        padding: 14px 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: 0;
+      }
+
+      .wordmark img {
+        width: 34px;
+        height: 34px;
+      }
+
+      .notes {
+        display: grid;
+        gap: 9px;
+        margin-top: 14px;
+        color: var(--secondary);
+        font-size: 13px;
+        line-height: 1.52;
+      }
+
+      .notes strong {
+        color: var(--text);
+      }
+
+      .mock-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .mock {
+        display: grid;
+        gap: 12px;
+      }
+
+      .mock h3 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 23px;
+        font-weight: 600;
+      }
+
+      .site-header {
+        border-bottom: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
+        background: color-mix(in srgb, var(--surface) 92%, transparent);
+      }
+
+      .site-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 20px;
+      }
+
+      .site-identity {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        color: var(--text);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: 0;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .site-identity img {
+        width: 26px;
+        height: 26px;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 10px;
+        color: var(--secondary);
+        font-size: 11px;
+        white-space: nowrap;
+      }
+
+      .mobile-shell {
+        max-width: 330px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .mobile-shell .site-nav {
+        padding: 12px 14px;
+      }
+
+      .menu-word {
+        color: var(--green);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .desktop-shell {
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .favicon-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .favicon-card {
+        border-top: 1px solid var(--border);
+        padding-top: 14px;
+      }
+
+      .favicon-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        margin-top: 13px;
+      }
+
+      .pixel {
+        display: grid;
+        width: 58px;
+        height: 58px;
+        place-items: center;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .application-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .app-card {
+        display: grid;
+        gap: 12px;
+        border-top: 1px solid var(--border);
+        padding-top: 14px;
+      }
+
+      .browser-tab {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        width: min(100%, 330px);
+        border: 1px solid var(--border);
+        border-bottom-color: color-mix(in srgb, var(--border) 68%, var(--text));
+        border-radius: 7px 7px 0 0;
+        background: var(--surface-muted);
+        padding: 9px 12px;
+        color: var(--secondary);
+        font-size: 13px;
+      }
+
+      .browser-tab img {
+        width: 16px;
+        height: 16px;
+      }
+
+      .case-header {
+        border-left: 1px solid var(--border);
+        padding-left: 18px;
+      }
+
+      .case-brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 19px;
+        font-weight: 600;
+      }
+
+      .case-brand img {
+        width: 24px;
+        height: 24px;
+      }
+
+      .case-header h4 {
+        max-width: 12ch;
+        margin: 14px 0 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 34px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 1.05;
+      }
+
+      .case-header p {
+        max-width: 30ch;
+        margin-top: 12px;
+        color: var(--secondary);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .contribution {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 12px;
+        max-width: 330px;
+        border-top: 2px solid var(--green);
+        background: color-mix(in srgb, var(--surface) 78%, transparent);
+        padding-top: 13px;
+      }
+
+      .contribution img {
+        width: 34px;
+        height: 34px;
+      }
+
+      .contribution strong {
+        display: block;
+        font-size: 14px;
+      }
+
+      .contribution span {
+        display: block;
+        margin-top: 5px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      @media (max-width: 980px) {
+        main {
+          padding-inline: 20px;
+        }
+
+        .intro,
+        .concept-grid,
+        .mock-grid,
+        .favicon-grid,
+        .application-grid {
+          grid-template-columns: 1fr;
+        }
+
+        h1 {
+          font-size: 54px;
+        }
+
+        .section-title {
+          align-items: start;
+          flex-direction: column;
+        }
+
+        .section-title p {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">Understory / Logo Round 2</p>
+          <h1>Go beneath. Ask again.</h1>
+        </div>
+        <div class="intro-copy">
+          <p>Second-round refinement of the first-round C direction. The goal is not a new visual territory, but three durable variations on the same brand logic: surface, underlying structure, and the small unresolved point that keeps analysis moving.</p>
+          <p>All marks are pure SVG, single-color capable, and tested here against the current site palette, Georgia wordmark, desktop/mobile headers, favicon sizes, and light application contexts.</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">A. Concept Board</p>
+            <h2>Three refined C directions</h2>
+          </div>
+          <p>Each mark is shown large, black on white, white on black, brand green on tint, dark brand field, favicon sizes, and paired with the current wordmark.</p>
+        </div>
+
+        <div class="concept-grid">
+          <article class="concept">
+            <p class="meta">C2-A</p>
+            <h3>Nested Open U</h3>
+            <div class="display">
+              <div class="hero-symbol"><img src="c2-a-nested-open-u.svg" alt="C2-A Nested Open U symbol" /></div>
+              <div class="tone-stack">
+                <div class="tone tone--black"><img src="c2-a-nested-open-u.svg" alt="C2-A black on white" /></div>
+                <div class="tone tone--white"><img src="c2-a-nested-open-u.svg" alt="C2-A white on black" /></div>
+                <div class="tone tone--green"><img src="c2-a-nested-open-u.svg" alt="C2-A brand green" /></div>
+                <div class="tone tone--dark"><img src="c2-a-nested-open-u.svg" alt="C2-A white on deep green" /></div>
+              </div>
+            </div>
+            <div class="size-row">
+              <div class="size-box"><span><img src="c2-a-nested-open-u.svg" alt="" width="16" height="16" /><small>16</small></span></div>
+              <div class="size-box"><span><img src="c2-a-nested-open-u.svg" alt="" width="24" height="24" /><small>24</small></span></div>
+              <div class="size-box"><span><img src="c2-a-nested-open-u.svg" alt="" width="32" height="32" /><small>32</small></span></div>
+              <div class="size-box"><span><img src="c2-a-nested-open-u.svg" alt="" width="48" height="48" /><small>48</small></span></div>
+            </div>
+            <div class="wordmark"><img src="c2-a-nested-open-u.svg" alt="" />understory</div>
+            <div class="notes">
+              <p><strong>Design note:</strong> 最简洁的版本：双层开放 U 形成 surface / underneath，右下点是未完成的 insight，而非问号句点。结构紧凑、留白清楚，第一眼可作为 symbol，第二眼能读到内部层次，最适合作 favicon 与长期基础标识。</p>
+              <p><strong>Strength:</strong> 小尺寸最稳，克制且耐用。</p>
+              <p><strong>Risk:</strong> 追问意味较隐，需要品牌语境补足。</p>
+              <p><strong>Recognizability:</strong> High.</p>
+              <p><strong>Favicon performance:</strong> Strong at 32/24px; acceptable at 16px.</p>
+            </div>
+          </article>
+
+          <article class="concept">
+            <p class="meta">C2-B</p>
+            <h3>Descending Question</h3>
+            <div class="display">
+              <div class="hero-symbol"><img src="c2-b-descending-question.svg" alt="C2-B Descending Question symbol" /></div>
+              <div class="tone-stack">
+                <div class="tone tone--black"><img src="c2-b-descending-question.svg" alt="C2-B black on white" /></div>
+                <div class="tone tone--white"><img src="c2-b-descending-question.svg" alt="C2-B white on black" /></div>
+                <div class="tone tone--green"><img src="c2-b-descending-question.svg" alt="C2-B brand green" /></div>
+                <div class="tone tone--dark"><img src="c2-b-descending-question.svg" alt="C2-B white on deep green" /></div>
+              </div>
+            </div>
+            <div class="size-row">
+              <div class="size-box"><span><img src="c2-b-descending-question.svg" alt="" width="16" height="16" /><small>16</small></span></div>
+              <div class="size-box"><span><img src="c2-b-descending-question.svg" alt="" width="24" height="24" /><small>24</small></span></div>
+              <div class="size-box"><span><img src="c2-b-descending-question.svg" alt="" width="32" height="32" /><small>32</small></span></div>
+              <div class="size-box"><span><img src="c2-b-descending-question.svg" alt="" width="48" height="48" /><small>48</small></span></div>
+            </div>
+            <div class="wordmark"><img src="c2-b-descending-question.svg" alt="" />understory</div>
+            <div class="notes">
+              <p><strong>Design note:</strong> 外部 U 保持稳定，内部路径从表层向下沉，再以很轻的弯折靠近点位。它强调 surface → depth → unresolved question，不直接画问号。相比 A 更有分析动作，适合表达“往下挖”的方法论。</p>
+              <p><strong>Strength:</strong> “go beneath the obvious” 概念最直接。</p>
+              <p><strong>Risk:</strong> 16px 时内部动作会变得微妙。</p>
+              <p><strong>Recognizability:</strong> Medium-high.</p>
+              <p><strong>Favicon performance:</strong> Good at 32px, acceptable at 24px, borderline at 16px.</p>
+            </div>
+          </article>
+
+          <article class="concept">
+            <p class="meta">C2-C</p>
+            <h3>Continuing Understory</h3>
+            <div class="display">
+              <div class="hero-symbol"><img src="c2-c-continuing-understory.svg" alt="C2-C Continuing Understory symbol" /></div>
+              <div class="tone-stack">
+                <div class="tone tone--black"><img src="c2-c-continuing-understory.svg" alt="C2-C black on white" /></div>
+                <div class="tone tone--white"><img src="c2-c-continuing-understory.svg" alt="C2-C white on black" /></div>
+                <div class="tone tone--green"><img src="c2-c-continuing-understory.svg" alt="C2-C brand green" /></div>
+                <div class="tone tone--dark"><img src="c2-c-continuing-understory.svg" alt="C2-C white on deep green" /></div>
+              </div>
+            </div>
+            <div class="size-row">
+              <div class="size-box"><span><img src="c2-c-continuing-understory.svg" alt="" width="16" height="16" /><small>16</small></span></div>
+              <div class="size-box"><span><img src="c2-c-continuing-understory.svg" alt="" width="24" height="24" /><small>24</small></span></div>
+              <div class="size-box"><span><img src="c2-c-continuing-understory.svg" alt="" width="32" height="32" /><small>32</small></span></div>
+              <div class="size-box"><span><img src="c2-c-continuing-understory.svg" alt="" width="48" height="48" /><small>48</small></span></div>
+            </div>
+            <div class="wordmark"><img src="c2-c-continuing-understory.svg" alt="" />understory</div>
+            <div class="notes">
+              <p><strong>Design note:</strong> 延续第一轮 C 的层级 U，但让内部路径向右外延，最后靠近一个小点。它表达 analysis → insight → next question，也隐含未来 contribution layer：分析不是终点，而是开放系统中的下一次进入。</p>
+              <p><strong>Strength:</strong> 叙事性最强，与 “one more question” 连接最好。</p>
+              <p><strong>Risk:</strong> 横向尾部让 header 间距更敏感。</p>
+              <p><strong>Recognizability:</strong> High at header/social sizes.</p>
+              <p><strong>Favicon performance:</strong> Good at 32px, acceptable at 24px, weaker at 16px.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">B. Website Header Mockup</p>
+            <h2>Current navigation environment</h2>
+          </div>
+          <p>Mockups only. These reproduce the existing header color, type, spacing, and mobile menu behavior without modifying the live Astro layout.</p>
+        </div>
+        <div class="mock-grid">
+          <article class="mock">
+            <h3>C2-A</h3>
+            <div class="desktop-shell">
+              <div class="site-header">
+                <div class="site-nav">
+                  <span class="site-identity"><img src="c2-a-nested-open-u.svg" alt="" />understory</span>
+                  <span class="nav-links">Cases&nbsp;&nbsp;Topics&nbsp;&nbsp;Concepts&nbsp;&nbsp;Method&nbsp;&nbsp;About</span>
+                </div>
+              </div>
+            </div>
+            <div class="mobile-shell">
+              <div class="site-header">
+                <div class="site-nav">
+                  <span class="site-identity"><img src="c2-a-nested-open-u.svg" alt="" />understory</span>
+                  <span class="menu-word">Menu</span>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="mock">
+            <h3>C2-B</h3>
+            <div class="desktop-shell">
+              <div class="site-header">
+                <div class="site-nav">
+                  <span class="site-identity"><img src="c2-b-descending-question.svg" alt="" />understory</span>
+                  <span class="nav-links">Cases&nbsp;&nbsp;Topics&nbsp;&nbsp;Concepts&nbsp;&nbsp;Method&nbsp;&nbsp;About</span>
+                </div>
+              </div>
+            </div>
+            <div class="mobile-shell">
+              <div class="site-header">
+                <div class="site-nav">
+                  <span class="site-identity"><img src="c2-b-descending-question.svg" alt="" />understory</span>
+                  <span class="menu-word">Menu</span>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="mock">
+            <h3>C2-C</h3>
+            <div class="desktop-shell">
+              <div class="site-header">
+                <div class="site-nav">
+                  <span class="site-identity"><img src="c2-c-continuing-understory.svg" alt="" />understory</span>
+                  <span class="nav-links">Cases&nbsp;&nbsp;Topics&nbsp;&nbsp;Concepts&nbsp;&nbsp;Method&nbsp;&nbsp;About</span>
+                </div>
+              </div>
+            </div>
+            <div class="mobile-shell">
+              <div class="site-header">
+                <div class="site-nav">
+                  <span class="site-identity"><img src="c2-c-continuing-understory.svg" alt="" />understory</span>
+                  <span class="menu-word">Menu</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">C. Favicon Test</p>
+            <h2>16 / 24 / 32 pixel checks</h2>
+          </div>
+          <p>The 16px row intentionally exposes how much structure survives before final pixel hinting or a dedicated favicon simplification pass.</p>
+        </div>
+        <div class="favicon-grid">
+          <article class="favicon-card">
+            <p class="meta">C2-A</p>
+            <div class="favicon-row">
+              <span class="pixel"><img src="c2-a-nested-open-u.svg" alt="C2-A 16px" width="16" height="16" /></span>
+              <span class="pixel"><img src="c2-a-nested-open-u.svg" alt="C2-A 24px" width="24" height="24" /></span>
+              <span class="pixel"><img src="c2-a-nested-open-u.svg" alt="C2-A 32px" width="32" height="32" /></span>
+            </div>
+          </article>
+          <article class="favicon-card">
+            <p class="meta">C2-B</p>
+            <div class="favicon-row">
+              <span class="pixel"><img src="c2-b-descending-question.svg" alt="C2-B 16px" width="16" height="16" /></span>
+              <span class="pixel"><img src="c2-b-descending-question.svg" alt="C2-B 24px" width="24" height="24" /></span>
+              <span class="pixel"><img src="c2-b-descending-question.svg" alt="C2-B 32px" width="32" height="32" /></span>
+            </div>
+          </article>
+          <article class="favicon-card">
+            <p class="meta">C2-C</p>
+            <div class="favicon-row">
+              <span class="pixel"><img src="c2-c-continuing-understory.svg" alt="C2-C 16px" width="16" height="16" /></span>
+              <span class="pixel"><img src="c2-c-continuing-understory.svg" alt="C2-C 24px" width="24" height="24" /></span>
+              <span class="pixel"><img src="c2-c-continuing-understory.svg" alt="C2-C 32px" width="32" height="32" /></span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">D. Brand Application Mini Mockup</p>
+            <h2>Tab, case header, contribution card</h2>
+          </div>
+          <p>Lightweight applications check whether the mark behaves as an editorial system component rather than a decorative app icon.</p>
+        </div>
+        <div class="application-grid">
+          <article class="app-card">
+            <p class="meta">C2-A</p>
+            <div class="browser-tab"><img src="c2-a-nested-open-u.svg" alt="" />Understory - Cases beneath the obvious</div>
+            <div class="case-header">
+              <div class="case-brand"><img src="c2-a-nested-open-u.svg" alt="" />understory</div>
+              <p class="case-label">Featured Case</p>
+              <h4>What does convenience actually cost?</h4>
+              <p>Evidence, counterargument, judgement, and one more question.</p>
+            </div>
+            <div class="contribution">
+              <img src="c2-a-nested-open-u.svg" alt="" />
+              <div><strong>Contribution layer</strong><span>A compact marker for reader-supplied context beneath the case.</span></div>
+            </div>
+          </article>
+          <article class="app-card">
+            <p class="meta">C2-B</p>
+            <div class="browser-tab"><img src="c2-b-descending-question.svg" alt="" />Understory - Cases beneath the obvious</div>
+            <div class="case-header">
+              <div class="case-brand"><img src="c2-b-descending-question.svg" alt="" />understory</div>
+              <p class="case-label">Featured Case</p>
+              <h4>What does convenience actually cost?</h4>
+              <p>Evidence, counterargument, judgement, and one more question.</p>
+            </div>
+            <div class="contribution">
+              <img src="c2-b-descending-question.svg" alt="" />
+              <div><strong>Contribution layer</strong><span>A compact marker for reader-supplied context beneath the case.</span></div>
+            </div>
+          </article>
+          <article class="app-card">
+            <p class="meta">C2-C</p>
+            <div class="browser-tab"><img src="c2-c-continuing-understory.svg" alt="" />Understory - Cases beneath the obvious</div>
+            <div class="case-header">
+              <div class="case-brand"><img src="c2-c-continuing-understory.svg" alt="" />understory</div>
+              <p class="case-label">Featured Case</p>
+              <h4>What does convenience actually cost?</h4>
+              <p>Evidence, counterargument, judgement, and one more question.</p>
+            </div>
+            <div class="contribution">
+              <img src="c2-c-continuing-understory.svg" alt="" />
+              <div><strong>Contribution layer</strong><span>A compact marker for reader-supplied context beneath the case.</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

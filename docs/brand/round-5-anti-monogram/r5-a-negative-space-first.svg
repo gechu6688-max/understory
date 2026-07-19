@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">R5-A: Negative Space First</title>
+  <desc id="desc">A self-contained field interrupted by a hidden lower aperture and offset negative-space channel.</desc>
+  <path
+    fill="#174D3C"
+    fill-rule="evenodd"
+    d="M15 9h36v46H15V9Zm10 9v19.2c0 5.7 3.4 9.8 8.6 9.8 4.2 0 7.3-2.3 8.6-6.2H36c-.8 1-1.8 1.5-3 1.5-2.1 0-3.2-1.7-3.2-4.7V18H25Zm20 0h-6.5v13.5H45V18Z"
+  />
+</svg>
