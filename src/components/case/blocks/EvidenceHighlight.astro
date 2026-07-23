@@ -14,6 +14,7 @@ interface Props {
   comparison?: string;
   caveat?: string;
   source?: string;
+  metric?: string;
 }
 
 const {
@@ -25,6 +26,7 @@ const {
   comparison,
   caveat,
   source,
+  metric,
 } = Astro.props;
 const isEditorial = Boolean(finding && comparison && caveat && source);
 ---
@@ -38,7 +40,10 @@ const isEditorial = Boolean(finding && comparison && caveat && source);
       </header>
       <div class="editorial-evidence-highlight__finding">
         <p class="editorial-evidence-highlight__term">Finding</p>
-        <p class="editorial-evidence-highlight__statement">{finding}</p>
+        <div>
+          {metric && <p class="editorial-evidence-highlight__metric">{metric}</p>}
+          <p class="editorial-evidence-highlight__statement">{finding}</p>
+        </div>
       </div>
       <div class="editorial-evidence-highlight__support">
         <div>

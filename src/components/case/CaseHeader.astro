@@ -40,6 +40,8 @@ const publishedDate = new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en", 
     )
   }
 
+  {editorial && <p class="case-header__company">{displayData.entities[0]}</p>}
+
   <h1 class:list={["max-w-4xl font-serif font-semibold leading-[1.04] tracking-normal text-[var(--color-text)]", editorial ? "mt-7 text-[2.8rem] sm:text-[4.6rem]" : "mt-5 text-[2.65rem] sm:text-[4.35rem]"]}>
     {displayData.title}
   </h1>
@@ -70,18 +72,41 @@ const publishedDate = new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en", 
     )
   }
 
-  <dl class:list={["case-taxonomy grid text-sm sm:grid-cols-3", editorial ? "case-taxonomy--quiet mt-7 gap-3" : "mt-8 gap-4"]}>
-    <div>
-      <dt class="font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{copy.labels.entities}</dt>
-      <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]"><ul class="case-taxonomy__items">{displayData.entities.map((item) => <li>{item}</li>)}</ul></dd>
-    </div>
-    <div>
-      <dt class="font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{copy.labels.topics}</dt>
-      <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]"><ul class="case-taxonomy__items">{displayData.topics.slice(0, 3).map((item) => <li>{item}</li>)}</ul></dd>
-    </div>
-    <div>
-      <dt class="font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{copy.labels.concepts}</dt>
-      <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]"><ul class="case-taxonomy__items">{displayData.concepts.slice(0, 3).map((item) => <li>{item}</li>)}</ul></dd>
-    </div>
-  </dl>
+  {
+    editorial ? (
+      <dl class="case-taxonomy case-taxonomy--editorial">
+        <div>
+          <dt>{locale === "zh" ? "公司" : "Company"}</dt>
+          <dd>{displayData.entities[0]}</dd>
+        </div>
+        <div>
+          <dt>{locale === "zh" ? "主题" : "Topic"}</dt>
+          <dd><ul class="case-taxonomy__items">{displayData.topics.slice(0, 2).map((item) => <li>{item}</li>)}</ul></dd>
+        </div>
+        <div>
+          <dt>{locale === "zh" ? "类型" : "Type"}</dt>
+          <dd>{formatCaseType(data.caseType, locale)}</dd>
+        </div>
+        <div>
+          <dt>{copy.labels.concepts}</dt>
+          <dd><ul class="case-taxonomy__items">{displayData.concepts.slice(0, 2).map((item) => <li>{item}</li>)}</ul></dd>
+        </div>
+      </dl>
+    ) : (
+      <dl class="case-taxonomy mt-8 grid gap-4 text-sm sm:grid-cols-3">
+        <div>
+          <dt class="font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{copy.labels.entities}</dt>
+          <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]"><ul class="case-taxonomy__items">{displayData.entities.map((item) => <li>{item}</li>)}</ul></dd>
+        </div>
+        <div>
+          <dt class="font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{copy.labels.topics}</dt>
+          <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]"><ul class="case-taxonomy__items">{displayData.topics.slice(0, 3).map((item) => <li>{item}</li>)}</ul></dd>
+        </div>
+        <div>
+          <dt class="font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{copy.labels.concepts}</dt>
+          <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]"><ul class="case-taxonomy__items">{displayData.concepts.slice(0, 3).map((item) => <li>{item}</li>)}</ul></dd>
+        </div>
+      </dl>
+    )
+  }
 </header>

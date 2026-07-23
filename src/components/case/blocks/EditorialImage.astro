@@ -1,0 +1,32 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  label?: string;
+  caption?: string;
+  credit?: string;
+}
+
+const {
+  src,
+  alt,
+  label = "System View",
+  caption,
+  credit,
+} = Astro.props;
+---
+
+<figure class="case-editorial-image">
+  <div class="case-editorial-image__frame">
+    <img src={src} alt={alt} loading="lazy" decoding="async" />
+  </div>
+  {
+    (label || caption || credit) && (
+      <figcaption>
+        <span class="case-editorial-image__label">{label}</span>
+        {caption && <span class="case-editorial-image__caption">{caption}</span>}
+        {credit && <span class="case-editorial-image__credit">{credit}</span>}
+      </figcaption>
+    )
+  }
+</figure>

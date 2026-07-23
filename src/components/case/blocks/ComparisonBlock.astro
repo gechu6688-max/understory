@@ -1,0 +1,41 @@
+---
+interface ComparisonSide {
+  label: string;
+  title: string;
+  detail: string;
+}
+
+interface Props {
+  title?: string;
+  left: ComparisonSide;
+  right: ComparisonSide;
+  label?: string;
+}
+
+const {
+  title = "A natural comparison",
+  left,
+  right,
+  label = "Comparison",
+} = Astro.props;
+---
+
+<section class="case-comparison" aria-label={title}>
+  <header class="case-comparison__header">
+    <p>{label}</p>
+    <h3>{title}</h3>
+  </header>
+  <div class="case-comparison__grid">
+    <article>
+      <p class="case-comparison__place">{left.label}</p>
+      <h4>{left.title}</h4>
+      <p>{left.detail}</p>
+    </article>
+    <div class="case-comparison__versus" aria-hidden="true">VS</div>
+    <article>
+      <p class="case-comparison__place">{right.label}</p>
+      <h4>{right.title}</h4>
+      <p>{right.detail}</p>
+    </article>
+  </div>
+</section>

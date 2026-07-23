@@ -4,12 +4,14 @@ interface Props {
   rightLabel: string;
   leftItems: string[];
   rightItems: string[];
+  label?: string;
 }
 
-const { leftLabel, rightLabel, leftItems, rightItems } = Astro.props;
+const { leftLabel, rightLabel, leftItems, rightItems, label = "The Trade-off" } = Astro.props;
 ---
 
 <section class="case-tradeoff" aria-label={`${leftLabel} versus ${rightLabel}`}>
+  <p class="case-tradeoff__eyebrow">{label}</p>
   <div class="case-tradeoff__grid">
     <div class="case-tradeoff__column">
       <p class="case-tradeoff__label">{leftLabel}</p>
@@ -17,6 +19,7 @@ const { leftLabel, rightLabel, leftItems, rightItems } = Astro.props;
         {leftItems.map((item) => <li>{item}</li>)}
       </ul>
     </div>
+    <div class="case-tradeoff__versus" aria-hidden="true">VS</div>
     <div class="case-tradeoff__column">
       <p class="case-tradeoff__label">{rightLabel}</p>
       <ul class="case-tradeoff__list">
