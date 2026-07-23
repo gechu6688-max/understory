@@ -1,0 +1,39 @@
+---
+interface ChainStep {
+  label: string;
+  detail?: string;
+}
+
+interface Props {
+  label?: string;
+  title: string;
+  steps: ChainStep[];
+  note?: string;
+}
+
+const {
+  label = "Causal Path",
+  title,
+  steps,
+  note,
+} = Astro.props;
+---
+
+<section class="case-causal-chain" aria-label={title}>
+  <header>
+    <p>{label}</p>
+    <h3>{title}</h3>
+  </header>
+  <ol>
+    {steps.map((step, index) => (
+      <li>
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        <div>
+          <strong>{step.label}</strong>
+          {step.detail && <p>{step.detail}</p>}
+        </div>
+      </li>
+    ))}
+  </ol>
+  {note && <p class="case-causal-chain__note">{note}</p>}
+</section>

@@ -1,0 +1,34 @@
+---
+interface BoundaryItem {
+  label: string;
+  detail: string;
+}
+
+interface Props {
+  label?: string;
+  title: string;
+  items: BoundaryItem[];
+}
+
+const {
+  label = "Analytical Boundary",
+  title,
+  items,
+} = Astro.props;
+---
+
+<section class="case-boundary-map" aria-label={title}>
+  <header>
+    <p>{label}</p>
+    <h3>{title}</h3>
+  </header>
+  <div>
+    {items.map((item, index) => (
+      <article>
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        <h4>{item.label}</h4>
+        <p>{item.detail}</p>
+      </article>
+    ))}
+  </div>
+</section>

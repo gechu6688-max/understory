@@ -52,9 +52,14 @@ const editorial = data.presentation === "editorial";
     )
   }
 
-  <CaseReadingNav label={locale === "zh" ? "本案例结构" : "In this case"} />
-  <div class:list={["case-body max-w-[var(--measure-article)]", editorial ? "mt-16" : "mt-12"]}>
-    <Content />
+  <div class:list={["case-reading-layout", { "case-reading-layout--editorial": editorial }]}>
+    <CaseReadingNav
+      label={locale === "zh" ? "本案例结构" : "In this case"}
+      mobileLabel={locale === "zh" ? "浏览案例章节" : "Browse case sections"}
+    />
+    <div class:list={["case-body max-w-[var(--measure-article)]", editorial ? "mt-16" : "mt-12"]}>
+      <Content />
+    </div>
   </div>
   <CaseReferences sources={data.sources} locale={locale} />
 </article>

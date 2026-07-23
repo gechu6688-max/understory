@@ -3,6 +3,10 @@ interface ComparisonSide {
   label: string;
   title: string;
   detail: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  imageCredit?: string;
+  imageSourceHref?: string;
 }
 
 interface Props {
@@ -27,12 +31,32 @@ const {
   </header>
   <div class="case-comparison__grid">
     <article>
+      {
+        left.imageSrc && (
+          <figure>
+            <img src={left.imageSrc} alt={left.imageAlt ?? ""} loading="lazy" decoding="async" />
+            {left.imageCredit && (
+              <figcaption>{left.imageSourceHref ? <a href={left.imageSourceHref}>{left.imageCredit}</a> : left.imageCredit}</figcaption>
+            )}
+          </figure>
+        )
+      }
       <p class="case-comparison__place">{left.label}</p>
       <h4>{left.title}</h4>
       <p>{left.detail}</p>
     </article>
     <div class="case-comparison__versus" aria-hidden="true">VS</div>
     <article>
+      {
+        right.imageSrc && (
+          <figure>
+            <img src={right.imageSrc} alt={right.imageAlt ?? ""} loading="lazy" decoding="async" />
+            {right.imageCredit && (
+              <figcaption>{right.imageSourceHref ? <a href={right.imageSourceHref}>{right.imageCredit}</a> : right.imageCredit}</figcaption>
+            )}
+          </figure>
+        )
+      }
       <p class="case-comparison__place">{right.label}</p>
       <h4>{right.title}</h4>
       <p>{right.detail}</p>

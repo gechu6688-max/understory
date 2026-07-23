@@ -1,0 +1,67 @@
+---
+interface VisualItem {
+  label: string;
+  detail?: string;
+}
+
+interface ImageData {
+  src: string;
+  alt: string;
+  credit?: string;
+  sourceHref?: string;
+}
+
+interface Props {
+  label?: string;
+  title: string;
+  body: string;
+  visualTitle: string;
+  items?: VisualItem[];
+  image?: ImageData;
+  align?: "left" | "right";
+}
+
+const {
+  label = "Context",
+  title,
+  body,
+  visualTitle,
+  items = [],
+  image,
+  align = "right",
+} = Astro.props;
+---
+
+<section class:list={["case-editorial-split", `case-editorial-split--${align}`]} aria-label={title}>
+  <div class="case-editorial-split__text">
+    <p>{label}</p>
+    <h3>{title}</h3>
+    <p>{body}</p>
+  </div>
+  <figure class="case-editorial-split__visual">
+    {
+      image ? (
+        <>
+          <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+          {image.credit && (
+            <figcaption>
+              {image.sourceHref ? <a href={image.sourceHref}>{image.credit}</a> : image.credit}
+            </figcaption>
+          )}
+        </>
+      ) : (
+        <>
+          <figcaption>{visualTitle}</figcaption>
+          <ul>
+            {items.map((item) => (
+              <li>
+                <strong>{item.label}</strong>
+                {item.detail && <span>{item.detail}</span>}
+              </li>
+            ))}
+          </ul>
+        </>
+      )
+    }
+  </figure>
+</section>

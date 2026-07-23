@@ -1,42 +1,64 @@
 ---
 interface Props {
   label?: string;
+  mobileLabel?: string;
 }
 
-const { label = "In this case" } = Astro.props;
+const {
+  label = "In this case",
+  mobileLabel = "Browse case sections",
+} = Astro.props;
 ---
 
-<aside class="case-reading-nav" data-case-reading-nav hidden>
-  <div class="case-reading-nav__progress" aria-hidden="true"><span data-case-progress></span></div>
-  <p>{label}</p>
-  <ol data-case-outline></ol>
+<aside class="case-reading-nav-shell" data-case-reading-nav hidden aria-label={label}>
+  <div class="case-reading-nav-desktop">
+    <div class="case-reading-nav__progress" aria-hidden="true"><span data-case-progress></span></div>
+    <p>{label}</p>
+    <ol data-case-outline></ol>
+  </div>
+  <details class="case-reading-nav-mobile">
+    <summary>
+      <span>{mobileLabel}</span>
+      <strong data-case-current></strong>
+    </summary>
+    <ol data-case-outline></ol>
+  </details>
 </aside>
 
 <script>
   const setupCaseReadingNav = () => {
     const article = document.querySelector<HTMLElement>("[data-case-article]");
     const nav = article?.querySelector<HTMLElement>("[data-case-reading-nav]");
-    const outline = nav?.querySelector<HTMLOListElement>("[data-case-outline]");
+    if (!article || !nav || nav.dataset.initialized === "true") return;
+    nav.dataset.initialized = "true";
+
+    const outlines = [...nav.querySelectorAll<HTMLOListElement>("[data-case-outline]")];
     const progress = nav?.querySelector<HTMLElement>("[data-case-progress]");
+    const current = nav?.querySelector<HTMLElement>("[data-case-current]");
+    const mobileDisclosure = nav?.querySelector<HTMLDetailsElement>(".case-reading-nav-mobile");
     const body = article?.querySelector<HTMLElement>(".case-body");
-    if (!article || !nav || !outline || !progress || !body) return;
+    if (!outlines.length || !progress || !body) return;
 
     const headings = [...body.querySelectorAll<HTMLHeadingElement>("h2")]
       .filter((heading) => heading.offsetParent !== null);
     if (headings.length < 2) return;
 
-    headings.forEach((heading, index) => {
-      heading.id ||= `case-section-${index + 1}`;
-      const item = document.createElement("li");
-      const link = document.createElement("a");
-      link.href = `#${heading.id}`;
-      link.textContent = heading.textContent?.trim() || `Section ${index + 1}`;
-      item.append(link);
-      outline.append(item);
+    outlines.forEach((outline) => {
+      outline.replaceChildren();
+      headings.forEach((heading, index) => {
+        heading.id ||= `case-section-${index + 1}`;
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent?.trim() || `Section ${index + 1}`;
+        link.addEventListener("click", () => mobileDisclosure?.removeAttribute("open"));
+        item.append(link);
+        outline.append(item);
+      });
     });
     nav.hidden = false;
 
-    const links = [...outline.querySelectorAll<HTMLAnchorElement>("a")];
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>("[data-case-outline] a")];
     const update = () => {
       const bodyTop = body.getBoundingClientRect().top + window.scrollY;
       const bodyHeight = Math.max(body.offsetHeight - window.innerHeight * 0.45, 1);
@@ -47,7 +69,11 @@ const { label = "In this case" } = Astro.props;
       headings.forEach((heading, index) => {
         if (heading.getBoundingClientRect().top <= window.innerHeight * 0.32) activeIndex = index;
       });
-      links.forEach((link, index) => link.toggleAttribute("aria-current", index === activeIndex));
+      links.forEach((link) => {
+        const active = link.getAttribute("href") === `#${headings[activeIndex]?.id}`;
+        link.toggleAttribute("aria-current", active);
+      });
+      if (current) current.textContent = headings[activeIndex]?.textContent?.trim() ?? "";
     };
 
     update();

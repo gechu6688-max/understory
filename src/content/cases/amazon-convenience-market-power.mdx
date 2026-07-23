@@ -113,6 +113,9 @@ sources:
 import EvidenceHighlight from "../../components/case/blocks/EvidenceHighlight.astro";
 import ComparisonBlock from "../../components/case/blocks/ComparisonBlock.astro";
 import EcosystemMap from "../../components/case/blocks/EcosystemMap.astro";
+import CausalChain from "../../components/case/blocks/CausalChain.astro";
+import EditorialSplit from "../../components/case/blocks/EditorialSplit.astro";
+import AnalyticalBoundary from "../../components/case/blocks/AnalyticalBoundary.astro";
 import KeyInsight from "../../components/case/blocks/KeyInsight.astro";
 import OneMoreQuestion from "../../components/case/blocks/OneMoreQuestion.astro";
 import Timeline from "../../components/case/blocks/Timeline.astro";
@@ -215,6 +218,17 @@ The simplest version of the case would say: a competitor leaves, Amazon raises p
 
 A better reading is conditional. Competition can discipline a company even when that company is already large. If consumers can easily switch to another retailer, if sellers can reach customers elsewhere, and if rivals can pressure price and service quality, Amazon has less room to use its scale against consumers. But when those outside options weaken, the same convenient platform can become harder to avoid.
 
+<CausalChain
+  title="How weaker competition can change consumer outcomes"
+  steps={[
+    { label: "Competition decreases", detail: "A meaningful outside option disappears." },
+    { label: "Market pressure weakens", detail: "The remaining platform faces less discipline." },
+    { label: "Pricing flexibility expands", detail: "There is more room to change prices or terms." },
+    { label: "Consumer outcomes may shift", detail: "Convenience can remain while constraints weaken." },
+  ]}
+  note="This is an analytical pathway, not proof that every price change follows the same mechanism."
+/>
+
 This is why the Toys "R" Us example is useful. The closure did not make Amazon the only seller of toys. Walmart, Target, specialty stores, and other online sellers still existed. But losing a major category-specific competitor could still reduce pressure in exactly the products where that competitor mattered.
 
 Popular products are especially revealing. If prices rise more for popular toys after a major rival disappears, the pattern suggests that the lost competitor may have been helping discipline prices. That does not prove every price increase came from market power. It does suggest that consumer outcomes can change after competition leaves.
@@ -249,6 +263,19 @@ Costs may have increased. Product mix may have changed. Popular toys may have fa
 
 Amazon's scale can also create real efficiencies. Better logistics, technology, inventory management, and marketplace seller competition may lower costs and improve the consumer experience. If those forces explain the main benefits, then treating Amazon's success as suspicious could harm consumers instead of helping them.
 
+<EditorialSplit
+  label="Competing Explanation"
+  title="Efficiency can produce the same visible benefits"
+  body="Low prices and convenience may reflect operating advantages rather than harmful market power."
+  visualTitle="Possible sources of consumer value"
+  items={[
+    { label: "Scale", detail: "High volume can lower unit costs." },
+    { label: "Logistics", detail: "Faster fulfillment can improve service." },
+    { label: "Technology", detail: "Better systems can reduce friction." },
+    { label: "Seller competition", detail: "Marketplace rivalry can discipline prices." },
+  ]}
+/>
+
 This is the strongest counterargument: low prices and convenience are not automatically a mask for market power. Sometimes they are simply what effective competition looks like.
 
 ## Limitations
@@ -258,6 +285,15 @@ This case does not prove predatory pricing. Predatory pricing would require evid
 The case also cannot prove that every price increase comes from market power. Price changes can reflect costs, demand, supply, quality, seasonality, and product substitution. The strongest claim is narrower: reduced competition can give Amazon more pricing freedom, and some evidence is consistent with that possibility.
 
 Finally, the evidence is category-specific. Toys are a useful setting, but Amazon's market power may look different in books, groceries, electronics, cloud computing, advertising, or marketplace services.
+
+<AnalyticalBoundary
+  title="What this evidence does—and does not—establish"
+  items={[
+    { label: "No predatory-pricing finding", detail: "The evidence concerns outcomes after exit, not proof of the strategy that caused the exit." },
+    { label: "No universal price explanation", detail: "Costs, demand, supply, quality, seasonality, and substitution can also affect prices." },
+    { label: "No category-wide generalization", detail: "Evidence from toys may not describe Amazon's position in every other market." },
+  ]}
+/>
 
 ## Conclusion
 
@@ -390,6 +426,18 @@ Toys "R" Us 退出以后，美国亚马逊上的相关商品价格上涨幅度�
 
 可是，当这些外部选择变弱，同一个便利的平台就会变得更难避开。
 
+<CausalChain
+  label="因果路径"
+  title="竞争减弱如何可能改变消费者结果"
+  steps={[
+    { label: "竞争减少", detail: "一个有意义的外部选择消失。" },
+    { label: "市场压力变弱", detail: "留下的平台受到的约束减少。" },
+    { label: "定价空间扩大", detail: "价格或交易条件更容易发生变化。" },
+    { label: "消费者结果可能改变", detail: "便利仍然存在，但约束可能变弱。" },
+  ]}
+  note="这是一条分析路径，并不能证明每一次价格变化都遵循同一机制。"
+/>
+
 Toys "R" Us 的例子正好说明这一点。它的关闭并不意味着亚马逊成了唯一卖玩具的地方。沃尔玛、Target、其他网店和专业零售商仍然存在。
 
 但失去一个重要的玩具零售竞争者，仍然可能减少某些商品上的价格压力。
@@ -430,6 +478,19 @@ Toys "R" Us 的例子正好说明这一点。它的关闭并不意味着亚马�
 
 如果这些才是主要原因，那么把亚马逊的成功简单看成可疑，反而可能伤害消费者。
 
+<EditorialSplit
+  label="竞争性解释"
+  title="效率也可能带来同样可见的好处"
+  body="低价和便利可能来自经营优势，而不是有害的市场力量。"
+  visualTitle="消费者价值的可能来源"
+  items={[
+    { label: "规模", detail: "更高交易量可能降低单位成本。" },
+    { label: "物流", detail: "更快履约可能改善服务。" },
+    { label: "技术", detail: "更好的系统可能减少摩擦。" },
+    { label: "卖家竞争", detail: "平台内竞争可能约束价格。" },
+  ]}
+/>
+
 这是最有力的反方解释：低价和便利不一定是市场力量的伪装。有时候，它们就是有效竞争本身的结果。
 
 ## 判断边界
@@ -443,6 +504,16 @@ Toys "R" Us 的证据更适合说明竞争者消失后可能发生什么，而�
 最稳妥的结论应该更窄：竞争减少可能让亚马逊拥有更大的定价空间，而部分证据和这个可能性相一致。
 
 最后，这个证据主要来自玩具品类。亚马逊在图书、食品杂货、电子产品、云计算、广告和平台服务里的市场力量，可能会呈现出不同的样子。
+
+<AnalyticalBoundary
+  label="判断边界"
+  title="这些证据能够、也不能说明什么"
+  items={[
+    { label: "不能证明掠夺性定价", detail: "证据关注竞争者退出后的结果，而不是证明导致退出的策略。" },
+    { label: "不能解释所有价格变化", detail: "成本、需求、供应、质量、季节性和替代也会影响价格。" },
+    { label: "不能推广到所有品类", detail: "玩具品类的证据未必描述亚马逊在其他市场中的位置。" },
+  ]}
+/>
 
 ## 结论
 
