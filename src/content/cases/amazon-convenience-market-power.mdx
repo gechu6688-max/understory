@@ -23,6 +23,13 @@ presentation: editorial
 caseNumber: "001"
 readingTimeMinutes: 12
 featured: true
+heroImage: "/images/amazon-fulfillment-center-kaiserslautern.jpg"
+heroImageAlt: "Visitors observe robotics and fulfillment operations inside Amazon's West Kaiserslautern fulfillment center."
+heroImageCaption: "Inside Amazon's West Kaiserslautern fulfillment center, May 2025."
+heroImageCredit: "Cameron Porter / U.S. Army 405th AFSB"
+heroImageSourceUrl: "https://commons.wikimedia.org/wiki/File:405th_AFSB_conducts_professional_development_staff_visit_to_Amazon_fulfillment_center_(9079634).jpg"
+heroImageLicense: "Public domain"
+heroImageLicenseUrl: "https://commons.wikimedia.org/wiki/File:405th_AFSB_conducts_professional_development_staff_visit_to_Amazon_fulfillment_center_(9079634).jpg#Licensing"
 questionContext: "Amazon delivers real benefits to consumers. This case asks whether those benefits change when a meaningful competitive constraint disappears."
 scopeBoundary: "The post-exit pricing evidence does not prove predatory pricing or explain every individual price change."
 counterargumentSummary: "Amazon's prices and convenience may come from efficiency, scale, logistics, and marketplace competition rather than harmful market power."
@@ -105,7 +112,7 @@ sources:
 
 import EvidenceHighlight from "../../components/case/blocks/EvidenceHighlight.astro";
 import ComparisonBlock from "../../components/case/blocks/ComparisonBlock.astro";
-import EditorialImage from "../../components/case/blocks/EditorialImage.astro";
+import EcosystemMap from "../../components/case/blocks/EcosystemMap.astro";
 import KeyInsight from "../../components/case/blocks/KeyInsight.astro";
 import OneMoreQuestion from "../../components/case/blocks/OneMoreQuestion.astro";
 import Timeline from "../../components/case/blocks/Timeline.astro";
@@ -117,15 +124,20 @@ import TradeoffBlock from "../../components/case/blocks/TradeoffBlock.astro";
 
 Amazon is not only a retailer. It is also a marketplace, a logistics system, an advertising business, a subscription ecosystem, and a default starting point for many online searches. That makes its market power hard to evaluate with one simple measure.
 
+<EcosystemMap
+  title="Amazon links demand, supply, and fulfillment"
+  nodes={[
+    { label: "Demand", title: "Customers", detail: "Search, purchase, and subscribe" },
+    { label: "Platform", title: "Marketplace", detail: "Discovery, ranking, and checkout" },
+    { label: "Supply", title: "Sellers", detail: "Inventory, pricing, and advertising" },
+    { label: "Infrastructure", title: "Fulfillment", detail: "Storage, delivery, and returns" },
+  ]}
+  note="The same system that lowers friction can also deepen dependence on the platform."
+/>
+
 Traditional consumer-welfare thinking often asks whether consumers receive low prices. That question still matters. But platform businesses can create a more complicated pattern: consumers may receive strong short-term benefits while sellers, rivals, and even consumers become more dependent on the platform over time.
 
 Toys "R" Us provides a useful case setting because its U.S. business closed while its Canadian presence continued. That difference creates a way to ask whether Amazon's prices changed more in the market where a major toy competitor disappeared than in a market where the competitor remained more present.
-
-<EditorialImage
-  src="/images/amazon-logistics-hero.png"
-  alt="A large fulfillment network with conveyor belts and packages"
-  label="System View"
-/>
 
 ## Evidence
 
@@ -136,6 +148,7 @@ The important pattern is not simply "prices went up." The more useful finding is
 <EvidenceHighlight
   title="Pricing after a major rival exits"
   metric="≈4%"
+  signalLabel="Observed change after rival exit"
   finding={'Amazon toy prices increased approximately 4% after Toys "R" Us exited the U.S. market.'}
   comparison={'The study compares the U.S. market with Canada, where Toys "R" Us remained active for longer. It does not assign an unsupported numeric value to the Canadian pattern.'}
   caveat="This is evidence of a pricing pattern after competitive pressure changed, not proof of every causal mechanism or every individual price change."
@@ -208,6 +221,8 @@ Popular products are especially revealing. If prices rise more for popular toys 
 
 <TradeoffBlock
   label="The Trade-off"
+  leftSignal="Lower friction"
+  rightSignal="Market power"
   leftLabel="Visible consumer benefits"
   rightLabel="Possible hidden costs"
   leftItems={[
@@ -298,6 +313,18 @@ Evidence that would strengthen the concern:
 
 正因为它覆盖的层面很多，判断它的市场力量不能只看一个指标。
 
+<EcosystemMap
+  label="系统图"
+  title="亚马逊连接需求、供给与履约"
+  nodes={[
+    { label: "需求", title: "消费者", detail: "搜索、购买与订阅" },
+    { label: "平台", title: "市场", detail: "发现、排序与结账" },
+    { label: "供给", title: "卖家", detail: "库存、定价与广告" },
+    { label: "基础设施", title: "履约", detail: "仓储、配送与退货" },
+  ]}
+  note="同一套降低摩擦的系统，也可能加深对平台的依赖。"
+/>
+
 传统上，判断消费者是否受益，常常会先看价格是不是低。这当然重要。
 
 但平台型公司会让问题变得更复杂：消费者眼前可能得到了很好的体验，可是卖家、竞争者，甚至消费者自己，也可能在长期里越来越依赖这个平台。
@@ -305,12 +332,6 @@ Evidence that would strengthen the concern:
 Toys "R" Us 是一个很有用的观察对象。它在美国关闭了门店，但加拿大业务在更长时间里继续存在。
 
 这个差异让研究者可以比较：在一个重要玩具零售竞争者退出的市场里，亚马逊的价格变化，是否和竞争者仍然存在的市场不一样。
-
-<EditorialImage
-  src="/images/amazon-logistics-hero.png"
-  alt="大型履约网络中的传送带与包裹"
-  label="系统视角"
-/>
 
 ## 关键证据
 
@@ -377,6 +398,8 @@ Toys "R" Us 的例子正好说明这一点。它的关闭并不意味着亚马�
 
 <TradeoffBlock
   label="核心权衡"
+  leftSignal="更低摩擦"
+  rightSignal="市场力量"
   leftLabel="表面上看得见的好处"
   rightLabel="可能隐藏在后面的成本"
   leftItems={[

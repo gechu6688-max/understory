@@ -15,6 +15,7 @@ interface Props {
   caveat?: string;
   source?: string;
   metric?: string;
+  signalLabel?: string;
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   caveat,
   source,
   metric,
+  signalLabel,
 } = Astro.props;
 const isEditorial = Boolean(finding && comparison && caveat && source);
 ---
@@ -43,6 +45,14 @@ const isEditorial = Boolean(finding && comparison && caveat && source);
         <div>
           {metric && <p class="editorial-evidence-highlight__metric">{metric}</p>}
           <p class="editorial-evidence-highlight__statement">{finding}</p>
+          {
+            metric && signalLabel && (
+              <div class="editorial-evidence-highlight__signal" aria-label={`${signalLabel}: ${metric}`}>
+                <div><span></span></div>
+                <p>{signalLabel}</p>
+              </div>
+            )
+          }
         </div>
       </div>
       <div class="editorial-evidence-highlight__support">

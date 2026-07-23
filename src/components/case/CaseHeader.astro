@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { formatCaseStatus, formatCaseType, getCaseDisplayData } from "../../lib/cases";
 import { defaultLocale, getSiteCopy, type Locale } from "../../lib/siteCopy";
+import EditorialImage from "./blocks/EditorialImage.astro";
 
 interface Props {
   caseEntry: CollectionEntry<"cases">;
@@ -48,7 +49,10 @@ const publishedDate = new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en", 
 
   {
     editorial ? (
-      <p class="case-header__deck">{displayData.summary}</p>
+      <div class="case-header__premise">
+        <p>{locale === "zh" ? "案例前提" : "Case Premise"}</p>
+        <p class="case-header__deck">{displayData.summary}</p>
+      </div>
     ) : (
       <>
         {displayData.subtitle && <p class="mt-4 max-w-2xl text-lg text-[var(--color-text-secondary)] sm:text-xl">{displayData.subtitle}</p>}
@@ -107,6 +111,22 @@ const publishedDate = new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en", 
           <dd class="mt-2 leading-6 text-[var(--color-text-secondary)]"><ul class="case-taxonomy__items">{displayData.concepts.slice(0, 3).map((item) => <li>{item}</li>)}</ul></dd>
         </div>
       </dl>
+    )
+  }
+
+  {
+    editorial && data.heroImage && (
+      <EditorialImage
+        src={data.heroImage}
+        alt={data.heroImageAlt ?? ""}
+        label={locale === "zh" ? "实地影像" : "Field Image"}
+        caption={data.heroImageCaption}
+        credit={data.heroImageCredit}
+        sourceHref={data.heroImageSourceUrl}
+        license={data.heroImageLicense}
+        licenseHref={data.heroImageLicenseUrl}
+        variant="hero"
+      />
     )
   }
 </header>

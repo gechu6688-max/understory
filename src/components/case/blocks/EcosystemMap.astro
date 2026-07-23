@@ -1,0 +1,41 @@
+---
+interface EcosystemNode {
+  label: string;
+  title: string;
+  detail?: string;
+}
+
+interface Props {
+  label?: string;
+  title: string;
+  nodes: EcosystemNode[];
+  note?: string;
+}
+
+const {
+  label = "System Map",
+  title,
+  nodes,
+  note,
+} = Astro.props;
+---
+
+<section class="case-ecosystem" aria-label={title}>
+  <header class="case-ecosystem__header">
+    <p>{label}</p>
+    <h3>{title}</h3>
+  </header>
+  <div class="case-ecosystem__flow">
+    {nodes.map((node, index) => (
+      <>
+        <article class:list={{ "is-core": index === Math.floor(nodes.length / 2) }}>
+          <p>{node.label}</p>
+          <h4>{node.title}</h4>
+          {node.detail && <span>{node.detail}</span>}
+        </article>
+        {index < nodes.length - 1 && <span class="case-ecosystem__connector" aria-hidden="true">→</span>}
+      </>
+    ))}
+  </div>
+  {note && <p class="case-ecosystem__note">{note}</p>}
+</section>

@@ -5,6 +5,10 @@ interface Props {
   label?: string;
   caption?: string;
   credit?: string;
+  sourceHref?: string;
+  license?: string;
+  licenseHref?: string;
+  variant?: "body" | "hero";
 }
 
 const {
@@ -13,19 +17,31 @@ const {
   label = "System View",
   caption,
   credit,
+  sourceHref,
+  license,
+  licenseHref,
+  variant = "body",
 } = Astro.props;
 ---
 
-<figure class="case-editorial-image">
+<figure class:list={["case-editorial-image", `case-editorial-image--${variant}`]}>
   <div class="case-editorial-image__frame">
-    <img src={src} alt={alt} loading="lazy" decoding="async" />
+    <img src={src} alt={alt} loading={variant === "hero" ? "eager" : "lazy"} decoding="async" />
   </div>
   {
     (label || caption || credit) && (
       <figcaption>
         <span class="case-editorial-image__label">{label}</span>
         {caption && <span class="case-editorial-image__caption">{caption}</span>}
-        {credit && <span class="case-editorial-image__credit">{credit}</span>}
+        {
+          (credit || license) && (
+            <span class="case-editorial-image__credit">
+              {sourceHref ? <a href={sourceHref}>{credit}</a> : credit}
+              {credit && license && <span aria-hidden="true"> · </span>}
+              {licenseHref ? <a href={licenseHref}>{license}</a> : license}
+            </span>
+          )
+        }
       </figcaption>
     )
   }
