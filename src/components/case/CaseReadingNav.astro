@@ -1,0 +1,60 @@
+---
+interface Props {
+  label?: string;
+}
+
+const { label = "In this case" } = Astro.props;
+---
+
+<aside class="case-reading-nav" data-case-reading-nav hidden>
+  <div class="case-reading-nav__progress" aria-hidden="true"><span data-case-progress></span></div>
+  <p>{label}</p>
+  <ol data-case-outline></ol>
+</aside>
+
+<script>
+  const setupCaseReadingNav = () => {
+    const article = document.querySelector<HTMLElement>("[data-case-article]");
+    const nav = article?.querySelector<HTMLElement>("[data-case-reading-nav]");
+    const outline = nav?.querySelector<HTMLOListElement>("[data-case-outline]");
+    const progress = nav?.querySelector<HTMLElement>("[data-case-progress]");
+    const body = article?.querySelector<HTMLElement>(".case-body");
+    if (!article || !nav || !outline || !progress || !body) return;
+
+    const headings = [...body.querySelectorAll<HTMLHeadingElement>("h2")]
+      .filter((heading) => heading.offsetParent !== null);
+    if (headings.length < 2) return;
+
+    headings.forEach((heading, index) => {
+      heading.id ||= `case-section-${index + 1}`;
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = `#${heading.id}`;
+      link.textContent = heading.textContent?.trim() || `Section ${index + 1}`;
+      item.append(link);
+      outline.append(item);
+    });
+    nav.hidden = false;
+
+    const links = [...outline.querySelectorAll<HTMLAnchorElement>("a")];
+    const update = () => {
+      const bodyTop = body.getBoundingClientRect().top + window.scrollY;
+      const bodyHeight = Math.max(body.offsetHeight - window.innerHeight * 0.45, 1);
+      const ratio = Math.min(1, Math.max(0, (window.scrollY - bodyTop + window.innerHeight * 0.3) / bodyHeight));
+      progress.style.transform = `scaleX(${ratio})`;
+
+      let activeIndex = 0;
+      headings.forEach((heading, index) => {
+        if (heading.getBoundingClientRect().top <= window.innerHeight * 0.32) activeIndex = index;
+      });
+      links.forEach((link, index) => link.toggleAttribute("aria-current", index === activeIndex));
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+  };
+
+  document.addEventListener("astro:page-load", setupCaseReadingNav);
+  setupCaseReadingNav();
+</script>

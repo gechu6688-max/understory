@@ -41,6 +41,8 @@ const localizedCaseSchema = z.object({
   concepts: z.array(z.string()).optional(),
   counterargumentSummary: z.string().optional(),
   whatWouldChangeMyMind: z.string().optional(),
+  questionContext: z.string().optional(),
+  scopeBoundary: z.string().optional(),
 });
 
 const cases = defineCollection({
@@ -57,6 +59,9 @@ const cases = defineCollection({
     topics: z.array(z.string()).min(1),
     concepts: z.array(z.string()).min(1),
     caseType: z.enum(caseTypes),
+    presentation: z.enum(["standard", "editorial"]).default("standard"),
+    caseNumber: z.string().optional(),
+    readingTimeMinutes: z.number().int().positive().optional(),
     sources: z.array(sourceSchema).min(1),
     subtitle: z.string().optional(),
     heroImage: z.string().optional(),
@@ -65,6 +70,8 @@ const cases = defineCollection({
     relatedCases: z.array(z.string()).optional(),
     counterargumentSummary: z.string().optional(),
     whatWouldChangeMyMind: z.string().optional(),
+    questionContext: z.string().optional(),
+    scopeBoundary: z.string().optional(),
     localized: z
       .object({
         zh: localizedCaseSchema.optional(),

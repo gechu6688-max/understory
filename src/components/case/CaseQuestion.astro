@@ -1,0 +1,15 @@
+---
+interface Props {
+  question: string;
+  context?: string;
+  label?: string;
+}
+
+const { question, context, label = "Central Question" } = Astro.props;
+---
+
+<section class="case-central-question" aria-labelledby="case-central-question-title">
+  <p class="case-central-question__label">{label}</p>
+  <h2 id="case-central-question-title">{question}</h2>
+  {context && <p>{context}</p>}
+</section>

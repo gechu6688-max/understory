@@ -1,0 +1,60 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { render } from "astro:content";
+import { getCaseDisplayData } from "../../lib/cases";
+import { defaultLocale, type Locale } from "../../lib/siteCopy";
+import CaseHeader from "./CaseHeader.astro";
+import CaseQuestion from "./CaseQuestion.astro";
+import CaseReadingNav from "./CaseReadingNav.astro";
+import CaseReferences from "./CaseReferences.astro";
+import KeyInsight from "./blocks/KeyInsight.astro";
+
+interface Props {
+  caseEntry: CollectionEntry<"cases">;
+  previewLabel?: string;
+  locale?: Locale;
+}
+
+const { caseEntry, previewLabel, locale = defaultLocale } = Astro.props;
+const { Content } = await render(caseEntry);
+const { data } = caseEntry;
+const displayData = getCaseDisplayData(caseEntry, locale);
+const editorial = data.presentation === "editorial";
+---
+
+<article class:list={{ "case-article--editorial": editorial }} data-case-article>
+  {
+    previewLabel && (
+      <aside class="mb-8 max-w-[var(--measure-wide)] border-l-2 border-[var(--color-uncertainty)] bg-[#fff8ea] px-4 py-3 text-[var(--color-text)]">
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-uncertainty)]">{previewLabel}</p>
+        <p class="mt-1 text-sm text-[var(--color-text-secondary)]">This route is for local content review. It is not a public production case route.</p>
+      </aside>
+    )
+  }
+
+  <CaseHeader caseEntry={caseEntry} locale={locale} />
+
+  {
+    editorial && (
+      <>
+        <CaseQuestion
+          label={locale === "zh" ? "核心问题" : "Central Question"}
+          question={displayData.centralQuestion}
+          context={displayData.questionContext}
+        />
+        <KeyInsight
+          title={locale === "zh" ? "当前判断" : "The consumer benefit is conditional"}
+          statement={displayData.quickThesis}
+          scopeBoundary={displayData.scopeBoundary}
+          label={locale === "zh" ? "当前判断" : "Current Judgment"}
+        />
+      </>
+    )
+  }
+
+  <CaseReadingNav label={locale === "zh" ? "本案例结构" : "In this case"} />
+  <div class:list={["case-body max-w-[var(--measure-article)]", editorial ? "mt-16" : "mt-12"]}>
+    <Content />
+  </div>
+  <CaseReferences sources={data.sources} locale={locale} />
+</article>

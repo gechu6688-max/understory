@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { defaultLocale, type Locale } from "../lib/siteCopy";
+import { defaultLocale, type Locale } from "../../lib/siteCopy";
 
 type Source = CollectionEntry<"cases">["data"]["sources"][number];
 
@@ -26,15 +26,9 @@ const sourceTypeLabels: Record<Source["sourceType"], string> = {
   interview: "访谈",
   other: "其他",
 };
-
-const formatDate = (date?: Date) =>
-  date
-    ? new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }).format(date)
-    : undefined;
+const formatDate = (date?: Date) => date
+  ? new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en", { year: "numeric", month: "short", day: "numeric" }).format(date)
+  : undefined;
 ---
 
 <section aria-labelledby="references-heading" class="case-references mt-14 max-w-[var(--measure-wide)] border-t border-[var(--color-border)] pt-8">
@@ -47,13 +41,7 @@ const formatDate = (date?: Date) =>
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">{source.publisher} · {locale === "zh" ? sourceTypeLabels[source.sourceType] : source.sourceType}</p>
             <p class="mt-2 font-semibold leading-7 text-[var(--color-text)]">
-              {source.url ? (
-                <a class="underline decoration-[var(--color-border)] underline-offset-4 hover:decoration-[var(--color-accent)]" href={source.url}>
-                  {source.title}
-                </a>
-              ) : (
-                source.title
-              )}
+              {source.url ? <a class="underline decoration-[var(--color-border)] underline-offset-4 hover:decoration-[var(--color-accent)]" href={source.url}>{source.title}</a> : source.title}
             </p>
             <p class="mt-1 text-sm text-[var(--color-text-muted)]">
               {formatDate(source.publicationDate) ? `${publishedLabel} ${formatDate(source.publicationDate)}` : ""}

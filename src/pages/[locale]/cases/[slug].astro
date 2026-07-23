@@ -2,7 +2,7 @@
 import { getCaseDisplayData, getPublishedCases } from "../../../lib/cases";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
-import CaseArticle from "../../../components/CaseArticle.astro";
+import CaseRenderer from "../../../components/case/CaseRenderer.astro";
 import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
 
 export async function getStaticPaths() {
@@ -42,7 +42,7 @@ const alternatePaths = {
   />
   {
     available ? (
-      <CaseArticle caseEntry={caseEntry} locale={locale} />
+      <CaseRenderer caseEntry={caseEntry} locale={locale} />
     ) : (
       <section class="page-shell case-unavailable" aria-labelledby="case-unavailable-heading">
         <div class="page-hero">
