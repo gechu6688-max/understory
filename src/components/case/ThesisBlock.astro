@@ -1,0 +1,24 @@
+---
+interface Props {
+  thesis: string;
+  boundary?: string;
+  label?: string;
+  title?: string;
+}
+
+const {
+  thesis,
+  boundary,
+  label = "Executive Thesis",
+  title = "Current judgment",
+} = Astro.props;
+---
+
+<aside class="case-key-insight" aria-labelledby="case-thesis-title">
+  <p class="case-key-insight__label">{label}</p>
+  <div class="case-key-insight__body">
+    <h2 id="case-thesis-title">{title}</h2>
+    <p class="case-key-insight__statement">{thesis}</p>
+    {boundary && <p class="case-key-insight__scope"><span>Research boundary</span>{boundary}</p>}
+  </div>
+</aside>

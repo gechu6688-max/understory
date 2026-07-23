@@ -3,11 +3,11 @@ import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
 import { getCaseDisplayData } from "../../lib/cases";
 import { defaultLocale, type Locale } from "../../lib/siteCopy";
-import CaseHeader from "./CaseHeader.astro";
-import CaseQuestion from "./CaseQuestion.astro";
+import CaseHero from "./CaseHero.astro";
+import QuestionBlock from "./QuestionBlock.astro";
 import CaseReadingNav from "./CaseReadingNav.astro";
-import CaseReferences from "./CaseReferences.astro";
-import KeyInsight from "./blocks/KeyInsight.astro";
+import ReferenceBlock from "./ReferenceBlock.astro";
+import ThesisBlock from "./ThesisBlock.astro";
 
 interface Props {
   caseEntry: CollectionEntry<"cases">;
@@ -32,21 +32,21 @@ const editorial = data.presentation === "editorial";
     )
   }
 
-  <CaseHeader caseEntry={caseEntry} locale={locale} />
+  <CaseHero caseEntry={caseEntry} locale={locale} />
 
   {
     editorial && (
       <>
-        <CaseQuestion
+        <QuestionBlock
           label={locale === "zh" ? "核心问题" : "Central Question"}
           question={displayData.centralQuestion}
           context={displayData.questionContext}
         />
-        <KeyInsight
-          title={locale === "zh" ? "当前判断" : "The consumer benefit is conditional"}
-          statement={displayData.quickThesis}
-          scopeBoundary={displayData.scopeBoundary}
-          label={locale === "zh" ? "当前判断" : "Current Judgment"}
+        <ThesisBlock
+          title={locale === "zh" ? "当前判断" : "Current judgment"}
+          thesis={displayData.quickThesis}
+          boundary={displayData.scopeBoundary}
+          label={locale === "zh" ? "执行判断" : "Executive Thesis"}
         />
       </>
     )
@@ -61,5 +61,5 @@ const editorial = data.presentation === "editorial";
       <Content />
     </div>
   </div>
-  <CaseReferences sources={data.sources} locale={locale} />
+  <ReferenceBlock sources={data.sources} locale={locale} />
 </article>

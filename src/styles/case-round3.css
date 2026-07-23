@@ -376,6 +376,41 @@
   letter-spacing: 0.08em;
 }
 
+.case-understory-insight {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: 1.5rem;
+  margin-block: clamp(3rem, 5.5vw, 4.5rem);
+  border-block: 2px solid var(--color-text);
+  padding-block: 1.1rem 1.35rem;
+}
+
+.case-understory-insight > p {
+  margin: 0;
+  color: var(--color-bronze);
+  font-size: 0.65rem;
+  font-weight: 720;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.case-understory-insight h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--case-serif);
+  font-size: clamp(1.5rem, 2.7vw, 2.05rem);
+  font-weight: 500;
+  line-height: 1.16;
+}
+
+.case-body .case-understory-insight div > p {
+  max-width: 42rem;
+  margin: 0.75rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
 .case-boundary-map h4 {
   margin: 0.45rem 0 0;
   color: var(--color-text);
@@ -483,7 +518,8 @@
   }
 
   .case-causal-chain > header,
-  .case-boundary-map > header {
+  .case-boundary-map > header,
+  .case-understory-insight {
     grid-template-columns: 1fr;
     gap: 0.45rem;
   }

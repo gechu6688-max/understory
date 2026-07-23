@@ -1,0 +1,21 @@
+---
+interface Props {
+  statement: string;
+  title?: string;
+  label?: string;
+}
+
+const {
+  statement,
+  title = "Understory Insight",
+  label = "Research Insight",
+} = Astro.props;
+---
+
+<aside class="case-understory-insight" aria-label={title}>
+  <p>{label}</p>
+  <div>
+    <h3>{title}</h3>
+    <p>{statement}</p>
+  </div>
+</aside>

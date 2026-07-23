@@ -9,17 +9,23 @@ renderer turns it into a consistent research page.
 ```text
 src/components/case/
 ├── CaseRenderer.astro       # page-level composition
-├── CaseHeader.astro         # archive metadata, title, deck, taxonomy
-├── CaseQuestion.astro       # central research question
+├── CaseHero.astro           # archive identity, title, premise, taxonomy, hero image
+├── QuestionBlock.astro      # central research question
+├── ThesisBlock.astro        # executive thesis and scope boundary
 ├── CaseReadingNav.astro     # generated outline and reading progress
-├── CaseReferences.astro     # structured source list
+├── ReferenceBlock.astro     # structured source list
 └── blocks/
     ├── EvidenceBlock.astro
-    ├── EvidenceHighlight.astro
+    ├── EvidenceMap.astro
+    ├── TimelineBlock.astro
+    ├── MechanismBlock.astro
+    ├── DebateBlock.astro
+    ├── TradeoffBlock.astro
+    ├── BoundaryBlock.astro
+    ├── InsightBlock.astro
     ├── KeyInsight.astro
     ├── OneMoreQuestion.astro
-    ├── Timeline.astro
-    └── TradeoffBlock.astro
+    └── supporting editorial blocks
 ```
 
 Routes only select a case and pass it to `CaseRenderer`. Company-specific logic
