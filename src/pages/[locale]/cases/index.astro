@@ -1,50 +1,25 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ConnectionDiagram from "../../../components/discovery/ConnectionDiagram.astro";
 import { getCaseDisplayData, getDiscoveryCases } from "../../../lib/cases";
 import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
-
-export function getStaticPaths() {
-  return locales.map((locale) => ({ params: { locale } }));
-}
-
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
 const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
 const copy = getSiteCopy(locale);
-const publishedCases = await getDiscoveryCases();
-const cases = locale === "zh" ? publishedCases.filter((caseEntry) => hasCaseLocale(locale, caseEntry.id)) : publishedCases;
-const featured = cases.find((caseEntry) => caseEntry.data.featured) ?? cases[0];
+const allCases = await getDiscoveryCases();
+const cases = locale === "zh" ? allCases.filter((entry) => hasCaseLocale(locale, entry.id)) : allCases;
+const featured = cases.find((entry) => entry.data.featured) ?? cases[0];
+const zh = locale === "zh";
 ---
-
-<BaseLayout title={locale === "zh" ? "案例" : "Cases"} description={copy.pages.cases.description} locale={locale}>
-  <section class="page-shell cases-page" aria-labelledby="cases-heading">
-    <div class="archive-hero">
-      <div>
-        <p class="discovery-kicker">{locale === "zh" ? "案例 / 研究档案" : "Cases / Research Archive"}</p>
-        <h1 id="cases-heading">{locale === "zh" ? "在表面之下的研究。" : "Research beneath the surface."}</h1>
-        <p>{locale === "zh" ? "从问题开始，以证据、机制与有边界的判断继续。" : "Business questions followed through question, evidence, mechanism, and judgement."}</p>
-      </div>
-      <div class="archive-index">
-        <span>{locale === "zh" ? "当前档案" : "Current archive"}</span>
-        <strong>{String(cases.length).padStart(2, "0")}</strong>
-        <small>{locale === "zh" ? "正式公开案例" : "formal public research case"}</small>
-      </div>
-    </div>
+<BaseLayout title={zh ? "案例" : "Cases"} description={copy.pages.cases.description} locale={locale}>
+  <section class="page-shell discovery-round2 cases-v21" aria-labelledby="cases-heading">
+    <header class="compact-archive-intro"><div><p class="discovery-kicker">{zh ? "案例 / 研究档案" : "Cases / Research Archive"}</p><h1 id="cases-heading">{zh ? "研究正在发生。" : "Research in progress."}</h1><p>{zh ? "围绕值得追问的商业问题，连接证据、机制与有边界的判断。" : "Business questions traced through evidence, mechanisms, and bounded judgement."}</p></div><dl><div><dt>{zh ? "正式档案" : "Formal archive"}</dt><dd>{String(cases.length).padStart(2, "0")}</dd></div><div><dt>{zh ? "研究方法" : "Research path"}</dt><dd>{zh ? "问题 → 证据 → 判断" : "Question → Evidence → Judgement"}</dd></div></dl></header>
     {featured && (() => { const item = getCaseDisplayData(featured, locale); return <>
-      <section class="featured-research" aria-labelledby="featured-heading">
-        <figure><img src={featured.data.heroImage} alt={featured.data.heroImageAlt} /><figcaption>{featured.data.heroImageCaption}</figcaption></figure>
-        <div class="featured-research__copy"><p class="discovery-kicker">{locale === "zh" ? "精选研究" : "Featured research"}</p><p class="archive-number">{locale === "zh" ? "案例" : "Case"} {featured.data.caseNumber ?? "001"} · {item.entities[0]}</p><h2 id="featured-heading">{item.title}</h2><div class="central-question"><span>{copy.labels.centralQuestion}</span><p>{item.centralQuestion}</p></div><p>{item.summary}</p><p class="archive-tags">{item.topics.join(" · ")} · {featured.data.readingTimeMinutes ?? 12} {locale === "zh" ? "分钟阅读" : "min read"}</p><a class="editorial-link" href={localizedPath(locale, `/cases/${featured.id}/`)}>{locale === "zh" ? "阅读案例 →" : "Read case →"}</a></div>
-      </section>
-      <section class="archive-questions"><div><p class="discovery-kicker">{locale === "zh" ? "我们正在追问" : "Questions we're following"}</p><h2>{item.centralQuestion}</h2></div><p>{locale === "zh" ? "一个正式案例也可以是一座有意图的档案：让问题、证据与下一步探索保持可见。" : "A one-case archive can still be intentional: keep the question, the evidence, and the next route of inquiry visible."}</p></section>
+      <article class="image-research-feature" aria-labelledby="feature-title"><figure><img src={featured.data.heroImage} alt={featured.data.heroImageAlt} /><figcaption>{featured.data.heroImageCaption}</figcaption></figure><div class="image-research-feature__content"><p class="discovery-kicker">{zh ? "精选研究" : "Featured research"}</p><p class="feature-case-meta">{zh ? "案例" : "Case"} {featured.data.caseNumber ?? "001"} <i></i> {item.entities[0]}</p><h2 id="feature-title">{item.title}</h2><div class="feature-question"><span>{copy.labels.centralQuestion}</span><p>{item.centralQuestion}</p></div><p class="feature-summary">{item.summary}</p><div class="feature-footer"><span>{item.topics.join(" · ")}</span><span>{featured.data.readingTimeMinutes ?? 12} {zh ? "分钟阅读" : "min read"}</span></div><a class="module-link" href={localizedPath(locale, `/cases/${featured.id}/`)}>{zh ? "阅读研究" : "Read research"} <b>→</b></a></div></article>
+      <section class="question-index" aria-labelledby="questions-heading"><div class="section-module-heading"><p class="discovery-kicker">{zh ? "我们正在追问" : "Questions we’re following"}</p><h2 id="questions-heading">{zh ? "从问题进入档案。" : "Enter through the question."}</h2></div><div class="question-index__grid"><article><span>01</span><small>{zh ? "竞争" : "Competition"}</small><p>{zh ? "当重要的竞争约束减弱时，会发生什么变化？" : "What changes when meaningful competitive constraints weaken?"}</p></article><article><span>02</span><small>{zh ? "市场力量" : "Market Power"}</small><p>{zh ? "规模何时会形成他人难以拒绝的空间？" : "When does scale create room others cannot easily resist?"}</p></article></div></section>
     </>})()}
-    <section class="archive-section"><div class="section-heading"><p class="discovery-kicker">{locale === "zh" ? "浏览档案" : "Explore the archive"}</p><p>{locale === "zh" ? "按真实主题进入" : "Enter through the topics already present in the research."}</p></div><div class="archive-topic-links">{[...new Set(cases.flatMap((caseEntry) => getCaseDisplayData(caseEntry, locale).topics))].map((topic) => <a href={localizedPath(locale, `/topics/${topic.toLowerCase().replace(/\s+/g, "-")}/`)}>{topic}</a>)}</div></section>
-    <section class="archive-section archive-section--entries"><div class="section-heading"><p class="discovery-kicker">{locale === "zh" ? "档案" : "The archive"}</p><p>{locale === "zh" ? "随着正式研究增加，这里将形成不同节奏的阅读版面。" : "As research grows, entries will form a varied editorial reading rhythm."}</p></div><ol class="archive-entries">{cases.map((caseEntry) => { const item = getCaseDisplayData(caseEntry, locale); return <li><span>{locale === "zh" ? "案例" : "Case"} {caseEntry.data.caseNumber ?? "—"}</span><h2><a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{item.title}</a></h2><p>{item.centralQuestion}</p><small>{item.entities[0]} · {item.topics.join(" · ")}</small></li>; })}</ol></section>
-    <section class="research-connections"><p class="discovery-kicker">{locale === "zh" ? "研究连接" : "Research connections"}</p><div><span>Amazon</span><i>→</i><a href={localizedPath(locale, "/topics/market-power/")}>{locale === "zh" ? "市场力量" : "Market Power"}</a><i>→</i><a href={localizedPath(locale, "/concepts/pricing-power/")}>{locale === "zh" ? "定价权" : "Pricing Power"}</a></div></section>
-    <section class="discovery-closing"><p>{locale === "zh" ? "每一个答案，都会打开下一个问题。" : "Every answer opens another question."}</p><div><a href={localizedPath(locale, "/topics/")}>{locale === "zh" ? "探索主题 →" : "Explore Topics →"}</a><a href={localizedPath(locale, "/concepts/")}>{locale === "zh" ? "浏览概念 →" : "Browse Concepts →"}</a></div></section>
-    {cases.length === 0 && locale === "zh" && (
-      <section class="library-empty library-empty--editorial library-empty--cases" aria-label="中文案例说明">
-        <p>中文案例还在慢慢整理。等第一篇真正用中文写好的案例完成后，它会出现在这里。</p>
-        <p>现在可以先阅读英文案例库。</p>
-        <a class="cta-link" href={localizedPath("en", "/cases/")}>先看英文案例库 -></a>
-      </section>
-    )}
+    <section class="dark-research-module case-connections" aria-labelledby="connections-heading"><div><p class="discovery-kicker">{zh ? "研究连接" : "Research connections"}</p><h2 id="connections-heading">{zh ? "一个案例，多个观察角度。" : "One case, several ways to see it."}</h2><p>{zh ? "案例、主题与概念不是分类终点，而是继续研究的路径。" : "Cases, topics, and concepts are not endpoints; they are paths for further research."}</p></div><ConnectionDiagram locale={locale} mode="case" /></section>
+    <section class="archive-state"><div><p class="discovery-kicker">{zh ? "当前档案" : "Current archive"}</p><h2>{zh ? "一项正式研究，已在档。" : "One formal research record, in view."}</h2></div>{featured && (() => { const item = getCaseDisplayData(featured, locale); return <a href={localizedPath(locale, `/cases/${featured.id}/`)}><span>{zh ? "案例" : "Case"} {featured.data.caseNumber ?? "001"}</span><strong>{item.title}</strong><p>{item.centralQuestion}</p></a>})()}</section>
+    <section class="discovery-closing discovery-closing--round2"><p>{zh ? "每一个答案，都会打开下一个问题。" : "Every answer opens another question."}</p><div><a href={localizedPath(locale, "/topics/")}>{zh ? "探索主题" : "Explore topics"} →</a><a href={localizedPath(locale, "/concepts/")}>{zh ? "浏览概念" : "Browse concepts"} →</a></div></section>
   </section>
 </BaseLayout>

@@ -1,43 +1,17 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ResearchLandscape from "../../../components/discovery/ResearchLandscape.astro";
+import ResearchSymbol from "../../../components/discovery/ResearchSymbol.astro";
 import { getCaseDisplayData, getDiscoveryCases, getTaxonomyItems } from "../../../lib/cases";
 import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath, topicDescriptions } from "../../../lib/siteCopy";
-import ResearchSymbol from "../../../components/discovery/ResearchSymbol.astro";
 import { discoveryContent } from "../../../lib/discovery";
-
-export function getStaticPaths() {
-  return locales.map((locale) => ({ params: { locale } }));
-}
-
-const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
-const copy = getSiteCopy(locale);
-const publishedCases = await getDiscoveryCases();
-const localizedCases = locale === "zh" ? publishedCases.filter((caseEntry) => hasCaseLocale(locale, caseEntry.id)) : publishedCases;
-const topics = getTaxonomyItems(localizedCases, "topics");
+export function getStaticPaths(){return locales.map((locale)=>({params:{locale}}));}
+const locale=isLocale(Astro.params.locale)?Astro.params.locale:"en"; const copy=getSiteCopy(locale); const zh=locale==="zh";
+const all=await getDiscoveryCases(); const cases=locale==="zh"?all.filter((entry)=>hasCaseLocale(locale,entry.id)):all; const topics=getTaxonomyItems(cases,"topics"); const feature=cases[0];
 ---
-
 <BaseLayout title={copy.pages.topics.eyebrow} description={copy.pages.topics.description} locale={locale}>
-  <section class="page-shell topics-page" aria-labelledby="topics-heading">
-    <div class="landscape-hero">
-      <div><p class="discovery-kicker">{locale === "zh" ? "主题 / 研究地貌" : "Topics / Research Landscape"}</p><h1 id="topics-heading">{locale === "zh" ? "商业世界之下的力量。" : "The forces beneath the business world."}</h1><p>{locale === "zh" ? "主题是 Understory 持续追问的结构、力量与变化。" : "Topics are the forces, structures, and questions Understory keeps following."}</p></div>
-      <div class="research-map" aria-label={locale === "zh" ? "研究地图" : "Research map"}><span></span><span></span><span></span><span></span><i></i><i></i><i></i></div>
-    </div>
-    <section class="landscape-intro"><p class="discovery-kicker">{locale === "zh" ? "研究地貌" : "Topic landscape"}</p><p>{locale === "zh" ? "每个主题不是一个标签，而是一组值得继续往下问的问题。" : "Each topic is not a label, but a set of questions worth taking further."}</p></section>
-    <ol class="topic-landscape">
-      {topics.map((topic) => (
-        <li>
-          <ResearchSymbol kind={topic.slug} label={topic.name} />
-          <div><p class="archive-number">{String(topics.indexOf(topic) + 1).padStart(2, "0")}</p><h2><a href={localizedPath(locale, `/topics/${topic.slug}/`)}>{topic.name}</a></h2><p>{topicDescriptions[locale][topic.name] ?? topicDescriptions.en[topic.name] ?? ""}</p><p class="topic-question">{discoveryContent(locale, topic.name).question}</p><small>{locale === "zh" ? `${topic.cases.length} 个正式案例` : `${topic.cases.length} formal case`}</small></div>
-        </li>
-      ))}
-    </ol>
-    <section class="topic-attached"><p class="discovery-kicker">{locale === "zh" ? "关联研究" : "Research attached to these topics"}</p>{localizedCases.map((caseEntry) => { const item = getCaseDisplayData(caseEntry, locale); return <article><img src={caseEntry.data.heroImage} alt=""/><div><span>{locale === "zh" ? "案例" : "Case"} {caseEntry.data.caseNumber ?? "001"}</span><h2>{item.title}</h2><p>{item.centralQuestion}</p><a class="editorial-link" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{locale === "zh" ? "阅读研究 →" : "Read research →"}</a></div></article>; })}</section>
-    {topics.length === 0 && locale === "zh" && (
-      <section class="library-empty library-empty--editorial library-empty--topics" aria-label="中文主题说明">
-        <p>每一个主题，都会从真正完成的中文案例里慢慢长出来。</p>
-        <p>在那之前，可以先去英文版看看已有的探索领域。</p>
-        <a class="cta-link" href={localizedPath("en", "/topics/")}>先看英文主题 -></a>
-      </section>
-    )}
-  </section>
-</BaseLayout>
+<section class="page-shell discovery-round2 topics-v21" aria-labelledby="topics-heading">
+ <header class="landscape-hero-v21"><div><p class="discovery-kicker">{zh?"主题 / 研究地貌":"Topics / Research Landscape"}</p><h1 id="topics-heading">{zh?"商业世界之下的力量。":"The forces beneath the business world."}</h1><p>{zh?"从真实案例出发，追踪竞争、市场力量与它们之间的关系。":"Follow the forces, structures, and questions that shape a business world."}</p></div><ResearchLandscape locale={locale}/></header>
+ <section class="topic-module-grid" aria-label={zh?"主题模块":"Topic modules"}>{topics.map((topic,index)=><article class:list={["topic-module",`topic-module--${topic.slug}`]}><div class="topic-module__top"><span>{String(index+1).padStart(2,"0")}</span><ResearchSymbol kind={topic.slug} label={topic.name}/></div><h2>{topic.name}</h2><p>{topicDescriptions[locale][topic.name]??topicDescriptions.en[topic.name]}</p><strong>{discoveryContent(locale,topic.name).question}</strong><footer><small>{topic.cases.length} {zh?"项正式案例":"formal case"}</small><a href={localizedPath(locale,`/topics/${topic.slug}/`)}>{zh?"探索":"Explore"} →</a></footer></article>)}</section>
+ {feature && (()=>{const item=getCaseDisplayData(feature,locale);return <section class="attached-research-v21"><figure><img src={feature.data.heroImage} alt={feature.data.heroImageAlt}/></figure><div><p class="discovery-kicker">{zh?"关联研究":"Research attached to the landscape"}</p><span>{zh?"案例":"Case"} {feature.data.caseNumber??"001"}</span><h2>{item.title}</h2><p>{item.centralQuestion}</p><small>{item.topics.join(" · ")} · {item.concepts.join(" · ")}</small><a class="module-link" href={localizedPath(locale,`/cases/${feature.id}/`)}>{zh?"阅读研究":"Read research"} →</a></div></section>})()}
+</section></BaseLayout>

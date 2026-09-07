@@ -1,0 +1,23 @@
+---
+import type { Locale } from "../../lib/siteCopy";
+import { localizedPath } from "../../lib/siteCopy";
+const { locale } = Astro.props as { locale: Locale };
+const zh = locale === "zh";
+---
+<div class="landscape-map" aria-label={zh ? "Understory 研究地貌" : "Understory research landscape"}>
+  <svg viewBox="0 0 760 490" role="img" aria-label={zh ? "案例、主题与概念的研究关系图" : "Research relationships between case, topics, and concepts"}>
+    <g class="landscape-map__routes" aria-hidden="true">
+      <path d="M205 254 C290 154 382 129 478 146" /><path d="M205 254 C308 340 390 358 526 326" />
+      <path d="M478 146 C555 175 589 224 602 276" /><path d="M526 326 C550 312 575 296 602 276" />
+      <path d="M478 146 C470 242 504 290 602 276" />
+    </g>
+    <g class="landscape-map__case"><rect x="78" y="194" width="156" height="120" rx="0"/><text x="102" y="229">CASE 001</text><text x="102" y="267">AMAZON</text><text x="102" y="291">RESEARCH</text></g>
+    <a href={localizedPath(locale, "/topics/competition/")} class="landscape-map__topic landscape-map__topic--competition"><circle cx="478" cy="146" r="72"/><text x="478" y="139">{zh ? "竞争" : "COMPETITION"}</text><text x="478" y="163">{zh ? "主题" : "TOPIC"}</text></a>
+    <a href={localizedPath(locale, "/topics/market-power/")} class="landscape-map__topic landscape-map__topic--power"><circle cx="526" cy="326" r="72"/><text x="526" y="319">{zh ? "市场力量" : "MARKET"}</text><text x="526" y="343">{zh ? "主题" : "POWER"}</text></a>
+    <a href={localizedPath(locale, "/concepts/pricing-power/")} class="landscape-map__lens landscape-map__lens--pricing"><circle cx="602" cy="276" r="36"/><text x="602" y="281">{zh ? "定价" : "PRICE"}</text></a>
+    <a href={localizedPath(locale, "/concepts/competitive-constraint/")} class="landscape-map__lens landscape-map__lens--constraint"><circle cx="678" cy="184" r="32"/><text x="678" y="189">{zh ? "约束" : "LIMIT"}</text></a>
+    <a href={localizedPath(locale, "/concepts/switching-costs/")} class="landscape-map__lens landscape-map__lens--switching"><circle cx="674" cy="376" r="32"/><text x="674" y="381">{zh ? "转换" : "SWITCH"}</text></a>
+    <path class="landscape-map__minor-route" d="M602 276 L678 184M602 276L674 376" aria-hidden="true" />
+  </svg>
+  <div class="landscape-map__legend"><span><i class="is-case"></i>{zh ? "案例" : "Case"}</span><span><i class="is-topic"></i>{zh ? "主题" : "Topic"}</span><span><i class="is-concept"></i>{zh ? "概念" : "Concept"}</span></div>
+</div>
