@@ -1,11 +1,14 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
-import { formatCaseType, formatDate, getCaseDisplayData, getPublishedCases, getTaxonomyItems } from "../../../lib/cases";
-import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
+import { getCaseDisplayData, getDiscoveryCases, getTaxonomyItems } from "../../../lib/cases";
+import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath, topicDescriptions } from "../../../lib/siteCopy";
+import ResearchSymbol from "../../../components/discovery/ResearchSymbol.astro";
+import ConceptDiagram from "../../../components/discovery/ConceptDiagram.astro";
+import { discoveryContent } from "../../../lib/discovery";
 
 export async function getStaticPaths() {
-  const publishedCases = await getPublishedCases();
+  const publishedCases = await getDiscoveryCases();
   const topics = getTaxonomyItems(publishedCases, "topics");
   return locales.flatMap((locale) => topics.map((topic) => ({ params: { locale, slug: topic.slug }, props: { topic } })));
 }
@@ -15,6 +18,9 @@ const copy = getSiteCopy(locale);
 const { topic } = Astro.props;
 const topicCases = locale === "zh" ? topic.cases.filter((caseEntry) => hasCaseLocale(locale, caseEntry.id)) : topic.cases;
 const caseCount = locale === "zh" ? `${topicCases.length} 个公开案例` : topicCases.length === 1 ? "1 public case" : `${topicCases.length} public cases`;
+const detail = discoveryContent(locale, topic.name);
+const relatedConcepts = Array.from(new Set(topicCases.flatMap((entry) => getCaseDisplayData(entry, locale).concepts)));
+const topicNumber = getTaxonomyItems(await getDiscoveryCases(), "topics").findIndex((item) => item.slug === topic.slug) + 1;
 ---
 
 <BaseLayout title={topic.name} description={`Published cases about ${topic.name}.`} locale={locale}>
@@ -27,24 +33,22 @@ const caseCount = locale === "zh" ? `${topicCases.length} 个公开案例` : top
         { label: topic.name },
       ]}
     />
-    <div class="page-hero">
-      <p class="home-eyebrow">{copy.pages.topics.eyebrow}</p>
-      <h1 id="topic-heading">{topic.name}</h1>
-      <p>{caseCount}</p>
+    <div class="taxonomy-identity taxonomy-identity--topic">
+      <div><p class="discovery-kicker">{locale === "zh" ? "主题" : "Topic"} / {String(topicNumber).padStart(2, "0")}</p><h1 id="topic-heading">{topic.name}</h1><p>{detail.framing}</p><small>{caseCount} · {relatedConcepts.length} {locale === "zh" ? "个相关概念" : "related concepts"}</small></div><ResearchSymbol kind={topic.slug} label={topic.name} />
     </div>
-    <ol class="library-list library-list--compact">
+    <section class="understanding"><p class="discovery-kicker">{locale === "zh" ? "理解这个主题" : "Understanding the topic"}</p><p>{topicDescriptions[locale][topic.name] ?? topicDescriptions.en[topic.name]}</p></section>
+    <section class="follow-questions"><p class="discovery-kicker">{locale === "zh" ? "我们正在追问" : "Questions we follow"}</p><ol>{[detail.question, ...detail.signals].map((question, index) => <li><span>{String(index + 1).padStart(2, "0")}</span><p>{question}</p></li>)}</ol></section>
+    <section class="taxonomy-cases"><p class="discovery-kicker">{locale === "zh" ? "这个主题中的研究" : "Cases in this topic"}</p>
       {topicCases.map((caseEntry) => {
         const displayData = getCaseDisplayData(caseEntry, locale);
 
         return (
-          <li>
-            <div class="library-list__meta"><time datetime={caseEntry.data.publishedDate.toISOString()}>{formatDate(caseEntry.data.publishedDate)}</time><span>{formatCaseType(caseEntry.data.caseType, locale)} {copy.labels.case}</span></div>
-            <div class="library-list__body"><h2><a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{displayData.title}</a></h2><p class="library-question">{displayData.centralQuestion}</p></div>
-            <a class="library-read cta-link" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.labels.read}</a>
-          </li>
+          <article><img src={caseEntry.data.heroImage} alt=""/><div><span>{locale === "zh" ? "案例" : "Case"} {caseEntry.data.caseNumber ?? "001"}</span><h2><a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{displayData.title}</a></h2><p>{displayData.centralQuestion}</p></div></article>
         );
       })}
-    </ol>
+    </section>
+    <section class="related-concepts"><p class="discovery-kicker">{locale === "zh" ? "帮助理解的概念" : "Concepts that help explain it"}</p><div>{relatedConcepts.map((concept) => <a href={localizedPath(locale, `/concepts/${concept.toLowerCase().replace(/\s+/g, "-")}/`)}><ConceptDiagram concept={concept} label={concept}/><span>{concept}</span></a>)}</div></section>
+    <section class="discovery-closing"><p>{locale === "zh" ? "继续沿着问题探索。" : "Continue following the question."}</p><div><a href={localizedPath(locale, "/topics/")}>{locale === "zh" ? "所有主题 →" : "All topics →"}</a><a href={localizedPath(locale, "/concepts/")}>{locale === "zh" ? "浏览概念 →" : "Browse concepts →"}</a></div></section>
     {topicCases.length === 0 && locale === "zh" && (
       <p class="library-empty">
         {copy.pages.topics.empty} <a class="cta-link" href={localizedPath("en", `/topics/${topic.slug}/`)}>阅读英文主题 -></a>

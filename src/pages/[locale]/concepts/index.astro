@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { getCaseDisplayData, getPublishedCases, getTaxonomyItems } from "../../../lib/cases";
+import { getDiscoveryCases, getTaxonomyItems } from "../../../lib/cases";
 import { conceptDescriptions, getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
+import ConceptDiagram from "../../../components/discovery/ConceptDiagram.astro";
+import { discoveryContent } from "../../../lib/discovery";
 
 export function getStaticPaths() {
   return locales.map((locale) => ({ params: { locale } }));
@@ -9,30 +11,27 @@ export function getStaticPaths() {
 
 const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
 const copy = getSiteCopy(locale);
-const publishedCases = await getPublishedCases();
+const publishedCases = await getDiscoveryCases();
 const localizedCases = locale === "zh" ? publishedCases.filter((caseEntry) => hasCaseLocale(locale, caseEntry.id)) : publishedCases;
 const concepts = getTaxonomyItems(localizedCases, "concepts");
 ---
 
 <BaseLayout title={copy.pages.concepts.eyebrow} description={copy.pages.concepts.description} locale={locale}>
   <section class="page-shell concepts-page" aria-labelledby="concepts-heading">
-    <div class="page-hero page-hero--index">
-      <p class="home-eyebrow">{copy.pages.concepts.eyebrow}</p>
-      <h1 id="concepts-heading">{copy.pages.concepts.title}</h1>
-      <p>{copy.pages.concepts.description}</p>
+    <div class="fieldguide-hero">
+      <div><p class="discovery-kicker">{locale === "zh" ? "概念 / 观察手册" : "Concepts / Field Guide"}</p><h1 id="concepts-heading">{locale === "zh" ? "看见表面之下的工具。" : "Tools for seeing beneath the surface."}</h1><p>{locale === "zh" ? "当我们知道该看什么，商业故事会变得更清楚。" : "Business stories become clearer when we know what to look for."}</p></div>
+      <div class="fieldguide-hero__diagrams">{concepts.map((concept) => <ConceptDiagram concept={concept.slug} label={concept.name} />)}</div>
     </div>
-    <ol class="concept-index">
+    <section class="fieldguide-index"><p class="discovery-kicker">{locale === "zh" ? "概念条目" : "Field guide entries"}</p>
+    <ol class="concept-entries">
       {concepts.map((concept) => (
         <li>
-          <a href={localizedPath(locale, `/concepts/${concept.slug}/`)}>
-            <span class="concept-index__name">{concept.name}</span>
-            <span class="concept-index__count">{locale === "zh" ? `用于 ${concept.cases.length} 个案例 ->` : `Used in ${concept.cases.length === 1 ? "1 case" : `${concept.cases.length} cases`} ->`}</span>
-          </a>
-          <p>{conceptDescriptions[locale][concept.name] ?? conceptDescriptions.en[concept.name] ?? ""}</p>
-          <small>{concept.cases.map((caseEntry) => getCaseDisplayData(caseEntry, locale).title).join(", ")}</small>
+          <p class="archive-number">{String(concepts.indexOf(concept) + 1).padStart(2, "0")}</p><ConceptDiagram concept={concept.slug} label={concept.name} /><div><h2><a href={localizedPath(locale, `/concepts/${concept.slug}/`)}>{concept.name}</a></h2><p>{conceptDescriptions[locale][concept.name] ?? conceptDescriptions.en[concept.name] ?? ""}</p><p class="concept-question">{discoveryContent(locale, concept.name).question}</p><small>{locale === "zh" ? `用于 ${concept.cases.length} 个正式案例` : `Used in ${concept.cases.length} formal case`}</small></div>
         </li>
       ))}
     </ol>
+    </section>
+    <section class="learn-to-spot"><p class="discovery-kicker">{locale === "zh" ? "如何识别" : "Learn to spot it"}</p><div>{concepts.map((concept) => <article><h2>{concept.name}</h2><ol>{discoveryContent(locale, concept.name).signals.map((signal) => <li>{signal}</li>)}</ol></article>)}</div></section>
     {concepts.length === 0 && locale === "zh" && (
       <section class="library-empty library-empty--editorial library-empty--concepts" aria-label="中文概念说明">
         <p>中文概念索引会随着真实完成的中文案例慢慢长出来。</p>

@@ -1,0 +1,14 @@
+---
+import { discoveryKind } from "../../lib/discovery";
+const { kind: input, label = "" } = Astro.props;
+const kind = discoveryKind(input);
+---
+<svg class="research-symbol" viewBox="0 0 120 120" role="img" aria-label={label}>
+  {kind === "market-power" && <><circle cx="60" cy="60" r="35"/><circle cx="60" cy="60" r="20"/><circle cx="86" cy="38" r="5" class="research-symbol__accent"/></>}
+  {kind === "competition" && <><path d="M18 42h50M52 26l16 16-16 16M102 78H52M68 62 52 78l16 16"/><circle cx="24" cy="42" r="6"/><circle cx="96" cy="78" r="6" class="research-symbol__accent"/></>}
+  {kind === "technology" && <><circle cx="28" cy="38" r="7"/><circle cx="91" cy="28" r="7"/><circle cx="82" cy="89" r="7" class="research-symbol__accent"/><path d="M34 39 84 29M32 44l46 40M88 35l-5 47"/></>}
+  {kind === "strategy" && <><path d="M22 94V24h34M56 24l18 18M56 24 74 6M22 64h48M70 64l18-18M70 64l18 18"/><circle cx="94" cy="46" r="5" class="research-symbol__accent"/><circle cx="94" cy="82" r="5"/></>}
+  {kind === "pricing-power" && <><path d="M22 86h76M28 72h58M35 58h42M43 44h26"/><path d="M60 92V24M48 36l12-12 12 12" class="research-symbol__accent"/></>}
+  {kind === "switching-costs" && <><circle cx="26" cy="60" r="12"/><circle cx="94" cy="60" r="12"/><path d="M38 60h44M58 42l-10 18 10 18M62 42l10 18-10 18"/><path d="M54 34h12" class="research-symbol__accent"/></>}
+  {kind === "competitive-constraint" && <><circle cx="60" cy="60" r="17"/><path d="M18 60h25M77 60h25M60 18v25M60 77v25"/><circle cx="18" cy="60" r="5"/><circle cx="102" cy="60" r="5"/><circle cx="60" cy="18" r="5" class="research-symbol__accent"/><circle cx="60" cy="102" r="5"/></>}
+</svg>

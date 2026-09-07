@@ -1,9 +1,9 @@
 ---
 import LocaleRedirect from "../../components/LocaleRedirect.astro";
-import { getPublishedCases, getTaxonomyItems } from "../../lib/cases";
+import { getDiscoveryCases, getTaxonomyItems } from "../../lib/cases";
 
 export async function getStaticPaths() {
-  const cases = await getPublishedCases();
+  const cases = await getDiscoveryCases();
   return getTaxonomyItems(cases, "concepts").map((concept) => ({
     params: { slug: concept.slug },
     props: { slug: concept.slug },

@@ -24,6 +24,11 @@ export const sortCasesByDate = (cases: CaseEntry[]) =>
 export const getPublishedCases = async () =>
   sortCasesByDate(await getCollection("cases", ({ data }) => data.status === "published"));
 
+// Demonstration fixtures remain addressable for development, but are never a part
+// of the public discovery system.
+export const getDiscoveryCases = async () =>
+  (await getPublishedCases()).filter((caseEntry) => caseEntry.id !== "sample-foundation-case");
+
 export const getPreviewCases = async () =>
   sortCasesByDate(await getCollection("cases", ({ data }) => data.status !== "published"));
 

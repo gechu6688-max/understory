@@ -1,0 +1,5 @@
+---
+import ResearchSymbol from "./ResearchSymbol.astro";
+const { concept, label } = Astro.props;
+---
+<div class="concept-diagram"><ResearchSymbol kind={concept} label={label} /></div>
