@@ -1,0 +1,15 @@
+---
+type Kind = "case" | "topic" | "concept" | "evidence" | "question" | "mechanism" | "connection" | "boundary" | "enter";
+const { kind, label = "" } = Astro.props as { kind: Kind; label?: string };
+---
+<svg class:list={["research-mark", `research-mark--${kind}`]} viewBox="0 0 28 28" role="img" aria-label={label}>
+  {kind === "case" && <><path d="M5 8h14v12H5z"/><path d="M9 4h14v12H9z"/><path d="M13 16h10v7H13z"/></>}
+  {kind === "topic" && <><path d="M5 20c2-8 7-12 17-12"/><path d="M5 20h8"/><circle cx="22" cy="8" r="3"/></>}
+  {kind === "concept" && <><path d="M5 6h15v15H5z"/><path d="M9 10h14v14H9z"/><path d="M13 14h6v6h-6z"/></>}
+  {kind === "evidence" && <><path d="M6 6v16"/><path d="M6 14h9"/><circle cx="19" cy="14" r="3"/></>}
+  {kind === "question" && <><path d="M6 14a8 8 0 0 1 12-6"/><path d="M6 14a8 8 0 0 0 12 6"/><path d="m18 8 3-3"/></>}
+  {kind === "mechanism" && <><path d="M5 20h18"/><path d="M8 20V9h5v11"/><path d="M15 20V5h5v15"/></>}
+  {kind === "connection" && <><path d="M5 9h6v10h6V9h6"/><path d="M11 14h6"/></>}
+  {kind === "boundary" && <><path d="M6 5v18"/><path d="M11 14h5"/><path d="M18 14h4"/></>}
+  {kind === "enter" && <><path d="M5 14h15"/><path d="m15 8 6 6-6 6"/><path d="M5 7v14"/></>}
+</svg>

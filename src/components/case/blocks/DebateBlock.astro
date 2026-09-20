@@ -32,7 +32,7 @@ const {
 } = Astro.props;
 ---
 
-<section class:list={["case-editorial-split", `case-editorial-split--${align}`]} aria-label={title}>
+<section class:list={["case-editorial-split", "case-debate-field", `case-editorial-split--${align}`]} aria-label={title}>
   <div class="case-editorial-split__text">
     <p>{label}</p>
     <h3>{title}</h3>
@@ -51,7 +51,7 @@ const {
         </>
       ) : (
         <>
-          <figcaption>{visualTitle}</figcaption>
+          <figcaption><span>Evidence / Counter-evidence / Interpretation</span>{visualTitle}</figcaption>
           <ul>
             {items.map((item) => (
               <li>

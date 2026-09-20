@@ -4,6 +4,8 @@ interface ChainStep {
   detail?: string;
 }
 
+import ResearchMark from "../../discovery/ResearchMark.astro";
+
 interface Props {
   label?: string;
   title: string;
@@ -21,7 +23,7 @@ const {
 
 <section class="case-causal-chain" aria-label={title}>
   <header>
-    <p>{label}</p>
+    <p><ResearchMark kind="mechanism" />{label}</p>
     <h3>{title}</h3>
   </header>
   <ol>

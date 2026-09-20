@@ -8,8 +8,10 @@ interface Props {
   sourceHref?: string;
   license?: string;
   licenseHref?: string;
-  variant?: "body" | "hero";
+  variant?: "body" | "hero" | "aftermath" | "infrastructure" | "last-mile" | "locker";
 }
+
+import ResearchMark from "../../discovery/ResearchMark.astro";
 
 const {
   src,
@@ -31,7 +33,7 @@ const {
   {
     (label || caption || credit) && (
       <figcaption>
-        <span class="case-editorial-image__label">{label}</span>
+        <span class="case-editorial-image__label"><ResearchMark kind="evidence" />{label}</span>
         {caption && <span class="case-editorial-image__caption">{caption}</span>}
         {
           (credit || license) && (

@@ -4,6 +4,8 @@ interface BoundaryItem {
   detail: string;
 }
 
+import ResearchMark from "../../discovery/ResearchMark.astro";
+
 interface Props {
   label?: string;
   title: string;
@@ -17,9 +19,9 @@ const {
 } = Astro.props;
 ---
 
-<section class="case-boundary-map" aria-label={title}>
+<section class="case-boundary-map case-boundary-map--v4" aria-label={title}>
   <header>
-    <p>{label}</p>
+    <p><ResearchMark kind="boundary" />{label}</p>
     <h3>{title}</h3>
   </header>
   <div>

@@ -1,0 +1,9 @@
+---
+const { concept, locale } = Astro.props as { concept: string; locale: "en" | "zh" };
+const zh = locale === "zh";
+---
+<div class:list={["field-mechanism", `field-mechanism--${concept}`]} aria-label={zh ? "概念机制图" : "Concept mechanism diagram"}>
+  {concept === "competitive-constraint" && <><small>{zh?"约束机制":"Mechanism of discipline"}</small><b class="rival rival--a">{zh?"竞争者 A":"Rival A"}</b><b class="rival rival--b">{zh?"竞争者 B":"Rival B"}</b><b class="rival rival--c">{zh?"竞争者 C":"Rival C"}</b><b class="rival rival--switch">{zh?"可转换性":"Switching"}</b><strong>{zh?"企业":"Firm"}</strong><span>{zh?"价格 / 条款 / 质量":"Price / terms / quality"}</span></>}
+  {concept === "pricing-power" && <><small>{zh?"概念说明，并非经验图表":"Conceptual explanation — not empirical data"}</small><div class="price-axis"><i>{zh?"较少持续空间":"Less room"}</i><span class="price-axis__track"><b></b><b></b><b></b></span><em>{zh?"更多买方在价格变化后仍然留存":"More buyers retained after a price change"}</em><i>{zh?"较大持续空间":"More room"}</i></div><strong>{zh?"更大的持续定价空间":"More room to sustain price"}</strong></>}
+  {concept === "switching-costs" && <><small>{zh?"摩擦场":"Friction field"}</small><b class="switch-origin">{zh?"当前选择":"Current option"}</b><div class="friction-band"><i>{zh?"时间":"Time"}</i><i>{zh?"数据":"Data"}</i><i>{zh?"学习":"Learning"}</i><i>{zh?"关系":"Relationships"}</i><i>{zh?"运营中断":"Operational disruption"}</i></div><b class="switch-destination">{zh?"替代选择":"Alternative"}</b><span>{zh?"离开并不只是点击另一个选项。":"Leaving is more than clicking another option."}</span></>}
+</div>
