@@ -23,7 +23,7 @@
 @media(prefers-reduced-motion:reduce){.topics-r81 *{transition:none!important}}
 
 /* Round 8.1.1 — Open Questions: one primary terrain with attached supports. */
-@media(min-width:761px){.r81-questions{grid-template-columns:4.35fr 7.65fr;gap:.9rem}.r81-questions header{padding-top:1.15rem}.r81-question-terrain{grid-template-rows:14.25rem 11.75rem;padding-top:.65rem}.r81-question--scale{margin-top:-1.65rem;margin-bottom:.8rem}.r81-question--no{margin-top:1.05rem}.r81-question--constraint{margin-top:-.15rem;margin-left:-2.65rem}}
+@media(min-width:761px){.r81-questions{grid-template-columns:4.35fr 7.65fr;gap:.9rem}.r81-questions header{padding-top:1.15rem}.r81-question-terrain{grid-template-rows:14.25rem 11.75rem;padding-top:.65rem}.r81-question--scale{margin-top:-1.65rem;margin-bottom:.8rem}.r81-question--no{margin-top:1.05rem}.r81-question--constraint{margin-top:-.15rem;margin-left:.55rem}}
 @media(max-width:760px){.r81-question-terrain{padding-top:.35rem}.r81-question--scale{margin-top:-.55rem;margin-bottom:.35rem}.r81-question--no{margin-top:.8rem}.r81-question--constraint{margin-top:-.15rem;margin-left:-2rem}}
 
 /* Round 8 — Topics: image-led editorial terrain. */
