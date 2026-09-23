@@ -2522,3 +2522,82 @@
   .concepts-r81 .pricing-path i { transform: rotate(90deg); }
   .concepts-r81 .pricing-path :is(b, strong) { min-height: 3.7rem; }
 }
+
+/* Concepts R8.1 review fixes — close the hero field, remove duplicate labels,
+   and give the relationship cards one stable sequence. */
+.concepts-r81 .concepts-r8__opening figure {
+  grid-column: 1 / 4;
+}
+.concepts-r81 .concept-instrument__mechanism > p {
+  display: none;
+}
+.concepts-r81 .concepts-r8__relationships {
+  grid-template-columns: 2.8fr 9.2fr;
+}
+.concepts-r81 .concepts-r8__path {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: auto auto auto;
+  gap: 0.8rem 1rem;
+}
+.concepts-r81 .concepts-r8__path a {
+  grid-row: 1;
+  min-height: 9rem;
+}
+.concepts-r81 .concepts-r8__path a:nth-of-type(1) { grid-column: 1; }
+.concepts-r81 .concepts-r8__path a:nth-of-type(2) { grid-column: 2; }
+.concepts-r81 .concepts-r8__path a:last-child {
+  grid-column: 3;
+  grid-row: 1;
+}
+.concepts-r81 .concepts-r8__path span,
+.concepts-r81 .concepts-r8__path p {
+  max-width: none;
+  padding: 0.65rem 0.8rem 0.65rem 1.8rem;
+  border-top: 1px solid rgba(247, 244, 238, 0.28);
+  color: var(--cfs);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+.concepts-r81 .concepts-r8__path span {
+  position: relative;
+  grid-column: 1 / 3;
+  grid-row: 2;
+}
+.concepts-r81 .concepts-r8__path p {
+  position: relative;
+  grid-column: 2 / 4;
+  grid-row: 3;
+}
+.concepts-r81 .concepts-r8__path span::before,
+.concepts-r81 .concepts-r8__path p::before {
+  position: absolute;
+  left: 0.45rem;
+  color: var(--co);
+  content: "→";
+}
+
+@media (max-width: 980px) {
+  .concepts-r81 .concepts-r8__relationships {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .concepts-r81 .concepts-r8__opening figure {
+    grid-column: 1;
+  }
+  .concepts-r81 .concepts-r8__path {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .concepts-r81 .concepts-r8__path a:nth-of-type(n),
+  .concepts-r81 .concepts-r8__path a:last-child,
+  .concepts-r81 .concepts-r8__path span,
+  .concepts-r81 .concepts-r8__path p {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .concepts-r81 .concepts-r8__path a {
+    min-height: 0;
+  }
+}
