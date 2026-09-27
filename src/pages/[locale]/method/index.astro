@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { getSiteCopy, isLocale, locales } from "../../../lib/siteCopy";
+import ResearchMark from "../../../components/discovery/ResearchMark.astro";
+import { getSiteCopy, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
 
 export function getStaticPaths() {
   return locales.map((locale) => ({ params: { locale } }));
@@ -8,80 +9,149 @@ export function getStaticPaths() {
 
 const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
 const copy = getSiteCopy(locale);
-const methodSteps = copy.method.steps;
+const zh = locale === "zh";
+
+const responsiveSrc = (src: string) =>
+  `${src.replace(/w=\d+/, "w=720")} 720w, ${src.replace(/w=\d+/, "w=1200")} 1200w, ${src.replace(/w=\d+/, "w=1800")} 1800w`;
+
+const images = {
+  observation: {
+    src: "https://images.unsplash.com/photo-1764083079459-ddb9a615d50e?auto=format&fit=crop&w=1800&q=85",
+    alt: zh ? "顾客在超市货架之间观察和选择商品" : "A shopper observing and choosing between products in a grocery aisle",
+    credit: "Unsplash · Spencer Plouzek · DEaDXCO7ErA",
+  },
+  evidence: {
+    src: "https://images.unsplash.com/photo-1768119997334-bc76e6f60e7d?auto=format&fit=crop&w=1800&q=85",
+    alt: zh ? "带标签的档案抽屉形成可追溯的资料系统" : "Labelled archive drawers forming a traceable system of records",
+    credit: "Unsplash · MIKE STOLL · wKfAiJTgyK8",
+  },
+  mechanism: {
+    src: "https://images.unsplash.com/photo-1778441531349-b0c874287ebc?auto=format&fit=crop&w=1800&q=85",
+    alt: zh ? "港口中的集装箱、列车和卡车共同构成运输系统" : "Containers, trains, and trucks forming a transport system at a port",
+    credit: "Unsplash · Louis Le Pessot · 0dKKJ0f4fQw",
+  },
+  analysis: {
+    src: "https://images.unsplash.com/photo-1771503937551-26097723ff7e?auto=format&fit=crop&w=1800&q=85",
+    alt: zh ? "夜间并列营业的多家街边店铺" : "Several street-level businesses operating side by side at night",
+    credit: "Unsplash · Maksim Zinchenko · 2yAAIbXaqPk",
+  },
+};
+
+const stages = zh
+  ? ["问题", "证据", "机制", "分析", "判断", "另一个问题"]
+  : ["Question", "Evidence", "Mechanism", "Analysis", "Judgment", "Another question"];
+
+const standards = zh
+  ? ["把证据、解释和判断清楚分开。", "让每一类来源承担与它相称的证明责任。", "明确仍然未知、仍有争议或需要更好数据的地方。", "说明什么新证据会削弱或改变当前判断。"]
+  : ["Keep evidence, interpretation, and judgment visibly distinct.", "Give each kind of source only the evidentiary weight it can carry.", "Name what remains unknown, contested, or dependent on better data.", "State what new evidence would weaken or change the present judgment."];
 ---
 
-<BaseLayout title={locale === "zh" ? "方法" : "Method"} description={copy.method.description} locale={locale}>
-  <section class="page-shell method-page method-page--path" aria-labelledby="method-heading">
-    <div class="method-hero">
-      <div>
-        <p class="home-eyebrow">{copy.method.eyebrow}</p>
-        <h1 id="method-heading">
-          {
-            locale === "zh" ? (
-              <>
-                <span>让问题</span>
-                <span>慢慢变清楚</span>
-              </>
-            ) : (
-              copy.method.title
-            )
-          }
-        </h1>
+<BaseLayout title={zh ? "方法" : "Method"} description={copy.method.description} locale={locale}>
+  <article class="page-shell method-r8" aria-labelledby="method-heading">
+    <header class="method-r8__opening">
+      <figure>
+        <img src={images.observation.src} srcset={responsiveSrc(images.observation.src)} sizes="(max-width: 760px) 100vw, 90vw" alt={images.observation.alt} fetchpriority="high" />
+        <figcaption>{zh ? "情境影像 / 观察选择发生的现场" : "Contextual image / observing where choice happens"}<small>{images.observation.credit}</small></figcaption>
+      </figure>
+      <div class="method-r8__opening-copy">
+        <p class="discovery-kicker"><ResearchMark kind="question" />{zh ? "研究过程 / 调查剖面" : "Research process / investigation anatomy"}</p>
+        <h1 id="method-heading">{zh ? "问题如何变成一个有边界的判断。" : "How a question becomes a bounded judgment."}</h1>
+        <p>{zh ? "研究不是一条通往确定答案的流水线，而是一种让证据、机制与不确定性保持可见的推进方式。" : "Research is not a pipeline toward certainty. It is a way to move while keeping evidence, mechanism, and uncertainty visible."}</p>
       </div>
-      <p>{copy.method.description}</p>
-    </div>
+      <aside aria-label={zh ? "研究序列" : "Research sequence"}>
+        <span>{zh ? "调查的推进逻辑" : "The logic of an inquiry"}</span>
+        <ol>{stages.map((stage, index) => <li><b>{String(index + 1).padStart(2, "0")}</b>{stage}</li>)}</ol>
+      </aside>
+    </header>
 
-    <section class="method-panel" aria-labelledby="method-sequence-heading">
-      <div>
-        <p class="home-eyebrow">{copy.method.sequence}</p>
-        <h2 id="method-sequence-heading">
-          {
-            locale === "zh" ? (
-              <>
-                <span>好的结论，</span>
-                <span>不是把问题关上，</span>
-                <span>而是让下一步更清楚。</span>
-              </>
-            ) : (
-              copy.brand.principle
-            )
-          }
-        </h2>
+    <section class="method-r8__question" aria-labelledby="question-heading">
+      <div class="method-r8__observation-note">
+        <p>{zh ? "观察" : "Observation"}</p>
+        <blockquote>{zh ? "选择看起来很多，但真正可行的替代方案可能很少。" : "Choice can look abundant while workable alternatives remain scarce."}</blockquote>
+        <span>{zh ? "观察不是结论。它只是需要被解释的张力。" : "An observation is not a conclusion. It is a tension that needs explaining."}</span>
       </div>
-      <ol class="home-method-list method-path">
-        {methodSteps.map((step, index) => (
-          <li>
-            <details class="method-step" open>
-              <summary>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <div><h3>{step.label}</h3><p>{step.short}</p></div>
-              </summary>
-              <p class="method-step__body">{step.text}</p>
-            </details>
-          </li>
-        ))}
+      <div class="method-r8__question-copy">
+        <p class="method-r8__stage"><b>01</b>{zh ? "问题" : "Question"}</p>
+        <h2 id="question-heading">{zh ? "从模糊的不适，走向可调查的问题。" : "Turn a vague unease into an investigable question."}</h2>
+        <p>{zh ? "先描述发生了什么，再指出哪里与预期不一致，最后把张力收窄为能够被证据检验的问题。" : "Begin by describing what happened, identify where it conflicts with expectation, then narrow that tension into a question evidence can test."}</p>
+        <div class="method-r8__refinement">
+          <span>{zh ? "不是" : "Not"}</span><s>{zh ? "这家公司是不是太强大？" : "Is this company too powerful?"}</s>
+          <span>{zh ? "而是" : "But"}</span><strong>{zh ? "便利何时会变成力量？" : "When does convenience become power?"}</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="method-r8__evidence" aria-labelledby="evidence-heading">
+      <div class="method-r8__evidence-copy">
+        <p class="method-r8__stage"><b>02</b>{zh ? "证据" : "Evidence"}</p>
+        <h2 id="evidence-heading">{zh ? "证据的价值，取决于它能证明什么。" : "Evidence matters in proportion to what it can prove."}</h2>
+        <p>{zh ? "法律诉状、公司披露、数据集和学术论证不是同一种材料。研究首先要建立来源层级，再决定一个主张能走多远。" : "A legal complaint, company filing, dataset, and academic argument are not the same material. Research first establishes a source hierarchy, then decides how far a claim can travel."}</p>
+      </div>
+      <figure>
+        <img src={images.evidence.src} srcset={responsiveSrc(images.evidence.src)} sizes="(max-width: 760px) 100vw, 50vw" alt={images.evidence.alt} loading="lazy" />
+        <figcaption>{zh ? "情境影像 / 建立可追溯的资料结构" : "Contextual image / building a traceable record structure"}<small>{images.evidence.credit}</small></figcaption>
+      </figure>
+      <ol class="method-r8__evidence-layers">
+        <li><b>01</b><strong>{zh ? "来源材料" : "Source material"}</strong><span>{zh ? "谁在什么条件下记录了什么？" : "Who recorded what, and under which conditions?"}</span></li>
+        <li><b>02</b><strong>{zh ? "可支持的主张" : "Claim it can support"}</strong><span>{zh ? "这份材料可以可靠地说明多大的事情？" : "How much can this material reliably establish?"}</span></li>
+        <li><b>03</b><strong>{zh ? "仍属解释的部分" : "What remains interpretation"}</strong><span>{zh ? "哪一步仍依赖推断、比较或更好的数据？" : "Which step still depends on inference, comparison, or better data?"}</span></li>
+      </ol>
+      <details class="method-r8__annotation">
+        <summary><ResearchMark kind="evidence" />{zh ? "查看证据边界" : "Inspect the evidence boundary"}<span aria-hidden="true">+</span></summary>
+        <p>{zh ? "如果材料仍是草稿、指控、不完整记录或依赖进一步验证，就明确标注不确定性，而不是用版式把它包装成定论。" : "If material is draft, alleged, incomplete, or dependent on further verification, name that uncertainty rather than styling it as a settled finding."}</p>
+      </details>
+    </section>
+
+    <section class="method-r8__mechanism" aria-labelledby="mechanism-heading">
+      <header>
+        <p class="method-r8__stage"><b>03</b>{zh ? "机制" : "Mechanism"}</p>
+        <h2 id="mechanism-heading">{zh ? "描述变化不够。还要说明压力如何传递。" : "Describing change is not enough. Trace how pressure travels."}</h2>
+        <p>{zh ? "机制把事实从并列的材料变成一条可以被挑战的因果路径。每一步都必须回答：谁的行动空间发生了变化，为什么？" : "A mechanism turns adjacent facts into a causal path that can be challenged. Each step must answer whose room to act changed, and why."}</p>
+      </header>
+      <figure>
+        <img src={images.mechanism.src} srcset={responsiveSrc(images.mechanism.src)} sizes="(max-width: 760px) 100vw, 48vw" alt={images.mechanism.alt} loading="lazy" />
+        <figcaption>{zh ? "情境影像 / 多个环节如何共同形成行动条件" : "Contextual image / how linked stages shape conditions for action"}<small>{images.mechanism.credit}</small></figcaption>
+      </figure>
+      <div class="method-r8__causal" aria-label={zh ? "机制路径" : "Mechanism path"}>
+        <div><span>{zh ? "力量" : "Force"}</span><strong>{zh ? "可行的替代方案变少" : "Workable alternatives narrow"}</strong></div>
+        <p>{zh ? "减少外部压力" : "reduces outside pressure"}</p>
+        <div><span>{zh ? "反应" : "Response"}</span><strong>{zh ? "离开变得更困难" : "Leaving becomes harder"}</strong></div>
+        <p>{zh ? "改变行为边界" : "changes the boundary of action"}</p>
+        <div><span>{zh ? "结果" : "Outcome"}</span><strong>{zh ? "一方获得更大行动空间" : "One side gains room to act"}</strong></div>
+      </div>
+    </section>
+
+    <section class="method-r8__analysis" aria-labelledby="analysis-heading">
+      <div class="method-r8__analysis-core">
+        <p class="method-r8__stage"><b>04</b>{zh ? "分析" : "Analysis"}</p>
+        <h2 id="analysis-heading">{zh ? "最好的解释，也必须承受压力测试。" : "The strongest explanation must survive pressure testing."}</h2>
+        <p>{zh ? "分析不是把支持与反对排成两张对称卡片。它要主动寻找最强的替代解释、边界条件和可能混淆因果的变化。" : "Analysis is not a symmetrical pair of for-and-against cards. It actively seeks the strongest alternative explanation, boundary condition, and change that could confound causality."}</p>
+      </div>
+      <figure>
+        <img src={images.analysis.src} srcset={responsiveSrc(images.analysis.src)} sizes="(max-width: 760px) 100vw, 45vw" alt={images.analysis.alt} loading="lazy" />
+        <figcaption>{zh ? "情境影像 / 同时存在的其他解释" : "Contextual image / other explanations remain present"}<small>{images.analysis.credit}</small></figcaption>
+      </figure>
+      <ol class="method-r8__tests">
+        <li><b>01</b><div><strong>{zh ? "最强的替代解释是什么？" : "What is the strongest alternative explanation?"}</strong><p>{zh ? "先找一个足以推翻当前机制、而不是方便被击败的版本。" : "Start with a version capable of overturning the mechanism, not one designed to be defeated."}</p></div></li>
+        <li><b>02</b><div><strong>{zh ? "这个解释在哪些条件下成立？" : "Under which conditions does this explanation hold?"}</strong><p>{zh ? "明确时间、市场、比较对象与证据覆盖范围。" : "Name the time, market, comparator, and evidentiary scope."}</p></div></li>
+        <li><b>03</b><div><strong>{zh ? "什么变化会让机制失效？" : "What change would break the mechanism?"}</strong><p>{zh ? "如果没有可证伪的边界，机制就只是一个故事。" : "Without a falsifiable boundary, a mechanism is only a story."}</p></div></li>
       </ol>
     </section>
 
-    <section class="method-notes" aria-labelledby="standards-heading">
-      <h2 id="standards-heading">{copy.method.standards}</h2>
-      <ul>
-        <li>{locale === "zh" ? "尽量把证据、解释和个人判断分清楚。" : "Evidence and interpretation should be visibly different."}</li>
-        <li>{locale === "zh" ? "不同类型的来源不应被当作同一种证据。" : "Legal complaints, company filings, academic arguments, and datasets should not be treated as the same kind of source."}</li>
-        <li>{locale === "zh" ? "如果资料还不够好，就把不确定的地方说出来。" : "Uncertainty is named when claims are still draft, alleged, incomplete, or dependent on better data."}</li>
-        <li>{locale === "zh" ? "每个结论都要留下可以被新证据改变的空间。" : "Each conclusion should include what would weaken or change it."}</li>
-      </ul>
+    <section class="method-r8__judgment" aria-labelledby="judgment-heading">
+      <header><p class="method-r8__stage"><b>05</b>{zh ? "判断" : "Judgment"}</p><h2 id="judgment-heading">{zh ? "判断应当与证据等重。" : "A judgment should weigh no more than its evidence."}</h2></header>
+      <blockquote>{zh ? "好的判断不是最后一句话。它是一份清楚标注条件、边界与可修正空间的当前结论。" : "A good judgment is not the last word. It is a present conclusion with its conditions, boundaries, and room for revision made clear."}</blockquote>
+      <div><p>{zh ? "这意味着结论可以是条件性的、比例适当的，也可以明确承认尚未解决的部分。语气的确信程度应当来自证据，而不是来自排版。" : "That means a conclusion can be conditional, proportionate, and explicit about what remains unresolved. Its confidence should come from evidence, not from presentation."}</p><ul>{standards.map((standard) => <li>{standard}</li>)}</ul></div>
     </section>
-  </section>
-  <script is:inline>
-    const syncMethodDisclosure = () => {
-      const shouldCollapse = window.matchMedia("(max-width: 640px)").matches;
-      document.querySelectorAll(".method-step").forEach((step) => {
-        if (step instanceof HTMLDetailsElement) step.open = !shouldCollapse;
-      });
-    };
-    syncMethodDisclosure();
-    window.matchMedia("(max-width: 640px)").addEventListener("change", syncMethodDisclosure);
-  </script>
+
+    <section class="method-r8__loop" aria-labelledby="loop-heading">
+      <div class="method-r8__loop-path" aria-hidden="true"><span>05</span><i>→</i><span>06</span><i>↻</i><span>01</span></div>
+      <div>
+        <p class="method-r8__stage"><b>06</b>{zh ? "另一个问题" : "Another question"}</p>
+        <h2 id="loop-heading">{zh ? "研究不会把问题关上。它会让下一步更清楚。" : "Research does not close the question. It makes the next one clearer."}</h2>
+        <p>{zh ? "每个有边界的判断都会暴露仍未解释的关系、仍不充分的证据，以及值得继续观察的变化。" : "Every bounded judgment reveals a relationship not yet explained, evidence not yet sufficient, and a change still worth watching."}</p>
+        <a href={`${localizedPath(locale)}#one-more-question`}>{zh ? "继续到另一个问题" : "Continue to one more question"}<span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+  </article>
 </BaseLayout>
