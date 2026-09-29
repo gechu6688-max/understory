@@ -1,172 +1,87 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import ResearchMark from "../../../components/discovery/ResearchMark.astro";
 import { getSiteCopy, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
 
-export function getStaticPaths() {
-  return locales.map((locale) => ({ params: { locale } }));
-}
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
 
 const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
 const copy = getSiteCopy(locale);
 const zh = locale === "zh";
-const responsiveSrc = (src: string) =>
-  `${src.replace(/w=\d+/, "w=720")} 720w, ${src.replace(/w=\d+/, "w=1200")} 1200w, ${src.replace(/w=\d+/, "w=1800")} 1800w`;
+const responsiveSrc = (src: string) => `${src.replace(/w=\d+/, "w=720")} 720w, ${src.replace(/w=\d+/, "w=1200")} 1200w, ${src.replace(/w=\d+/, "w=1800")} 1800w`;
 
 const images = {
-  opening: {
-    src: "https://images.unsplash.com/photo-1764083079459-ddb9a615d50e?auto=format&fit=crop&w=1800&q=85",
-    alt: zh ? "顾客在超市货架之间观察商品与选择" : "A shopper observing products and choices in a grocery aisle",
-    credit: "Unsplash · Spencer Plouzek · DEaDXCO7ErA",
-  },
-  evidence: {
-    src: "https://images.unsplash.com/photo-1726137570589-4461351d1180?auto=format&fit=crop&w=1800&q=85",
-    alt: zh ? "零售柜台上正在发生的一次支付交易" : "A payment transaction taking place at a retail counter",
-    credit: "Unsplash · SumUp · Yv6OkD0wyA4",
-  },
-  mechanism: {
-    src: "https://images.unsplash.com/photo-1778441531349-b0c874287ebc?auto=format&fit=crop&w=1800&q=85",
-    alt: zh ? "港口中的列车、集装箱与卡车形成相互连接的运输系统" : "Trains, containers, and trucks forming a linked transport system at a port",
-    credit: "Unsplash · Louis Le Pessot · 0dKKJ0f4fQw",
-  },
-  analysis: {
-    src: "https://images.unsplash.com/photo-1768424096914-df76c8aa8304?auto=format&fit=crop&w=1800&q=85",
-    alt: zh ? "加油站价格牌上并列显示多种燃料价格" : "Several fuel prices displayed together on a station price board",
-    credit: "Unsplash · Vladislav Klapin · DykYMZLzZ8Y",
-  },
+  opening: { src: "https://images.unsplash.com/photo-1764083079459-ddb9a615d50e?auto=format&fit=crop&w=1800&q=85", alt: zh ? "顾客在超市货架之间观察商品与选择" : "A shopper observing products and choices in a grocery aisle", credit: "Unsplash · Spencer Plouzek · DEaDXCO7ErA" },
+  question: { src: "https://images.unsplash.com/photo-1726137570589-4461351d1180?auto=format&fit=crop&w=1200&q=85", alt: zh ? "顾客在零售货架前作出选择" : "A shopper making a choice at a retail shelf", credit: "Unsplash · SumUp · Yv6OkD0wyA4" },
+  evidence: { src: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=85", alt: zh ? "桌面上的记录、计算工具与财务材料" : "Records, calculation tools, and financial material on a desk", credit: "Unsplash · Scott Graham" },
+  mechanism: { src: "https://images.unsplash.com/photo-1778441531349-b0c874287ebc?auto=format&fit=crop&w=1800&q=85", alt: zh ? "港口中的列车、集装箱与卡车形成相互连接的运输系统" : "Trains, containers, and trucks forming a linked transport system at a port", credit: "Unsplash · Louis Le Pessot · 0dKKJ0f4fQw" },
+  analysis: { src: "https://images.unsplash.com/photo-1768424096914-df76c8aa8304?auto=format&fit=crop&w=1200&q=85", alt: zh ? "价格信息透过玻璃与城市环境并置" : "Price information seen against a layered urban setting", credit: "Unsplash · Vladislav Klapin · DykYMZLzZ8Y" },
+  judgment: { src: "https://images.unsplash.com/photo-1589994965851-a8f479c573a9?auto=format&fit=crop&w=1400&q=85", alt: zh ? "文件旁的一架天平" : "A balance scale beside a stack of documents", credit: "Unsplash · Tingey Injury Law Firm" },
+  another: { src: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=85", alt: zh ? "暖光下正在书写的研究笔记" : "Research notes being written in warm light", credit: "Unsplash · Aaron Burden" },
 };
 
-const stages = zh
-  ? ["问题", "证据", "机制", "分析", "判断", "另一个问题"]
-  : ["Question", "Evidence", "Mechanism", "Analysis", "Judgment", "Another question"];
-
-const evidenceStates = zh
-  ? [
-      { label: "来源材料", title: "我们实际观察到了什么？", text: "一项交易、公开记录或可比较的数据，在特定条件下留下痕迹。" },
-      { label: "可支持的主张", title: "这份材料能可靠说明什么？", text: "主张的范围必须与来源的质量、覆盖范围和比较条件相称。" },
-      { label: "仍属解释", title: "哪一步仍依赖推断？", text: "原因、机制与外推仍可能需要更多比较、更好的数据或替代解释。" },
-    ]
-  : [
-      { label: "Source material", title: "What did we actually observe?", text: "A transaction, public record, or comparable dataset leaves a trace under specific conditions." },
-      { label: "Supported claim", title: "What can this material reliably establish?", text: "The claim must remain proportionate to source quality, coverage, and conditions of comparison." },
-      { label: "Remaining interpretation", title: "Which step still depends on inference?", text: "Cause, mechanism, and extrapolation may still require comparison, better data, or an alternative explanation." },
-    ];
-
-const judgmentStates = zh
-  ? [
-      ["我们可以说", "当前材料支持一个有条件、范围明确的判断。"],
-      ["成立条件", "来源、比较对象与机制路径必须继续成立。"],
-      ["仍不确定", "因果强度、边界与未观察到的替代解释。"],
-      ["会改变判断", "更好的反例、不同的比较结果或机制失效的证据。"],
-    ]
-  : [
-      ["What we can say", "The present material supports a conditional, bounded judgment."],
-      ["Under what conditions", "The sources, comparison, and proposed mechanism must continue to hold."],
-      ["What remains uncertain", "Causal strength, boundaries, and alternatives not yet observed."],
-      ["What would change it", "A stronger counterexample, a different comparison, or evidence that breaks the mechanism."],
-    ];
+const stages = zh ? ["问题", "证据", "机制", "分析", "判断", "另一个问题"] : ["Question", "Evidence", "Mechanism", "Analysis", "Judgment", "Another question"];
+const evidenceSteps = zh ? [["来源材料", "交易数据、公开记录与可比较研究。"], ["可支持的主张", "消费者在许多市场拥有更多选择。"], ["仍属解释", "这种变化为何发生、又通向什么，仍需进一步推理。"]] : [["Source material", "Transaction data, public records, and comparable studies."], ["Supported claim", "Choice has increased in many consumer markets."], ["Remaining interpretation", "Why this change occurs, and what it leads to, still requires further reasoning."]];
+const mechanismSteps = zh ? [["进入点", "什么触发了变化？"], ["传导", "它如何穿过系统？"], ["结果", "什么行为或结构发生改变？"]] : [["Entry point", "What triggers the change?"], ["Transmission", "How does it spread through the system?"], ["Outcome", "What behavior or structure changes?"]];
+const analysisSteps = zh ? [["替代解释", "需求、成本或时点能否造成同一模式？"], ["边界条件", "它在哪些市场、时期或条件下成立？"], ["反证", "什么新结果会推翻这条机制？"]] : [["Alternative explanation", "Could demand, cost, or timing produce the same pattern?"], ["Boundary condition", "Under which markets, periods, or conditions does it hold?"], ["Counterevidence", "What new result would break the mechanism?"]];
+const judgmentSteps = zh ? [["我们可以说", "当前证据支持一个范围明确的主张。"], ["成立条件", "它只在特定市场与时期成立。"], ["仍不确定", "因果强度与长期影响仍不清楚。"], ["会改变判断", "更强的反例或新数据可能改变结论。"]] : [["What we can say", "The evidence supports a limited claim."], ["Under what conditions", "It holds in specific markets and time periods."], ["What remains uncertain", "Causal strength and long-term effects are still unclear."], ["What would change it", "A stronger counterexample or new data could alter the judgment."]];
 ---
 
 <BaseLayout title={zh ? "方法" : "Method"} description={copy.method.description} locale={locale}>
-  <article class="page-shell method-r81" aria-labelledby="method-heading">
-    <header class="method-r81__opening">
-      <figure>
-        <img src={images.opening.src} srcset={responsiveSrc(images.opening.src)} sizes="(max-width: 760px) 100vw, 62vw" alt={images.opening.alt} fetchpriority="high" />
-        <figcaption>{zh ? "情境影像 / 观察选择如何发生" : "Contextual image / observing how choice happens"}<small>{images.opening.credit}</small></figcaption>
+  <article class="page-shell method-r82" aria-labelledby="method-heading">
+    <header class="method-r82__opening">
+      <figure class="method-r82__opening-image">
+        <img src={images.opening.src} srcset={responsiveSrc(images.opening.src)} sizes="(max-width: 760px) 100vw, 50vw" alt={images.opening.alt} fetchpriority="high" />
+        <figcaption>{images.opening.credit}</figcaption>
       </figure>
-      <div class="method-r81__opening-copy">
-        <p class="method-r81__kicker"><ResearchMark kind="question" />{zh ? "研究过程 / 调查剖面" : "Research process / investigation anatomy"}</p>
+      <div class="method-r82__opening-copy">
+        <p class="method-r82__eyebrow">{zh ? "研究过程 / 调查剖面" : "Research process / investigation anatomy"}</p>
         <h1 id="method-heading">{zh ? "问题如何变成一个有边界的判断。" : "How a question becomes a bounded judgment."}</h1>
         <p>{zh ? "研究不是一条通往确定答案的流水线。它让观察、证据、机制与不确定性在推进中保持可见。" : "Research is not a pipeline toward certainty. It keeps observation, evidence, mechanism, and uncertainty visible as the inquiry moves."}</p>
+        <aside>{zh ? "更清楚地看，让熟悉的场景变成更精确的问题。" : "A closer look turns a familiar scene into a more precise question."}</aside>
       </div>
-      <ol class="method-r81__index" aria-label={zh ? "调查推进逻辑" : "The logic of an inquiry"}>
-        {stages.map((stage, index) => <li><b>{String(index + 1).padStart(2, "0")}</b><span>{stage}</span></li>)}
-      </ol>
+      <ol class="method-r82__index" aria-label={zh ? "调查推进逻辑" : "The logic of an inquiry"}>{stages.map((stage, index) => <li><b>{String(index + 1).padStart(2, "0")}</b><span>{stage}</span></li>)}</ol>
     </header>
 
-    <section class="method-r81__question" aria-labelledby="question-heading">
-      <header>
-        <p class="method-r81__stage"><b>01</b>{zh ? "问题" : "Question"}</p>
-        <h2 id="question-heading">{zh ? "观察如何变成一个可调查的问题？" : "How does an observation become an investigable question?"}</h2>
-      </header>
-      <div class="method-r81__question-transform">
-        <div><span>{zh ? "观察" : "Observation"}</span><strong>{zh ? "选择看起来很多" : "Choice looks abundant"}</strong><p>{zh ? "先描述可以看见的情境，不把它提前写成结论。" : "Describe the visible situation before turning it into a conclusion."}</p></div>
-        <div><span>{zh ? "张力" : "Tension"}</span><strong>{zh ? "真正可行的替代方案可能很少" : "Workable alternatives may remain scarce"}</strong><p>{zh ? "指出现实与预期之间需要解释的差距。" : "Name the gap between what is visible and what was expected."}</p></div>
-        <div class="method-r81__question-result"><span>{zh ? "收窄" : "Refine"}</span><s>{zh ? "这家公司是不是太强大？" : "Is this company too powerful?"}</s><strong>{zh ? "便利何时会变成力量？" : "When does convenience become power?"}</strong></div>
+    <section class="method-r82__question method-r82__section" aria-labelledby="question-heading">
+      <div class="method-r82__question-main">
+        <header><p class="method-r82__stage"><b>01</b>{zh ? "问题" : "Question"}</p><h2 id="question-heading">{zh ? "从一个熟悉的观察，到一个更尖锐的问题。" : "From a familiar observation to a sharper question."}</h2></header>
+        <p class="method-r82__intro">{zh ? "我们从看得见的事物开始——一种行为、一个决定或一种模式——再把它转化成可以调查的问题，而不是一句已经听起来像答案的话。" : "We start with something visible — a behavior, a decision, or a pattern — and turn it into a question that can be investigated, rather than a statement that sounds already resolved."}</p>
+        <div class="method-r82__question-shift"><div><span>{zh ? "示例观察" : "Example observation"}</span><p>{zh ? "消费者拥有比以往更多的选择。" : "Consumers have more choices than ever before."}</p></div><i aria-hidden="true">→</i><div><span>{zh ? "可调查的问题" : "Investigable question"}</span><strong>{zh ? "更多选择如何影响消费者行为与市场力量？" : "How does greater choice affect consumer behavior and market power?"}</strong></div></div>
       </div>
+      <figure class="method-r82__question-image"><img src={images.question.src} srcset={responsiveSrc(images.question.src)} sizes="(max-width: 760px) 100vw, 25vw" alt={images.question.alt} loading="lazy" /><figcaption>{images.question.credit}</figcaption></figure>
+      <p class="method-r82__margin-note">{zh ? "常见的场景，并不等于已经清楚的问题。" : "A common scene, but the question is not yet clear."}</p>
     </section>
 
-    <div class="method-r81__handoff method-r81__handoff--evidence" aria-label={zh ? "问题向证据的交接" : "Question to evidence handoff"}>
-      <p>{zh ? "问题提出了一个证据需求" : "The question creates an evidence requirement"}</p>
-      <strong>{zh ? "要回答它，我们必须知道什么？" : "What would we need to know to answer it?"}</strong>
-      <span aria-hidden="true">02</span>
-    </div>
-
-    <section class="method-r81__evidence" aria-labelledby="evidence-heading">
-      <header>
-        <p class="method-r81__stage"><b>02</b>{zh ? "证据" : "Evidence"}</p>
-        <h2 id="evidence-heading">{zh ? "让一项观察穿过证据边界。" : "Move an observation through its evidence boundary."}</h2>
-        <p>{zh ? "法律诉状、公司披露、数据集和学术论证不是同一种材料。研究要让主张在来源能够承受的地方停下。" : "A legal complaint, company filing, dataset, and academic argument are not the same material. A claim must stop where its source can no longer carry it."}</p>
-      </header>
-      <div class="method-r81__evidence-workbench">
-        <figure>
-          <img src={images.evidence.src} srcset={responsiveSrc(images.evidence.src)} sizes="(max-width: 760px) 100vw, 42vw" alt={images.evidence.alt} loading="lazy" />
-          <figcaption>{zh ? "情境影像 / 一项可观察的交易" : "Contextual image / an observable transaction"}<small>{images.evidence.credit}</small></figcaption>
-        </figure>
-        <ol>
-          {evidenceStates.map((state, index) => <li class:list={{ "method-r81__evidence-stop": index === 2 }}><b>{String(index + 1).padStart(2, "0")}</b><span>{state.label}</span><strong>{state.title}</strong><p>{state.text}</p>{index === 2 && <details><summary><ResearchMark kind="boundary" />{zh ? "证据在这里必须停下" : "The claim must stop here"}<i aria-hidden="true">+</i></summary><p>{zh ? "如果材料仍是草稿、指控、不完整记录或依赖进一步验证，就明确标注不确定性，而不是把它呈现为定论。" : "If material is draft, alleged, incomplete, or dependent on further verification, name that uncertainty rather than presenting it as settled."}</p></details>}</li>)}
-        </ol>
+    <section class="method-r82__evidence method-r82__section" aria-labelledby="evidence-heading">
+      <div class="method-r82__evidence-field">
+        <header><p class="method-r82__stage"><b>02</b>{zh ? "证据" : "Evidence"}</p><h2 id="evidence-heading">{zh ? "让问题穿过它的证据边界。" : "Move the question through its evidence boundary."}</h2><p>{zh ? "我们收集并检视来源材料，辨认它真正能够支持什么。证据缩小了我们可以说的范围，也显示解释从哪里开始。" : "We collect and examine source material, and identify what it can actually establish. Evidence narrows what we can say, and also shows where interpretation begins."}</p></header>
+        <ol class="method-r82__sequence method-r82__sequence--evidence">{evidenceSteps.map((step, index) => <li><b>{String(index + 1).padStart(2, "0")}</b><span>{step[0]}</span><p>{step[1]}</p></li>)}</ol>
       </div>
-      <footer class="method-r81__thread"><span>{zh ? "持续的问题" : "Running question"}</span><strong>{zh ? "我们观察到的模式，可能通过什么关系产生？" : "What relationship could produce the pattern we observe?"}</strong></footer>
+      <figure class="method-r82__evidence-image"><img src={images.evidence.src} srcset={responsiveSrc(images.evidence.src)} sizes="(max-width: 760px) 100vw, 28vw" alt={images.evidence.alt} loading="lazy" /><figcaption>{zh ? "记录、账目与日常痕迹，只揭示故事的一部分。" : "Records, accounts, and everyday traces reveal part of the story."}<small>{images.evidence.credit}</small></figcaption></figure>
     </section>
 
-    <div class="method-r81__handoff method-r81__handoff--mechanism"><p>{zh ? "证据还不是解释" : "Evidence is not yet an explanation"}</p><strong>{zh ? "现在追踪压力如何传递。" : "Now trace how pressure travels."}</strong><span aria-hidden="true">03</span></div>
-
-    <section class="method-r81__mechanism" aria-labelledby="mechanism-heading">
-      <figure>
-        <img src={images.mechanism.src} srcset={responsiveSrc(images.mechanism.src)} sizes="100vw" alt={images.mechanism.alt} loading="lazy" />
-        <div class="method-r81__mechanism-heading">
-          <p class="method-r81__stage"><b>03</b>{zh ? "机制" : "Mechanism"}</p>
-          <h2 id="mechanism-heading">{zh ? "压力从哪里进入，行为在哪里改变？" : "Where does pressure enter, and where does behavior change?"}</h2>
-          <p>{zh ? "机制把并列事实变成一条可以被挑战的关系。图像中的连接不是证据，而是帮助读者看见：系统结果取决于环节如何相互制约。" : "A mechanism turns adjacent facts into a relationship that can be challenged. The linked system is contextual, helping the reader see that outcomes depend on how stages constrain one another."}</p>
-        </div>
-        <ol class="method-r81__mechanism-field" aria-label={zh ? "机制关系" : "Mechanism relationship"}>
-          <li><span>{zh ? "力量进入" : "Pressure enters"}</span><strong>{zh ? "可行替代方案变少" : "Workable alternatives narrow"}</strong><p>{zh ? "外部约束减弱" : "outside constraint weakens"}</p></li>
-          <li><span>{zh ? "行为改变" : "Behavior changes"}</span><strong>{zh ? "离开变得更困难" : "Leaving becomes harder"}</strong><p>{zh ? "反应范围收窄" : "the range of response narrows"}</p></li>
-          <li><span>{zh ? "行动空间" : "Room to act"}</span><strong>{zh ? "一方可持续改变条件" : "One side can sustain changed terms"}</strong><p>{zh ? "结果必须再次被证据检验" : "the outcome must be tested again"}</p></li>
-        </ol>
-        <figcaption>{zh ? "情境影像 / 相互连接的环节如何塑造系统结果" : "Contextual image / how linked stages shape a system outcome"}<small>{images.mechanism.credit}</small></figcaption>
-      </figure>
+    <section class="method-r82__mechanism method-r82__section" aria-labelledby="mechanism-heading">
+      <img src={images.mechanism.src} srcset={responsiveSrc(images.mechanism.src)} sizes="100vw" alt={images.mechanism.alt} loading="lazy" />
+      <div class="method-r82__mechanism-copy"><header><p class="method-r82__stage"><b>03</b>{zh ? "机制" : "Mechanism"}</p><h2 id="mechanism-heading">{zh ? "追踪压力如何传递。" : "Trace how pressure travels."}</h2></header><p>{zh ? "机制把相邻事实连接成一种可以被挑战的关系。它帮助我们看见：系统的一部分如何影响另一部分，以及压力究竟从哪里进入。" : "A mechanism links adjacent facts into a relationship that can be challenged. It helps us see how one part of the system influences another, and where the pressure actually enters."}</p><ol class="method-r82__sequence method-r82__sequence--mechanism">{mechanismSteps.map((step, index) => <li><b>{String(index + 1).padStart(2, "0")}</b><span>{step[0]}</span><p>{step[1]}</p></li>)}</ol><aside>{zh ? "个体决定会连接到更大的结构。" : "Individual decisions connect to larger structures."}</aside></div>
+      <small class="method-r82__image-credit">{images.mechanism.credit}</small>
     </section>
 
-    <div class="method-r81__handoff method-r81__handoff--analysis"><p>{zh ? "一条看似合理的机制仍只是工作假设" : "A plausible mechanism is still a working hypothesis"}</p><strong>{zh ? "它能承受最强的替代解释吗？" : "Can it survive the strongest alternative explanation?"}</strong><span aria-hidden="true">04</span></div>
-
-    <section class="method-r81__analysis" aria-labelledby="analysis-heading">
-      <figure>
-        <img src={images.analysis.src} srcset={responsiveSrc(images.analysis.src)} sizes="(max-width: 760px) 100vw, 45vw" alt={images.analysis.alt} loading="lazy" />
-        <figcaption>{zh ? "情境影像 / 可见的价格差异仍需要解释" : "Contextual image / visible price differences still require explanation"}<small>{images.analysis.credit}</small></figcaption>
-      </figure>
-      <div class="method-r81__analysis-work">
-        <header><p class="method-r81__stage"><b>04</b>{zh ? "分析" : "Analysis"}</p><h2 id="analysis-heading">{zh ? "让工作假设承受反向压力。" : "Put the working hypothesis under counter-pressure."}</h2><p>{zh ? "可见差异本身不会告诉我们原因。分析逐步收窄解释，直到它的边界与脆弱处变得清楚。" : "A visible difference does not explain its cause. Analysis narrows an explanation until its boundaries and weak points become clear."}</p></header>
-        <div class="method-r81__hypothesis"><span>{zh ? "工作假设" : "Working hypothesis"}</span><strong>{zh ? "便利减少了外部约束，扩大了一方改变条件的空间。" : "Convenience weakens outside constraint and expands one side’s room to change terms."}</strong></div>
-        <ol>
-          <li><b>01</b><div><span>{zh ? "替代解释" : "Alternative explanation"}</span><strong>{zh ? "同一观察是否可能由需求、成本或时点变化造成？" : "Could demand, cost, or timing produce the same observation?"}</strong></div></li>
-          <li><b>02</b><div><span>{zh ? "边界条件" : "Boundary condition"}</span><strong>{zh ? "这个解释在哪些市场、时间与比较条件下成立？" : "Under which market, time, and comparison conditions does it hold?"}</strong></div></li>
-          <li><b>03</b><div><span>{zh ? "削弱它的证据" : "Evidence that would weaken it"}</span><strong>{zh ? "什么新结果会切断这条机制路径？" : "What new result would break the proposed mechanism?"}</strong></div></li>
-        </ol>
-      </div>
+    <section class="method-r82__analysis method-r82__section" aria-labelledby="analysis-heading">
+      <div class="method-r82__analysis-field"><header><p class="method-r82__stage"><b>04</b>{zh ? "分析" : "Analysis"}</p><h2 id="analysis-heading">{zh ? "让主张承受压力测试。" : "Test the claim under pressure."}</h2><p>{zh ? "我们检视替代解释、边界条件与反证，观察所提出的机制是否仍然成立。" : "We examine alternative explanations, boundary conditions, and counterevidence, and see whether the proposed mechanism can still hold."}</p></header><ol class="method-r82__sequence method-r82__sequence--analysis">{analysisSteps.map((step, index) => <li><b>{String(index + 1).padStart(2, "0")}</b><span>{step[0]}</span><p>{step[1]}</p></li>)}</ol></div>
+      <figure class="method-r82__analysis-image"><img src={images.analysis.src} srcset={responsiveSrc(images.analysis.src)} sizes="(max-width: 760px) 100vw, 27vw" alt={images.analysis.alt} loading="lazy" /><strong aria-hidden="true">{zh ? "相关 ≠ 因果？" : "Correlation ≠ Causation?"}</strong><figcaption>{zh ? "相互竞争的解释，让论证保持开放。" : "Competing explanations keep the argument open."}<small>{images.analysis.credit}</small></figcaption></figure>
     </section>
 
-    <div class="method-r81__handoff method-r81__handoff--judgment"><p>{zh ? "分析扩展复杂性；判断必须压缩它" : "Analysis expands complexity; judgment must compress it"}</p><strong>{zh ? "我们现在能负责任地说什么？" : "What can we responsibly say now?"}</strong><span aria-hidden="true">05</span></div>
-
-    <section class="method-r81__judgment" aria-labelledby="judgment-heading">
-      <header><p class="method-r81__stage"><b>05</b>{zh ? "判断" : "Judgment"}</p><h2 id="judgment-heading">{zh ? "判断应当与证据等重。" : "A judgment should weigh no more than its evidence."}</h2><p>{zh ? "好的判断不是最后一句话，而是一份明确标注条件、边界与可修正空间的当前结论。" : "A good judgment is not the last word. It is a present conclusion with its conditions, boundaries, and room for revision made visible."}</p></header>
-      <ol>{judgmentStates.map((state, index) => <li><b>{String(index + 1).padStart(2, "0")}</b><span>{state[0]}</span><strong>{state[1]}</strong></li>)}</ol>
+    <section class="method-r82__judgment method-r82__section" aria-labelledby="judgment-heading">
+      <figure class="method-r82__judgment-image"><img src={images.judgment.src} srcset={responsiveSrc(images.judgment.src)} sizes="(max-width: 760px) 100vw, 34vw" alt={images.judgment.alt} loading="lazy" /><figcaption>{images.judgment.credit}</figcaption></figure>
+      <header><p class="method-r82__stage"><b>05</b>{zh ? "判断" : "Judgment"}</p><h2 id="judgment-heading">{zh ? "得出一个不超出证据的结论。" : "Reach a conclusion that stays within the evidence."}</h2></header>
+      <div class="method-r82__judgment-boundary"><p>{zh ? "好的判断不会终结问题。它会说明什么得到了支持、在什么条件下成立，以及什么仍然不确定。" : "A good judgment does not close the question. It states what can be supported, under which conditions, and what remains uncertain."}</p><ol>{judgmentSteps.map((step) => <li><span>{step[0]}</span><p>{step[1]}</p></li>)}</ol></div>
     </section>
 
-    <section class="method-r81__another" aria-labelledby="another-heading">
-      <div class="method-r81__uncertainty"><span>{zh ? "判断之后仍然留下" : "What the judgment leaves behind"}</span><p>{zh ? "仍未解释的关系、仍不充分的证据，以及值得继续观察的变化。" : "A relationship not yet explained, evidence not yet sufficient, and a change still worth watching."}</p></div>
-      <div><p class="method-r81__stage"><b>06</b>{zh ? "另一个问题" : "Another question"}</p><h2 id="another-heading">{zh ? "剩余的不确定性，会提出下一个问题。" : "The remaining uncertainty asks the next question."}</h2><a href={`${localizedPath(locale)}#one-more-question`}>{zh ? "继续到另一个问题" : "Continue to one more question"}<span aria-hidden="true">↗</span></a></div>
+    <section class="method-r82__another method-r82__section" aria-labelledby="another-heading">
+      <header><p class="method-r82__stage"><b>06</b>{zh ? "另一个问题" : "Another question"}</p><h2 id="another-heading">{zh ? "剩余的不确定性，会提出下一个问题。" : "The remaining uncertainty asks the next question."}</h2></header>
+      <div class="method-r82__another-copy"><p>{zh ? "研究不会以最终答案结束。它会留下一个更精确的问题，等待进一步调查。" : "Research does not end with a final answer. It leaves a more precise question for further investigation."}</p><a href={`${localizedPath(locale)}#one-more-question`}>{zh ? "继续到另一个问题" : "Continue to one more question"}<span aria-hidden="true">→</span></a></div>
+      <figure><img src={images.another.src} srcset={responsiveSrc(images.another.src)} sizes="(max-width: 760px) 100vw, 25vw" alt={images.another.alt} loading="lazy" /><figcaption>{images.another.credit}</figcaption></figure>
+      <p class="method-r82__margin-note">{zh ? "结论是一种停顿，而不是终点。" : "A conclusion is a pause, not an endpoint."}</p>
     </section>
   </article>
 </BaseLayout>
