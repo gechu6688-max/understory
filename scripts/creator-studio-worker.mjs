@@ -197,6 +197,8 @@ export default {
           if (auth.error.status === 401) return Response.redirect(new URL("/signin-with-chatgpt?return_to=/studio/", url), 302);
           return new Response("Creator Studio access is restricted.", { status: auth.error.status });
         }
+        if (url.pathname.startsWith("/studio/preview/")) return env.ASSETS.fetch(new Request(new URL("/_studio-preview-amazon/", url), request));
+        return env.ASSETS.fetch(new Request(new URL("/_studio/", url), request));
       }
       return env.ASSETS.fetch(request);
     } catch (error) {
