@@ -23,7 +23,7 @@ await writeFile(
       compatibility_date: "2026-05-15",
       main: "index.js",
       no_bundle: true,
-      assets: { directory: "../client" },
+      assets: { directory: "../client", run_worker_first: true },
     },
     null,
     2,
