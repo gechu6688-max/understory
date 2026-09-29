@@ -4,11 +4,15 @@ const state = { documents: [], current: null };
 const blank = (kind) => ({ kind, slug: "", locale: "en", title: "", status: "draft", content: kind === "case" ? { blocks: [{ type: "prose", heading: "Opening", body: "" }] } : { fields: {} } });
 const types = ["prose", "image", "evidence", "timeline", "causal-chain", "debate", "trade-off", "boundary", "insight", "ecosystem", "question"];
 const defaults = { prose:{heading:"New section",body:""}, image:{src:"",alt:"",caption:""}, evidence:{title:"Evidence",metric:"",finding:"",comparison:"",caveat:"",source:""}, timeline:{title:"Timeline",events:[{year:"",title:"",description:"",type:"market"}]}, "causal-chain":{title:"Causal chain",steps:[{label:"",detail:""}]}, debate:{title:"Debate",body:"",visualTitle:"Evidence / Counter-evidence / Interpretation"}, "trade-off":{leftLabel:"",rightLabel:"",leftItems:[""],rightItems:[""]}, boundary:{title:"Boundary",items:[{label:"",detail:""}]}, insight:{title:"Insight",statement:""}, ecosystem:{title:"System map",nodes:[{label:"",title:"",detail:""}]}, question:{question:""} };
+const asJson = async (response) => {
+  const raw = await response.text();
+  try { return raw ? JSON.parse(raw) : {}; } catch { throw new Error("Studio sign-in expired. Please refresh this page and sign in again."); }
+};
 const request = async (path, options = {}) => {
   const response = await fetch(`${endpoint}${path}`, options);
-  if (response.status === 401) { const body = await response.json(); window.location.assign(body.signInPath); throw new Error("Sign in required"); }
-  if (!response.ok) { const body = await response.json().catch(() => ({})); throw new Error(body.error || "Request failed"); }
-  return response.status === 204 ? null : response.json();
+  if (response.status === 401) { const body = await asJson(response); window.location.assign(body.signInPath); throw new Error("Sign in required"); }
+  if (!response.ok) { const body = await asJson(response).catch(() => ({})); throw new Error(body.error || "Request failed"); }
+  return response.status === 204 ? null : asJson(response);
 };
 const notice = (message) => { const node = $("[data-notice]"); node.textContent = message; node.hidden = false; };
 const serialize = (document) => JSON.stringify(document.content, null, 2);
@@ -20,7 +24,9 @@ function renderDocuments() {
 async function refresh() {
   let data = await request("/documents");
   if (!data.documents.length) {
-    const seed = await fetch("/studio-seed.json").then((response) => response.json());
+    const seedResponse = await fetch("/studio-seed.json");
+    if (!seedResponse.ok) throw new Error("The initial content template could not be loaded.");
+    const seed = await asJson(seedResponse);
     await Promise.all(seed.documents.map((document) => request("/documents", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(document) })));
     data = await request("/documents");
     notice("Existing Understory pages and the Amazon case have been imported as first drafts. Nothing is public until you publish it.");
