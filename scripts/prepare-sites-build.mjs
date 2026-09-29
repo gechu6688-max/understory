@@ -1,4 +1,4 @@
-import { mkdir, readdir, rename, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readdir, rename, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 const dist = new URL("../dist/", import.meta.url);
@@ -13,15 +13,7 @@ for (const entry of await readdir(dist)) {
 }
 
 await mkdir(server, { recursive: true });
-await writeFile(
-  new URL("index.js", server),
-  `export default {
-  async fetch(request, env) {
-    return env.ASSETS.fetch(request);
-  },
-};
-`,
-);
+await copyFile(new URL("./creator-studio-worker.mjs", import.meta.url), new URL("index.js", server));
 
 await writeFile(
   new URL("wrangler.json", server),

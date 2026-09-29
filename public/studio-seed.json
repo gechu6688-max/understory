@@ -1,0 +1,103 @@
+{
+  "documents": [
+    {
+      "kind": "site",
+      "slug": "global-system",
+      "locale": "en",
+      "title": "Global system copy and navigation",
+      "status": "draft",
+      "content": {
+        "fields": {
+          "brandName": "understory",
+          "brandLine": "Look beneath. Ask one more question.",
+          "navigation": ["Archive", "Topics", "Concepts", "Method", "About"],
+          "searchLabel": "What’s your one more question?"
+        }
+      }
+    },
+    {
+      "kind": "page",
+      "slug": "home",
+      "locale": "en",
+      "title": "Home",
+      "status": "draft",
+      "content": {
+        "fields": {
+          "heroLines": ["Look beneath.", "Ask one more question."],
+          "descriptor": "Cases on business, technology, and the forces beneath them.",
+          "featuredLabel": "Featured Case"
+        }
+      }
+    },
+    {
+      "kind": "page",
+      "slug": "cases",
+      "locale": "en",
+      "title": "Cases",
+      "status": "draft",
+      "content": { "fields": { "title": "Analysis library", "description": "Published business analysis cases.", "note": "Public entries only. Drafts, reviews, and archived cases stay out of this library." } }
+    },
+    {
+      "kind": "page",
+      "slug": "topics",
+      "locale": "en",
+      "title": "Topics",
+      "status": "draft",
+      "content": { "fields": { "eyebrow": "Topics", "title": "Explore by topic", "description": "Topics are broad fields of exploration. They are generated only from currently published cases." } }
+    },
+    {
+      "kind": "page",
+      "slug": "concepts",
+      "locale": "en",
+      "title": "Concepts",
+      "status": "draft",
+      "content": { "fields": { "eyebrow": "Business Concepts", "title": "Idea index", "description": "Concepts are analytical mechanisms and reusable lenses beneath each published case." } }
+    },
+    {
+      "kind": "page",
+      "slug": "method",
+      "locale": "en",
+      "title": "Method",
+      "status": "draft",
+      "content": { "fields": { "eyebrow": "Method", "title": "A thinking path for unfinished questions", "sequence": ["Question", "Evidence", "Counterargument", "Judgement", "One More Question"] } }
+    },
+    {
+      "kind": "page",
+      "slug": "about",
+      "locale": "en",
+      "title": "About",
+      "status": "draft",
+      "content": { "fields": { "title": "A place for questions that do not end quickly", "note": "Understory began with a habit I have never really been able to stop: asking one more question." } }
+    },
+    {
+      "kind": "case",
+      "slug": "amazon-convenience-market-power",
+      "locale": "en",
+      "title": "Amazon and the Hidden Cost of Reduced Competition",
+      "status": "draft",
+      "content": {
+        "meta": {
+          "subtitle": "A case on market power after a major rival leaves",
+          "summary": "Amazon can look strongly consumer-friendly because it offers low prices, fast delivery, and convenience.",
+          "centralQuestion": "How can a reduction in competitive constraints change Amazon's strategic flexibility and consumer outcomes?",
+          "hero": { "image": "/images/amazon-fulfillment-center-kaiserslautern.jpg", "alt": "Visitors observe robotics and fulfillment operations inside Amazon's West Kaiserslautern fulfillment center.", "caption": "Inside Amazon's West Kaiserslautern fulfillment center, May 2025." },
+          "topics": ["Market Power", "Competition"],
+          "concepts": ["Pricing Power", "Switching Costs", "Competitive Constraint"]
+        },
+        "blocks": [
+          { "type": "prose", "heading": "Business Context", "body": "Amazon is not only a retailer. It is also a marketplace, logistics system, advertising business, subscription ecosystem, and default starting point for many online searches." },
+          { "type": "ecosystem", "title": "Amazon links demand, supply, and fulfillment", "nodes": ["Customers", "Marketplace", "Sellers", "Fulfillment"], "note": "The same system that lowers friction can also deepen dependence on the platform." },
+          { "type": "image", "src": "/images/toys-r-us-monroe-aftermath.png", "alt": "A former Toys R Us store in Monroe, Louisiana, photographed after its closure.", "caption": "A documentary trace of the retailer’s physical exit." },
+          { "type": "evidence", "title": "Pricing after a major rival exits", "metric": "≈4%", "finding": "Amazon toy prices increased approximately 4% after Toys R Us exited the U.S. market.", "comparison": "The study compares the U.S. market with Canada.", "caveat": "A pricing pattern is not proof of every causal mechanism.", "source": "He, Reimers & Shiller (2022)" },
+          { "type": "timeline", "title": "Amazon, rival exit, and the evidence record", "events": [{ "year": "1994", "title": "Amazon is founded" }, { "year": "2018", "title": "Toys R Us closes U.S. stores" }, { "year": "2022", "title": "Research on post-exit pricing is published" }, { "year": "2023", "title": "FTC complaint is filed" }, { "year": "2026", "title": "Understory publishes this case" }] },
+          { "type": "causal-chain", "title": "How weaker competition can change consumer outcomes", "steps": ["Competition decreases", "Market pressure weakens", "Pricing flexibility expands", "Consumer outcomes may shift"] },
+          { "type": "debate", "title": "The case for convenience", "body": "Low prices, selection, delivery speed, and scale can all be explained by efficiency as well as power." },
+          { "type": "trade-off", "leftLabel": "Convenience", "rightLabel": "Competitive constraint", "leftItems": ["Fast delivery", "Broad selection"], "rightItems": ["Outside options", "Price discipline"] },
+          { "type": "boundary", "title": "What this case does not establish", "items": ["Intent", "Predatory pricing", "A result across every Amazon business"] },
+          { "type": "insight", "title": "Understory Insight", "statement": "Convenience and competition can coexist, but convenience alone does not tell us how much constraint remains." },
+          { "type": "question", "question": "If convenience depends on competition, what should we watch when competition disappears?" }
+        ]
+      }
+    }
+  ]
+}
