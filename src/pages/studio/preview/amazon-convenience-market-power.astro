@@ -1,0 +1,13 @@
+---
+import { getEntry } from "astro:content";
+import CaseRenderer from "../../../components/case/CaseRenderer.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const caseEntry = await getEntry("cases", "amazon-convenience-market-power");
+if (!caseEntry) throw new Error("Amazon case fixture is missing.");
+---
+
+<BaseLayout title="Preview · Amazon case" description="Owner-only draft preview" locale="en">
+  <aside class="mb-8 border-l-2 border-[var(--color-uncertainty)] bg-[#fff8ea] px-4 py-3">Creator Studio draft preview — not public.</aside>
+  <CaseRenderer caseEntry={caseEntry} runtimeMode="draft" />
+</BaseLayout>

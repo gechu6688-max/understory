@@ -127,11 +127,11 @@ const home = locale === "zh"
     <section class="brand-introduction" aria-labelledby="brand-introduction-title">
       <div class="brand-introduction__identity">
         <p class="editorial-kicker">Independent research archive</p>
-        <h1 id="brand-introduction-title">{home.brandTitle}</h1>
+        <h1 id="brand-introduction-title" data-cms="brandTitle">{home.brandTitle}</h1>
       </div>
       <div class="brand-introduction__definition">
-        <p class="brand-introduction__description">{home.brandDescription}</p>
-        <p class="brand-introduction__purpose">{home.brandPurpose}</p>
+        <p class="brand-introduction__description" data-cms="brandDescription">{home.brandDescription}</p>
+        <p class="brand-introduction__purpose" data-cms="brandPurpose">{home.brandPurpose}</p>
       </div>
       <nav class="brand-introduction__categories" aria-label={locale === "zh" ? "探索 Understory" : "Explore Understory"}>
         {home.brandCategories.map((category, index) => (
@@ -148,7 +148,7 @@ const home = locale === "zh"
     <section class="question-search" id="one-more-question" aria-labelledby="question-search-heading">
       <div class="question-search__heading">
         <p class="editorial-kicker">{home.explore}</p>
-        <h2 id="question-search-heading">{home.question}</h2>
+        <h2 id="question-search-heading" data-cms="question">{home.question}</h2>
         <p>{home.searchDescription}</p>
       </div>
       <div class="question-search__tool" data-search-root data-search-idle={copy.search.idle} data-search-empty={copy.search.empty}>
@@ -220,8 +220,8 @@ const home = locale === "zh"
 
     <footer class="editorial-footer">
       <div class="editorial-footer__brand"><img src="/brand/understory-symbol.svg" alt="" /><span>understory</span></div>
-      <p>{home.footerLine}</p>
-      <div class="editorial-footer__bottom"><span>{home.footerNote}</span><span>© {new Date().getFullYear()} Understory</span></div>
+      <p data-cms-global="footerLine">{home.footerLine}</p>
+      <div class="editorial-footer__bottom"><span data-cms-global="footerNote">{home.footerNote}</span><span>© {new Date().getFullYear()} Understory</span></div>
     </footer>
   </div>
 

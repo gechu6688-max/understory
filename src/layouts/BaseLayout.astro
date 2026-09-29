@@ -78,7 +78,7 @@ const isHome = pathname === homePath;
       <nav class="site-nav" aria-label="Primary navigation">
         <a class="site-identity" href={homePath} aria-label={homeLabel}>
           <span class="site-identity__symbol" aria-hidden="true"></span>
-          <span class="site-identity__wordmark">{copy.brand.name}</span>
+          <span class="site-identity__wordmark" data-cms-global="brandName">{copy.brand.name}</span>
         </a>
         {
           mobileLocaleLink && (
@@ -91,7 +91,7 @@ const isHome = pathname === homePath;
           <div class="site-nav__links">
           {
             navItems.map((item) => (
-              <a class={isActive(item.section) ? "is-active" : undefined} href={item.href} aria-current={isActive(item.section) ? "page" : undefined}>
+              <a data-cms-nav={item.label} class={isActive(item.section) ? "is-active" : undefined} href={item.href} aria-current={isActive(item.section) ? "page" : undefined}>
                 {item.label}
               </a>
             ))
@@ -150,5 +150,6 @@ const isHome = pathname === homePath;
         window.addEventListener("scroll", updateHeader, { passive: true });
       </script>
     }
+    <script is:inline src="/site-runtime.js" defer></script>
   </body>
 </html>

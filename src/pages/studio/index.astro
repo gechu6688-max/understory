@@ -36,10 +36,14 @@ const title = "Creator Studio · Understory";
             <label>Title <input name="title" required /></label>
             <label>Slug <input name="slug" required pattern="[a-z0-9-]+" /></label>
             <label>Locale <select name="locale"><option value="en">English</option><option value="zh">中文</option></select></label>
-            <label>Status <select name="status"><option value="draft">Draft</option><option value="review">Review</option><option value="published">Published</option><option value="archived">Archived</option></select></label>
-            <label>Structured content <textarea name="content" rows="20" required></textarea></label>
-            <p class="studio__hint">Case content uses an ordered <code>blocks</code> array. Supported types: prose, evidence, timeline, causal-chain, debate, trade-off, boundary, insight, image, ecosystem, question.</p>
-            <div class="studio__actions"><button type="submit">Save draft</button><button type="button" data-publish>Publish / Update</button><button type="button" data-versions>Version history</button><button type="button" data-delete class="danger">Delete</button></div>
+            <label>Status <select name="status"><option value="draft">Draft</option><option value="review">Review</option><option value="archived">Archived</option></select></label>
+            <div data-case-fields hidden>
+              <fieldset><legend>Case Hero</legend><label>Summary <textarea data-meta="summary" rows="3"></textarea></label><label>Central question <textarea data-meta="centralQuestion" rows="3"></textarea></label><label>Hero image URL <input data-hero="image" /></label><label>Hero alt text <input data-hero="alt" /></label><label>Hero caption <input data-hero="caption" /></label></fieldset>
+              <div class="studio__blocks" data-blocks></div><button type="button" data-add-block>Add editorial section</button>
+            </div>
+            <label data-raw-content>Structured content <textarea name="content" rows="20" required></textarea></label>
+            <p class="studio__hint">Every public section is a constrained editorial block; its layout and CSS remain controlled by Understory.</p>
+            <div class="studio__actions"><button type="submit">Save draft</button><button type="button" data-preview>Preview draft</button><button type="button" data-publish>Publish / Update</button><button type="button" data-versions>Version history</button><button type="button" data-delete class="danger">Delete</button></div>
           </form>
           <section class="studio__media" data-media-panel hidden>
             <div class="studio__editor-heading"><h2>Media library</h2><button type="button" data-close-media>Close</button></div>
@@ -49,6 +53,6 @@ const title = "Creator Studio · Understory";
         </section>
       </div>
     </main>
-    <script src="/studio.js" defer></script>
+    <script is:inline src="/studio.js" defer></script>
   </body>
 </html>

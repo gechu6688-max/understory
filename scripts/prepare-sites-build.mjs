@@ -14,6 +14,7 @@ for (const entry of await readdir(dist)) {
 
 await mkdir(server, { recursive: true });
 await copyFile(new URL("./creator-studio-worker.mjs", import.meta.url), new URL("index.js", server));
+await copyFile(new URL("../src/lib/cms-schema.mjs", import.meta.url), new URL("cms-schema.mjs", server));
 
 await writeFile(
   new URL("wrangler.json", server),

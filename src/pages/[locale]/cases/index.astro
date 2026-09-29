@@ -15,7 +15,7 @@ const zh = locale === "zh";
   <section class="page-shell cases-r8" aria-labelledby="cases-heading">
     {featured && (() => { const item = getCaseDisplayData(featured, locale); return <>
       <header class="cases-r8__entry">
-        <div class="cases-r8__entry-intro"><p class="discovery-kicker"><ResearchMark kind="case" />{zh ? "研究档案" : "Research archive"}</p><h1 id="cases-heading">{zh ? "案例" : "Cases"}</h1><p>{zh ? "围绕值得追问的商业问题，连接证据、机制与有边界的判断。" : "A slowly built archive of questions, evidence, mechanisms, and bounded judgement."}</p></div>
+        <div class="cases-r8__entry-intro"><p class="discovery-kicker"><ResearchMark kind="case" />{zh ? "研究档案" : "Research archive"}</p><h1 id="cases-heading" data-cms="title">{zh ? "案例" : "Cases"}</h1><p data-cms="description">{zh ? "围绕值得追问的商业问题，连接证据、机制与有边界的判断。" : "A slowly built archive of questions, evidence, mechanisms, and bounded judgement."}</p></div>
         <figure class="cases-r8__entry-image"><img src={featured.data.heroImage} alt={featured.data.heroImageAlt}/><figcaption>{featured.data.heroImageCaption}</figcaption></figure>
         <a class="cases-r8__dossier-tab" href={localizedPath(locale, `/cases/${featured.id}/`)}><span>{zh ? "当前档案" : "Current dossier"}</span><strong><ResearchMark kind="case" />{zh ? "案例" : "Case"} {featured.data.caseNumber ?? "001"}</strong><b>{item.entities[0]}</b><small>{item.topics.join(" · ")}<br/>{featured.data.readingTimeMinutes ?? 12} {zh ? "分钟阅读" : "min read"} <i aria-hidden="true">↗</i></small></a>
         <dl class="cases-r8__archive-count"><div><dt>{zh ? "已发布研究" : "Published research"}</dt><dd>{String(cases.length).padStart(2, "0")}</dd></div><div><dt>{zh ? "分析镜头" : "Analytical lenses"}</dt><dd>{String(item.concepts.length).padStart(2, "0")}</dd></div></dl>

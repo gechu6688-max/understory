@@ -1,3 +1,5 @@
+import { normalizeCase, validateDocument } from "./cms-schema.mjs";
+
 const json = (value, init = {}) =>
   new Response(JSON.stringify(value), { ...init, headers: { "content-type": "application/json; charset=utf-8", ...(init.headers || {}) } });
 
@@ -34,15 +36,10 @@ async function getDocument(env, documentId) {
   return row ? documentRow(row) : null;
 }
 
-function validateDocument(input) {
-  if (!input || !["page", "case", "site"].includes(input.kind) || !input.slug || !input.title || typeof input.content !== "object") {
-    throw new Error("A document needs a kind, slug, title, and structured content.");
-  }
-  if (input.kind === "case" && !Array.isArray(input.content.blocks)) throw new Error("Case documents require an ordered blocks array.");
-}
-
 async function createDocument(env, input) {
-  validateDocument(input);
+  if (input.kind === "case") input.content = normalizeCase(input.content);
+  const validation = validateDocument(input);
+  if (validation) throw new Error(validation);
   const timestamp = now();
   const value = { id: id(), kind: input.kind, slug: input.slug, locale: input.locale || "en", title: input.title, status: input.status || "draft", content: input.content };
   await env.DB.prepare("INSERT INTO content_documents (id, kind, slug, locale, title, status, content_json, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
@@ -51,7 +48,9 @@ async function createDocument(env, input) {
 }
 
 async function updateDocument(env, documentId, input) {
-  validateDocument(input);
+  if (input.kind === "case") input.content = normalizeCase(input.content);
+  const validation = validateDocument(input);
+  if (validation) throw new Error(validation);
   const existing = await getDocument(env, documentId);
   if (!existing) return null;
   await env.DB.prepare("UPDATE content_documents SET slug = ?, locale = ?, title = ?, status = ?, content_json = ?, draft_version = draft_version + 1, updated_at = ? WHERE id = ?")
@@ -112,6 +111,36 @@ async function handleStudioApi(request, env, pathname) {
   return json({ error: "method_not_allowed" }, { status: 405 });
 }
 
+async function handlePublicApi(request, env) {
+  const url = new URL(request.url);
+  const kind = url.searchParams.get("kind");
+  const slug = url.searchParams.get("slug");
+  const locale = url.searchParams.get("locale") || "en";
+  if (!kind || !slug || !["site", "page", "case"].includes(kind)) return json({ error: "invalid_query" }, { status: 400 });
+  const row = await env.DB.prepare("SELECT id, kind, slug, locale, title, published_json, published_version, published_at FROM content_documents WHERE kind = ? AND slug = ? AND locale = ? AND status = 'published'").bind(kind, slug, locale).first();
+  if (!row || !row.published_json) return json({ document: null }, { headers: { "cache-control": "no-store" } });
+  const document = { ...row, content: JSON.parse(row.published_json) };
+  const validation = validateDocument({ ...document, status: "published" });
+  if (validation) return json({ document: null }, { headers: { "cache-control": "no-store" } });
+  return json({ document }, { headers: { "cache-control": "no-store" } });
+}
+
+async function handlePreviewApi(request, env) {
+  const auth = requireOwner(request, env);
+  if (auth.error) return auth.error;
+  const url = new URL(request.url);
+  const kind = url.searchParams.get("kind");
+  const slug = url.searchParams.get("slug");
+  const locale = url.searchParams.get("locale") || "en";
+  if (!kind || !slug || !["site", "page", "case"].includes(kind)) return json({ error: "invalid_query" }, { status: 400 });
+  const row = await env.DB.prepare("SELECT * FROM content_documents WHERE kind = ? AND slug = ? AND locale = ?").bind(kind, slug, locale).first();
+  if (!row) return json({ document: null });
+  const document = documentRow(row);
+  const validation = validateDocument({ ...document, content: document.content });
+  if (validation) return json({ document: null, validation });
+  return json({ document });
+}
+
 async function handleMediaApi(request, env, pathname) {
   const auth = requireOwner(request, env);
   if (auth.error) return auth.error;
@@ -145,7 +174,7 @@ async function handleMediaApi(request, env, pathname) {
   return json({ error: "not_found" }, { status: 404 });
 }
 
-async function publicMedia(request, env, assetId) {
+async function publicMedia(_request, env, assetId) {
   const asset = await env.DB.prepare("SELECT object_key, content_type FROM media_assets WHERE id = ?").bind(assetId).first();
   if (!asset) return new Response("Not found", { status: 404 });
   const object = await env.BUCKET.get(asset.object_key);
@@ -157,7 +186,9 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     try {
+      if (url.pathname === "/api/studio/preview") return handlePreviewApi(request, env);
       if (url.pathname.startsWith("/api/studio/media")) return handleMediaApi(request, env, url.pathname);
+      if (url.pathname === "/api/public/document") return handlePublicApi(request, env);
       if (url.pathname.startsWith("/api/studio")) return handleStudioApi(request, env, url.pathname);
       if (url.pathname.startsWith("/media/")) return publicMedia(request, env, url.pathname.slice(7));
       if (url.pathname === "/studio" || url.pathname.startsWith("/studio/")) {
