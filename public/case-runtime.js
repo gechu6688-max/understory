@@ -5,6 +5,8 @@
   const text = (value = "") => escape(value).replace(/\n/g, "<br>");
   const number = (value, min, max, fallback) => typeof value === "number" && Number.isFinite(value) ? Math.max(min, Math.min(max, value)) : fallback;
   const align = (value) => ["left", "center", "right"].includes(value) ? value : "left";
+  const family = (value) => ({ display: '"Instrument Serif", Georgia, serif', sans: '"Source Sans 3", system-ui, sans-serif' })[value] || '"Source Sans 3", system-ui, sans-serif';
+  const color = (value) => ({ ink: "#18201d", moss: "#355d48", clay: "#9f3e2d", paper: "#f5f4ef" })[value] || "#18201d";
   const vars = (presentation = {}, kind = "text") => {
     const value = kind === "image" ? presentation.image || {} : presentation.text || {};
     const prefix = kind === "image" ? "--cms-image" : "--cms-text";
@@ -13,7 +15,7 @@
       `${prefix}-align:${align(value.align)}`,
     ];
     if (kind === "image") pieces.push(`${prefix}-width:${number(value.width, 40, 100, 100)}%`);
-    else pieces.push(`${prefix}-size:${number(value.fontSize, 16, 96, 18)}px`, `${prefix}-max-width:${number(value.maxWidth, 280, 1100, 760)}px`, `${prefix}-weight:${[400,500,600,700].includes(value.fontWeight) ? value.fontWeight : 600}`, `${prefix}-line-height:${number(value.lineHeight, .95, 1.8, 1.35)}`);
+    else pieces.push(`${prefix}-size:${number(value.fontSize, 16, 96, 18)}px`, `${prefix}-max-width:${number(value.maxWidth, 280, 1100, 760)}px`, `${prefix}-weight:${[400,500,600,700].includes(value.fontWeight) ? value.fontWeight : 600}`, `${prefix}-line-height:${number(value.lineHeight, .95, 1.8, 1.35)}`, `font-family:${family(value.fontFamily)}`, `color:${color(value.color)}`);
     return ` style="${pieces.join(";")}"`;
   };
   const image = (block) => `<figure class="case-editorial-image case-editorial-image--${escape(block.variant || "body")} cms-adjustable-image" data-cms-block-id="${escape(block.id)}" data-cms-visual="evidence-image"${vars(block.presentation, "image")}><div class="case-editorial-image__frame"><img src="${escape(block.src)}" alt="${escape(block.alt)}" loading="lazy"></div><figcaption><span class="case-editorial-image__label">${escape(block.label || "System View")}</span>${block.caption ? `<span class="case-editorial-image__caption">${text(block.caption)}</span>` : ""}</figcaption></figure>`;
@@ -34,7 +36,7 @@
     const hero = content.meta.hero; const header = root.querySelector(".case-header");
     if (!header || !hero) return;
     const title = header.querySelector("h1"); if (title) { title.textContent = root.closest("main")?.dataset.cmsDocumentTitle || title.textContent; title.dataset.cmsVisual = "hero-title"; title.classList.add("cms-adjustable-title"); title.setAttribute("style", vars({ text: hero.presentation })); }
-    const summary = header.querySelector(".case-header__deck"); if (summary) summary.textContent = content.meta.summary;
+    const summary = header.querySelector(".case-header__deck"); if (summary) { summary.textContent = content.meta.summary; summary.dataset.cmsVisual = "hero-subtitle"; summary.classList.add("cms-adjustable-text"); summary.setAttribute("style", vars({ text: hero.subtitlePresentation })); }
     const question = root.querySelector(".case-question-block__question"); if (question) question.textContent = content.meta.centralQuestion;
     const heroFigure = header.querySelector(".case-editorial-image--hero"); if (heroFigure) { heroFigure.dataset.cmsVisual = "hero-image"; heroFigure.classList.add("cms-adjustable-image"); heroFigure.setAttribute("style", vars({ image: hero.imagePresentation }, "image")); }
     const heroImage = header.querySelector(".case-editorial-image--hero img"); if (heroImage) { heroImage.src = hero.image; heroImage.alt = hero.alt; }
@@ -49,6 +51,7 @@
       root.closest("main")?.setAttribute("data-cms-document-title", document.title);
       replaceHero(document.content);
       const body = root.querySelector(".case-body"); if (body) body.innerHTML = document.content.blocks.filter((block) => block.visible !== false).map((block) => renderers[block.type]?.(block) || "").join("");
+      window.dispatchEvent(new CustomEvent("understory:cms-ready"));
     } catch { /* fall back to the audited Astro/MDX case */ }
   })();
 })();

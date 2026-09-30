@@ -6,6 +6,8 @@ const number = (value) => typeof value === "number" && Number.isFinite(value);
 const between = (value, min, max) => number(value) && value >= min && value <= max;
 const ALIGNMENTS = ["left", "center", "right"];
 const WEIGHTS = [400, 500, 600, 700];
+const FONTS = ["display", "sans"];
+const COLORS = ["ink", "moss", "clay", "paper"];
 
 // These are deliberately not arbitrary CSS values. They are the small set of
 // desktop refinements the editorial system can safely carry into its renderer.
@@ -17,7 +19,9 @@ const textPresentation = (value) => {
     && (!("yOffset" in value) || between(value.yOffset, -64, 96))
     && (!("fontWeight" in value) || WEIGHTS.includes(value.fontWeight))
     && (!("lineHeight" in value) || between(value.lineHeight, 0.95, 1.8))
-    && (!("align" in value) || ALIGNMENTS.includes(value.align));
+    && (!("align" in value) || ALIGNMENTS.includes(value.align))
+    && (!("fontFamily" in value) || FONTS.includes(value.fontFamily))
+    && (!("color" in value) || COLORS.includes(value.color));
 };
 const imagePresentation = (value) => {
   if (!value || typeof value !== "object") return true;
@@ -33,6 +37,7 @@ const normalizeTextPresentation = (value = {}, fallback = {}) => ({
   xOffset: clamp(value.xOffset, -96, 96, fallback.xOffset ?? 0), yOffset: clamp(value.yOffset, -64, 96, fallback.yOffset ?? 0),
   fontWeight: WEIGHTS.includes(value.fontWeight) ? value.fontWeight : (fallback.fontWeight ?? 600),
   lineHeight: clamp(value.lineHeight, 0.95, 1.8, fallback.lineHeight ?? 1.1), align: ALIGNMENTS.includes(value.align) ? value.align : (fallback.align ?? "left"),
+  fontFamily: FONTS.includes(value.fontFamily) ? value.fontFamily : (fallback.fontFamily ?? "sans"), color: COLORS.includes(value.color) ? value.color : (fallback.color ?? "ink"),
 });
 const normalizeImagePresentation = (value = {}) => ({
   width: clamp(value.width, 40, 100, 100), xOffset: clamp(value.xOffset, -96, 96, 0),
@@ -57,7 +62,8 @@ export function normalizeCase(content) {
   next.meta ??= {};
   next.meta.hero ??= {};
   next.blocks ??= [];
-  next.meta.hero.presentation = normalizeTextPresentation(next.meta.hero.presentation, { fontSize: 74, maxWidth: 900, xOffset: 0, yOffset: 0, fontWeight: 600, lineHeight: 1.04, align: "left" });
+  next.meta.hero.presentation = normalizeTextPresentation(next.meta.hero.presentation, { fontSize: 74, maxWidth: 900, xOffset: 0, yOffset: 0, fontWeight: 600, lineHeight: 1.04, align: "left", fontFamily: "display", color: "ink" });
+  next.meta.hero.subtitlePresentation = normalizeTextPresentation(next.meta.hero.subtitlePresentation, { fontSize: 22, maxWidth: 720, xOffset: 0, yOffset: 0, fontWeight: 400, lineHeight: 1.35, align: "left", fontFamily: "sans", color: "ink" });
   next.meta.hero.imagePresentation = normalizeImagePresentation(next.meta.hero.imagePresentation);
   next.blocks = next.blocks.map((block) => ({
     id: block.id || crypto.randomUUID(), visible: block.visible !== false, ...block,
@@ -73,7 +79,7 @@ export function validateCase(content) {
   if (!content || typeof content !== "object") return "Case content must be an object.";
   if (!content.meta || !text(content.meta.summary) || !text(content.meta.centralQuestion)) return "Case metadata requires a summary and central question.";
   if (!content.meta.hero || !text(content.meta.hero.image) || !text(content.meta.hero.alt)) return "Case Hero requires an image and alt text.";
-  if (!textPresentation(content.meta.hero.presentation) || !imagePresentation(content.meta.hero.imagePresentation)) return "Hero layout values are outside the safe editorial range.";
+  if (!textPresentation(content.meta.hero.presentation) || !textPresentation(content.meta.hero.subtitlePresentation) || !imagePresentation(content.meta.hero.imagePresentation)) return "Hero layout values are outside the safe editorial range.";
   if (!Array.isArray(content.blocks)) return "Case content requires an ordered blocks array.";
   for (const block of content.blocks) {
     if (!block || !text(block.id) || typeof block.visible !== "boolean" || !BLOCK_TYPES.includes(block.type)) return "Every block needs an id, a supported type, and visibility.";

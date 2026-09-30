@@ -5,13 +5,14 @@ const blank = (kind) => ({ kind, slug: "", locale: "en", title: "", status: "dra
 const types = ["prose", "image", "evidence", "timeline", "causal-chain", "debate", "trade-off", "boundary", "insight", "ecosystem", "question"];
 const defaults = { prose:{heading:"New section",body:""}, image:{src:"",alt:"",caption:""}, evidence:{title:"Evidence",metric:"",finding:"",comparison:"",caveat:"",source:""}, timeline:{title:"Timeline",events:[{year:"",title:"",description:"",type:"market"}]}, "causal-chain":{title:"Causal chain",steps:[{label:"",detail:""}]}, debate:{title:"Debate",body:"",visualTitle:"Evidence / Counter-evidence / Interpretation"}, "trade-off":{leftLabel:"",rightLabel:"",leftItems:[""],rightItems:[""]}, boundary:{title:"Boundary",items:[{label:"",detail:""}]}, insight:{title:"Insight",statement:""}, ecosystem:{title:"System map",nodes:[{label:"",title:"",detail:""}]}, question:{question:""} };
 const esc = (value = "") => String(value).replace(/[&<>"']/g, (character) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" })[character]);
-const textLayoutDefaults = { fontSize: 18, maxWidth: 760, xOffset: 0, yOffset: 0, fontWeight: 600, lineHeight: 1.35, align: "left" };
-const heroLayoutDefaults = { fontSize: 74, maxWidth: 900, xOffset: 0, yOffset: 0, fontWeight: 600, lineHeight: 1.04, align: "left" };
+const textLayoutDefaults = { fontSize: 18, maxWidth: 760, xOffset: 0, yOffset: 0, fontWeight: 600, lineHeight: 1.35, align: "left", fontFamily: "sans", color: "ink" };
+const heroLayoutDefaults = { fontSize: 74, maxWidth: 900, xOffset: 0, yOffset: 0, fontWeight: 600, lineHeight: 1.04, align: "left", fontFamily: "display", color: "ink" };
 const imageLayoutDefaults = { width: 100, xOffset: 0, yOffset: 0, align: "left" };
 const numeric = (value, fallback) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 function ensurePresentation(content) {
   content.meta ??= {}; content.meta.hero ??= {}; content.blocks ??= [];
   content.meta.hero.presentation = { ...heroLayoutDefaults, ...(content.meta.hero.presentation || {}) };
+  content.meta.hero.subtitlePresentation = { ...textLayoutDefaults, fontSize: 22, maxWidth: 720, fontWeight: 400, ...(content.meta.hero.subtitlePresentation || {}) };
   content.meta.hero.imagePresentation = { ...imageLayoutDefaults, ...(content.meta.hero.imagePresentation || {}) };
   content.blocks.forEach((block) => { block.presentation = { text: { ...textLayoutDefaults, ...(block.presentation?.text || {}) }, image: { ...imageLayoutDefaults, ...(block.presentation?.image || {}) } }; });
 }
@@ -101,11 +102,12 @@ function collectCase() {
 }
 const visual = { selected: null, overlay: null, document: null };
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-const visualLabels = { "hero-title": "Hero title", "hero-image": "Hero image", "evidence-text": "Evidence finding", "evidence-image": "Evidence image" };
+const visualLabels = { "hero-title": "Hero title", "hero-subtitle": "Hero summary", "hero-image": "Hero image", "evidence-text": "Evidence finding", "evidence-image": "Evidence image" };
 function visualBlock(id) { return state.current.content.blocks.find((block) => block.id === id); }
 function selectedLayout() {
   if (!visual.selected) return null;
   if (visual.selected.kind === "hero-title") return state.current.content.meta.hero.presentation;
+  if (visual.selected.kind === "hero-subtitle") return state.current.content.meta.hero.subtitlePresentation;
   if (visual.selected.kind === "hero-image") return state.current.content.meta.hero.imagePresentation;
   const block = visualBlock(visual.selected.blockId);
   return visual.selected.kind === "evidence-text" ? block?.presentation.text : block?.presentation.image;
@@ -113,8 +115,9 @@ function selectedLayout() {
 function selectedElement() {
   const doc = visual.document; if (!doc || !visual.selected) return null;
   if (visual.selected.kind === "hero-title") return doc.querySelector('[data-cms-visual="hero-title"]');
+  if (visual.selected.kind === "hero-subtitle") return doc.querySelector('[data-cms-visual="hero-subtitle"]');
   if (visual.selected.kind === "hero-image") return doc.querySelector('[data-cms-visual="hero-image"]');
-  if (visual.selected.kind === "evidence-text") return doc.querySelector(`[data-cms-block-id="${visual.selected.blockId}"] [data-cms-visual="evidence-text"]`);
+  if (visual.selected.kind === "evidence-text") return doc.querySelector(`[data-cms-block-id="${visual.selected.blockId}"]`);
   return doc.querySelector(`[data-cms-block-id="${visual.selected.blockId}"][data-cms-visual="evidence-image"]`);
 }
 function applySelectedLayout() {
@@ -129,13 +132,15 @@ function applySelectedLayout() {
     element.style.setProperty("--cms-text-max-width", `${layout.maxWidth}px`);
     element.style.setProperty("--cms-text-weight", layout.fontWeight);
     element.style.setProperty("--cms-text-line-height", layout.lineHeight);
+    element.style.fontFamily = layout.fontFamily === "display" ? '"Instrument Serif", Georgia, serif' : '"Source Sans 3", system-ui, sans-serif';
+    element.style.color = ({ ink: "#18201d", moss: "#355d48", clay: "#9f3e2d", paper: "#f5f4ef" })[layout.color] || "#18201d";
   }
   renderVisualOverlay(); renderInspector();
 }
 function addVisualStyles(doc) {
   if (doc.getElementById("studio-direct-styles")) return;
   const style = doc.createElement("style"); style.id = "studio-direct-styles";
-  style.textContent = `body{padding-bottom:5rem!important}.studio-direct-overlay{position:fixed;z-index:2147483647;pointer-events:none;border:2px solid #355d48;box-shadow:0 0 0 1px #fff}.studio-direct-drag{position:absolute;left:0;right:0;top:-18px;height:16px;background:#355d48;color:#fff;font:600 10px/16px system-ui;text-align:center;letter-spacing:.06em;cursor:move;pointer-events:auto}.studio-direct-handle{position:absolute;width:12px;height:12px;background:#fff;border:2px solid #355d48;pointer-events:auto}.studio-direct-handle.left{left:-7px;top:calc(50% - 6px);cursor:ew-resize}.studio-direct-handle.right{right:-7px;top:calc(50% - 6px);cursor:ew-resize}.studio-direct-handle.nw{left:-7px;top:-7px;cursor:nwse-resize}.studio-direct-handle.ne{right:-7px;top:-7px;cursor:nesw-resize}.studio-direct-handle.sw{left:-7px;bottom:-7px;cursor:nesw-resize}.studio-direct-handle.se{right:-7px;bottom:-7px;cursor:nwse-resize}.studio-direct-editable{outline:0;cursor:text}`;
+  style.textContent = `body{padding-bottom:5rem!important}.studio-direct-overlay{position:fixed;z-index:2147483647;pointer-events:none;border:2px solid #355d48;box-shadow:0 0 0 1px #fff}.studio-direct-toolbar{position:absolute;left:-2px;bottom:calc(100% + 21px);display:flex;gap:4px;align-items:center;padding:5px;background:#18201d;border:1px solid #355d48;box-shadow:0 3px 12px #0003;pointer-events:auto;white-space:nowrap}.studio-direct-toolbar select,.studio-direct-toolbar input{box-sizing:border-box;height:25px;min-width:0;border:1px solid #637268;background:#fff;color:#18201d;padding:1px 4px;font:12px system-ui}.studio-direct-toolbar input[data-direct-text="fontSize"]{width:48px}.studio-direct-toolbar input[data-direct-text="lineHeight"]{width:45px}.studio-direct-drag{position:absolute;left:0;right:0;top:-18px;height:16px;background:#355d48;color:#fff;font:600 10px/16px system-ui;text-align:center;letter-spacing:.06em;cursor:move;pointer-events:auto}.studio-direct-handle{position:absolute;width:12px;height:12px;background:#fff;border:2px solid #355d48;pointer-events:auto}.studio-direct-handle.left{left:-7px;top:calc(50% - 6px);cursor:ew-resize}.studio-direct-handle.right{right:-7px;top:calc(50% - 6px);cursor:ew-resize}.studio-direct-handle.nw{left:-7px;top:-7px;cursor:nwse-resize}.studio-direct-handle.ne{right:-7px;top:-7px;cursor:nesw-resize}.studio-direct-handle.sw{left:-7px;bottom:-7px;cursor:nesw-resize}.studio-direct-handle.se{right:-7px;bottom:-7px;cursor:nwse-resize}.studio-direct-editable{outline:0;cursor:text}`;
   doc.head.append(style);
 }
 function renderVisualOverlay() {
@@ -146,9 +151,12 @@ function renderVisualOverlay() {
   if (!overlay) { overlay = visual.document.createElement("div"); overlay.className = "studio-direct-overlay"; visual.document.body.append(overlay); visual.overlay = overlay; }
   overlay.style.left = `${rect.left}px`; overlay.style.top = `${rect.top}px`; overlay.style.width = `${rect.width}px`; overlay.style.height = `${rect.height}px`;
   const image = visual.selected.kind.includes("image");
-  overlay.innerHTML = `<span class="studio-direct-drag">DRAG</span>${image ? ["nw","ne","sw","se"].map((handle) => `<span class="studio-direct-handle ${handle}" data-direct-handle="${handle}"></span>`).join("") : '<span class="studio-direct-handle left" data-direct-handle="left"></span><span class="studio-direct-handle right" data-direct-handle="right"></span>'}`;
+  const layout = selectedLayout();
+  const toolbar = !image ? `<div class="studio-direct-toolbar"><select data-direct-text="fontFamily"><option value="display" ${layout.fontFamily === "display" ? "selected" : ""}>Display</option><option value="sans" ${layout.fontFamily === "sans" ? "selected" : ""}>Sans</option></select><input data-direct-text="fontSize" type="number" min="16" max="96" value="${layout.fontSize}"><select data-direct-text="fontWeight">${[400,500,600,700].map((weight) => `<option value="${weight}" ${layout.fontWeight === weight ? "selected" : ""}>${weight}</option>`).join("")}</select><select data-direct-text="color">${["ink","moss","clay","paper"].map((color) => `<option value="${color}" ${layout.color === color ? "selected" : ""}>${color}</option>`).join("")}</select><input data-direct-text="lineHeight" type="number" min=".95" max="1.8" step=".05" value="${layout.lineHeight}"><select data-direct-text="align">${["left","center","right"].map((align) => `<option value="${align}" ${layout.align === align ? "selected" : ""}>${align}</option>`).join("")}</select></div>` : "";
+  overlay.innerHTML = `${toolbar}<span class="studio-direct-drag">DRAG</span>${image ? ["nw","ne","sw","se"].map((handle) => `<span class="studio-direct-handle ${handle}" data-direct-handle="${handle}"></span>`).join("") : '<span class="studio-direct-handle left" data-direct-handle="left"></span><span class="studio-direct-handle right" data-direct-handle="right"></span>'}`;
   overlay.querySelector(".studio-direct-drag").addEventListener("pointerdown", (event) => beginDirectGesture(event, "move"));
   overlay.querySelectorAll("[data-direct-handle]").forEach((handle) => handle.addEventListener("pointerdown", (event) => beginDirectGesture(event, handle.dataset.directHandle)));
+  overlay.querySelectorAll("[data-direct-text]").forEach((input) => input.addEventListener("input", () => { const key = input.dataset.directText; const current = selectedLayout(); current[key] = ["fontFamily", "color", "align"].includes(key) ? input.value : numeric(input.value, current[key]); applySelectedLayout(); }));
 }
 function beginDirectGesture(event, mode) {
   event.preventDefault(); event.stopPropagation();
@@ -168,23 +176,33 @@ function renderInspector() {
   const host = $("[data-visual-inspector]"); const layout = selectedLayout();
   if (!visual.selected || !layout) { host.innerHTML = "<p>Select a title, evidence finding, or image in the page.</p>"; return; }
   const image = visual.selected.kind.includes("image");
-  host.innerHTML = `<p class="studio__inspector-label">${visualLabels[visual.selected.kind]}</p>${image ? `<label>Size <input data-inspect="width" type="number" min="40" max="100" value="${layout.width}"></label>` : `<label>Font size <input data-inspect="fontSize" type="number" min="16" max="96" value="${layout.fontSize}"></label><label>Font weight <select data-inspect="fontWeight">${[400,500,600,700].map((weight) => `<option ${layout.fontWeight === weight ? "selected" : ""}>${weight}</option>`).join("")}</select></label><label>Line height <input data-inspect="lineHeight" type="number" min="0.95" max="1.8" step=".05" value="${layout.lineHeight}"></label>`}<label>Alignment <select data-inspect="align">${["left","center","right"].map((alignment) => `<option ${layout.align === alignment ? "selected" : ""}>${alignment}</option>`).join("")}</select></label><p class="studio__hint">Move and resize on the canvas. These fields are only for precise finishing.</p>`;
-  host.querySelectorAll("[data-inspect]").forEach((input) => input.addEventListener("input", () => { const key = input.dataset.inspect; layout[key] = key === "align" ? input.value : numeric(input.value, layout[key]); applySelectedLayout(); }));
+  host.innerHTML = `<p class="studio__inspector-label">${visualLabels[visual.selected.kind]}</p>${image ? `<label>Size <input data-inspect="width" type="number" min="40" max="100" value="${layout.width}"></label>` : `<label>Font size <input data-inspect="fontSize" type="number" min="16" max="96" value="${layout.fontSize}"></label><label>Font family <select data-inspect="fontFamily"><option value="display" ${layout.fontFamily === "display" ? "selected" : ""}>Display</option><option value="sans" ${layout.fontFamily === "sans" ? "selected" : ""}>Sans</option></select></label><label>Font weight <select data-inspect="fontWeight">${[400,500,600,700].map((weight) => `<option value="${weight}" ${layout.fontWeight === weight ? "selected" : ""}>${weight}</option>`).join("")}</select></label><label>Color <select data-inspect="color">${["ink","moss","clay","paper"].map((color) => `<option value="${color}" ${layout.color === color ? "selected" : ""}>${color}</option>`).join("")}</select></label><label>Line height <input data-inspect="lineHeight" type="number" min="0.95" max="1.8" step=".05" value="${layout.lineHeight}"></label>`}<label>Alignment <select data-inspect="align">${["left","center","right"].map((alignment) => `<option ${layout.align === alignment ? "selected" : ""}>${alignment}</option>`).join("")}</select></label><p class="studio__hint">Move and resize on the canvas. These fields are only for precise finishing.</p>`;
+  host.querySelectorAll("[data-inspect]").forEach((input) => input.addEventListener("input", () => { const key = input.dataset.inspect; layout[key] = ["align", "fontFamily", "color"].includes(key) ? input.value : numeric(input.value, layout[key]); applySelectedLayout(); }));
 }
 function selectVisual(kind, blockId) { visual.selected = { kind, blockId }; renderVisualOverlay(); renderInspector(); }
 function bindVisualCanvas() {
   const frame = $("[data-visual-frame]"); const doc = frame.contentDocument; if (!doc) return;
   visual.document = doc; visual.overlay?.remove(); visual.overlay = null; addVisualStyles(doc);
+  const directText = (node, kind, blockId, sync) => {
+    node.contentEditable = "true"; node.classList.add("studio-direct-editable");
+    node.addEventListener("pointerdown", (event) => { if (event.detail > 1) return; selectVisual(kind, blockId); beginDirectGesture(event, "move"); });
+    node.addEventListener("dblclick", () => { node.focus(); });
+    node.addEventListener("keydown", (event) => { if (event.key === "Enter" && doc.activeElement !== node) { event.preventDefault(); node.focus(); } });
+    node.addEventListener("input", sync);
+  };
   const title = doc.querySelector('[data-cms-visual="hero-title"]');
-  if (title) { title.contentEditable = "true"; title.classList.add("studio-direct-editable"); title.addEventListener("focus", () => selectVisual("hero-title")); title.addEventListener("input", () => { state.current.title = title.textContent.trim(); }); }
-  const hero = doc.querySelector('[data-cms-visual="hero-image"]'); if (hero) hero.addEventListener("click", () => selectVisual("hero-image"));
-  doc.querySelectorAll('[data-cms-visual="evidence-text"]').forEach((node) => { const blockId = node.closest("[data-cms-block-id]")?.dataset.cmsBlockId; node.contentEditable = "true"; node.classList.add("studio-direct-editable"); node.addEventListener("focus", () => selectVisual("evidence-text", blockId)); node.addEventListener("input", () => { const block = visualBlock(blockId); if (block) block.finding = node.innerText; }); });
-  doc.querySelectorAll('[data-cms-visual="evidence-image"]').forEach((node) => node.addEventListener("click", () => selectVisual("evidence-image", node.dataset.cmsBlockId)));
+  if (title) directText(title, "hero-title", undefined, () => { state.current.title = title.textContent.trim(); });
+  const subtitle = doc.querySelector('[data-cms-visual="hero-subtitle"]');
+  if (subtitle) directText(subtitle, "hero-subtitle", undefined, () => { state.current.content.meta.summary = subtitle.innerText; });
+  const directImage = (node, kind, blockId) => node.addEventListener("pointerdown", (event) => { selectVisual(kind, blockId); beginDirectGesture(event, "move"); });
+  const hero = doc.querySelector('[data-cms-visual="hero-image"]'); if (hero) directImage(hero, "hero-image");
+  doc.querySelectorAll('[data-cms-visual="evidence-text"]').forEach((node) => { const blockId = node.closest("[data-cms-block-id]")?.dataset.cmsBlockId; directText(node, "evidence-text", blockId, () => { const block = visualBlock(blockId); if (block) block.finding = node.innerText; }); });
+  doc.querySelectorAll('[data-cms-visual="evidence-image"]').forEach((node) => directImage(node, "evidence-image", node.dataset.cmsBlockId));
   doc.defaultView.addEventListener("scroll", renderVisualOverlay); doc.defaultView.addEventListener("resize", renderVisualOverlay);
 }
 function renderVisualNavigator() {
   const host = $("[data-visual-navigator]"); const blocks = state.current.content.blocks;
-  host.innerHTML = `<p>Sections</p><button data-visual-select="hero-title">Hero title</button><button data-visual-select="hero-image">Hero image</button>${blocks.map((block, index) => `<div class="studio__nav-block"><button data-visual-select="${block.type === "evidence" ? "evidence-text" : block.type === "image" ? "evidence-image" : ""}" data-visual-block="${block.id}">${esc(block.type)}</button><label><input type="checkbox" data-visual-visible="${block.id}" ${block.visible !== false ? "checked" : ""}>Visible</label><button data-visual-move="up" data-visual-index="${index}">↑</button><button data-visual-move="down" data-visual-index="${index}">↓</button></div>`).join("")}`;
+  host.innerHTML = `<p>Sections</p><button data-visual-select="hero-title">Hero title</button><button data-visual-select="hero-subtitle">Hero summary</button><button data-visual-select="hero-image">Hero image</button>${blocks.map((block, index) => `<div class="studio__nav-block"><button data-visual-select="${block.type === "evidence" ? "evidence-text" : block.type === "image" ? "evidence-image" : ""}" data-visual-block="${block.id}">${esc(block.type)}</button><label><input type="checkbox" data-visual-visible="${block.id}" ${block.visible !== false ? "checked" : ""}>Visible</label><button data-visual-move="up" data-visual-index="${index}">↑</button><button data-visual-move="down" data-visual-index="${index}">↓</button></div>`).join("")}`;
   host.querySelectorAll("[data-visual-select]").forEach((button) => button.addEventListener("click", () => button.dataset.visualSelect && selectVisual(button.dataset.visualSelect, button.dataset.visualBlock)));
   host.querySelectorAll("[data-visual-visible]").forEach((input) => input.addEventListener("change", () => { const block = visualBlock(input.dataset.visualVisible); if (block) block.visible = input.checked; }));
   host.querySelectorAll("[data-visual-move]").forEach((button) => button.addEventListener("click", () => { const index = Number(button.dataset.visualIndex); const next = button.dataset.visualMove === "up" ? index - 1 : index + 1; if (next >= 0 && next < blocks.length) { [blocks[index], blocks[next]] = [blocks[next], blocks[index]]; renderVisualNavigator(); notice("Section order changed. Save draft to update the canvas."); } }));
@@ -223,7 +241,7 @@ document.querySelectorAll("[data-new]").forEach((button) => button.addEventListe
 $("[data-media]").addEventListener("click", () => media().catch((error) => notice(error.message)));
 $("[data-close-media]").addEventListener("click", () => { $("[data-media-panel]").hidden = true; });
 $("[data-media-form]").addEventListener("submit", async (event) => { event.preventDefault(); try { const form = new FormData(event.target); await request("/media", { method: "POST", body: form }); event.target.reset(); await media(); notice("Image uploaded to the media library."); } catch (error) { notice(error.message); } });
-$("[data-visual-frame]").addEventListener("load", () => { bindVisualCanvas(); window.setTimeout(bindVisualCanvas, 600); });
+$("[data-visual-frame]").addEventListener("load", () => { bindVisualCanvas(); const win = $("[data-visual-frame]").contentWindow; win?.addEventListener("understory:cms-ready", bindVisualCanvas, { once: true }); });
 $("[data-visual-save]").addEventListener("click", () => saveVisual().catch((error) => notice(error.message)));
 $("[data-visual-preview]").addEventListener("click", async () => { try { await saveVisual(true); window.open("/studio/preview/amazon-convenience-market-power/", "_blank", "noopener"); } catch (error) { notice(error.message); } });
 $("[data-visual-publish]").addEventListener("click", async () => { try { await saveVisual(true); const saved = await request(`/documents/${state.current.id}/publish`, { method: "POST" }); state.current = saved.document; await refresh(); notice(`Published version ${saved.publication.version}. The public case is updated.`); } catch (error) { notice(error.message); } });
