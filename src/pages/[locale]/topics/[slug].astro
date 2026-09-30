@@ -16,6 +16,7 @@ const allCases = zh ? topic.cases.filter((entry) => hasCaseLocale(locale, entry.
 const caseEntry = allCases[0];
 const concepts = getTaxonomyItems(allCases, "concepts", locale);
 const generic = discoveryContent(locale, topic.name);
+// Competition is a dedicated bilingual editorial page; other topic routes retain the generic template.
 const I = (id: string, width = 1200) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=85`;
 const images = {
   hero: [I("photo-1542838132-92c53300491e", 1800), zh ? "超市货架上的不同商品选择" : "Several competing choices on a grocery shelf", "Unsplash · photo-1542838132-92c53300491e"],
