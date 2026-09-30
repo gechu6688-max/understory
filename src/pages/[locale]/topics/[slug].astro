@@ -19,7 +19,7 @@ const { topic } = Astro.props;
 const topicCases = locale === "zh" ? topic.cases.filter((caseEntry) => hasCaseLocale(locale, caseEntry.id)) : topic.cases;
 const caseCount = locale === "zh" ? `${topicCases.length} 个公开案例` : topicCases.length === 1 ? "1 public case" : `${topicCases.length} public cases`;
 const detail = discoveryContent(locale, topic.name);
-const relatedConcepts = Array.from(new Set(topicCases.flatMap((entry) => getCaseDisplayData(entry, locale).concepts)));
+const relatedConcepts = getTaxonomyItems(topicCases, "concepts", locale);
 const topicNumber = getTaxonomyItems(await getDiscoveryCases(), "topics").findIndex((item) => item.slug === topic.slug) + 1;
 ---
 
@@ -47,7 +47,7 @@ const topicNumber = getTaxonomyItems(await getDiscoveryCases(), "topics").findIn
         );
       })}
     </section>
-    <section class="related-concepts"><p class="discovery-kicker">{locale === "zh" ? "帮助理解的概念" : "Concepts that help explain it"}</p><div>{relatedConcepts.map((concept) => <a href={localizedPath(locale, `/concepts/${concept.toLowerCase().replace(/\s+/g, "-")}/`)}><ConceptDiagram concept={concept} label={concept}/><span>{concept}</span></a>)}</div></section>
+    <section class="related-concepts"><p class="discovery-kicker">{locale === "zh" ? "帮助理解的概念" : "Concepts that help explain it"}</p><div>{relatedConcepts.map((concept) => <a href={localizedPath(locale, `/concepts/${concept.slug}/`)}><ConceptDiagram concept={concept.slug} label={concept.name}/><span>{concept.name}</span></a>)}</div></section>
     <section class="discovery-closing"><p>{locale === "zh" ? "继续沿着问题探索。" : "Continue following the question."}</p><div><a href={localizedPath(locale, "/topics/")}>{locale === "zh" ? "所有主题 →" : "All topics →"}</a><a href={localizedPath(locale, "/concepts/")}>{locale === "zh" ? "浏览概念 →" : "Browse concepts →"}</a></div></section>
     {topicCases.length === 0 && locale === "zh" && (
       <p class="library-empty">

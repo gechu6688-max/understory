@@ -32,11 +32,13 @@ export const getDiscoveryCases = async () =>
 export const getPreviewCases = async () =>
   sortCasesByDate(await getCollection("cases", ({ data }) => data.status !== "published"));
 
-export const getTaxonomyItems = (cases: CaseEntry[], field: "topics" | "concepts") =>
+export const getTaxonomyItems = (cases: CaseEntry[], field: "topics" | "concepts", locale?: Locale) =>
   Array.from(
     cases.reduce((items, caseEntry) => {
-      for (const name of caseEntry.data[field]) {
-        const slug = toSlug(name);
+      for (const [index, stableName] of caseEntry.data[field].entries()) {
+        const localizedName = locale ? getCaseDisplayData(caseEntry, locale)[field][index] : undefined;
+        const name = localizedName ?? stableName;
+        const slug = toSlug(stableName);
         const existing = items.get(slug);
 
         if (existing) {

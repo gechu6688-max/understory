@@ -1,12 +1,12 @@
 ---
-import { getCaseDisplayData, getPublishedCases } from "../../../lib/cases";
+import { getCaseDisplayData, getDiscoveryCases } from "../../../lib/cases";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import CaseRenderer from "../../../components/case/CaseRenderer.astro";
 import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
 
 export async function getStaticPaths() {
-  const cases = await getPublishedCases();
+  const cases = await getDiscoveryCases();
   return locales.flatMap((locale) =>
     cases.map((caseEntry) => ({
       params: { locale, slug: caseEntry.id },
