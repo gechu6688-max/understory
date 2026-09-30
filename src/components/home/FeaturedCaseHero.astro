@@ -7,17 +7,18 @@ interface Props {
   summary: string;
   cta: string;
   image: string;
+  locale: "en" | "zh";
 }
 
-const { href, company, eyebrow, headline, summary, cta, image } = Astro.props;
+const { href, company, eyebrow, headline, summary, cta, image, locale } = Astro.props;
 ---
 
 <section class="editorial-hero" aria-labelledby="featured-case-title" data-featured-slider data-slide-count="1">
   <a class="editorial-hero__link" href={href} aria-label={`${cta}: ${company} — ${headline}`}>
-    <img class="editorial-hero__image" src={image} alt="A vast logistics system of conveyor lines and shelving inside a warehouse" fetchpriority="high" />
+    <img class="editorial-hero__image" src={image} alt={locale === "zh" ? "仓库内的物流传送线与货架系统" : "A vast logistics system of conveyor lines and shelving inside a warehouse"} fetchpriority="high" />
     <span class="editorial-hero__shade" aria-hidden="true"></span>
     <span class="editorial-hero__rail" aria-hidden="true">
-      <span>Understory / Featured research</span>
+      <span>{locale === "zh" ? "问溯 / 精选研究" : "Understory / Featured research"}</span>
       <span>01 / 01</span>
     </span>
     <span class="editorial-hero__content">

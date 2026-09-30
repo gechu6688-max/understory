@@ -232,23 +232,23 @@ export const siteCopy = {
     pages: {
       cases: {
         title: "案例库",
-        description: "真正用中文写好的案例，会慢慢出现在这里。",
-        count: (count: number) => (count === 0 ? "中文案例正在准备中" : `${count} 个中文案例`),
-        note: "等第一篇完整的中文案例完成后，它会出现在这里。",
-        discovery: "以后你可以从问题、公司、主题和概念进入这座案例库。",
-        empty: "中文案例还在慢慢整理。等第一篇真正用中文写好的案例完成后，它会出现在这里。",
+        description: "从真实商业问题出发的已发布案例。",
+        count: (count: number) => `${count} 个已发布案例`,
+        note: "这里只收录已公开发布的案例。",
+        discovery: "从问题、公司、主题和概念进入不断扩展的案例库。",
+        empty: "暂时没有符合条件的已发布内容。",
       },
       topics: {
         eyebrow: "主题",
         title: "按主题探索",
-        description: "每一个主题，都会从真正完成的中文案例里慢慢长出来。",
-        empty: "每一个主题，都会从真正完成的中文案例里慢慢长出来。",
+        description: "主题从已发布案例中自然形成，便于追踪反复出现的问题。",
+        empty: "暂时还没有已发布主题。",
       },
       concepts: {
         eyebrow: "商业概念",
         title: "概念索引",
-        description: "概念不是漂亮词汇，而是帮助我理解一个商业现象为什么会发生的工具。",
-        empty: "中文概念索引会随着真实完成的中文案例慢慢长出来。",
+        description: "概念不是标签，而是用来理解真实商业情境的分析工具。",
+        empty: "暂时还没有已发布概念。",
       },
       about: {
         title: "有些问题，不必急着结束",

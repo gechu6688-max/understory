@@ -14,20 +14,21 @@ interface Props {
 }
 
 const { title = "Case Timeline", events } = Astro.props;
+const zh = /[\u3400-\u9fff]/.test(title);
 const eventTypeLabels: Record<TimelineEventType, string> = {
-  company: "Company event",
-  market: "Market event",
-  academic: "Academic research",
-  regulatory: "Regulatory event",
-  publication: "Publication",
+  company: zh ? "公司事件" : "Company event",
+  market: zh ? "市场事件" : "Market event",
+  academic: zh ? "学术研究" : "Academic research",
+  regulatory: zh ? "监管事件" : "Regulatory event",
+  publication: zh ? "发布" : "Publication",
 };
 ---
 
 <section class="case-timeline" aria-labelledby="case-timeline-title">
   <header class="case-timeline__header">
-    <p>Chronology</p>
+    <p>{zh ? "时间脉络" : "Chronology"}</p>
     <h3 id="case-timeline-title">{title}</h3>
-    <p class="case-timeline__note">Events are labeled by source context; they do not carry equal evidentiary weight.</p>
+    <p class="case-timeline__note">{zh ? "事件按来源语境标注；它们并不具有相同的证据分量。" : "Events are labeled by source context; they do not carry equal evidentiary weight."}</p>
   </header>
   <ol class="case-timeline__list">
     {events.map((event) => (

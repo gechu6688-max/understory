@@ -30,6 +30,7 @@ const {
   image,
   align = "right",
 } = Astro.props;
+const zh = /[\u3400-\u9fff]/.test(`${label}${title}${body}`);
 ---
 
 <section class:list={["case-editorial-split", "case-debate-field", `case-editorial-split--${align}`]} aria-label={title}>
@@ -51,7 +52,7 @@ const {
         </>
       ) : (
         <>
-          <figcaption><span>Evidence / Counter-evidence / Interpretation</span>{visualTitle}</figcaption>
+          <figcaption><span>{zh ? "证据 / 另一种解释 / 判断" : "Evidence / Counter-evidence / Interpretation"}</span>{visualTitle}</figcaption>
           <ul>
             {items.map((item) => (
               <li>

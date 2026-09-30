@@ -2,40 +2,42 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import { getCaseDisplayData, getDiscoveryCases, getTaxonomyItems } from "../../../lib/cases";
-import { conceptDescriptions, getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
+import { formatConceptCaseCount, getConceptBySlug, getPublishedConcepts } from "../../../lib/concepts";
+import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
 import ConceptDiagram from "../../../components/discovery/ConceptDiagram.astro";
 import { discoveryContent } from "../../../lib/discovery";
 
 export async function getStaticPaths() {
   const publishedCases = await getDiscoveryCases();
-  const concepts = getTaxonomyItems(publishedCases, "concepts");
-  return locales.flatMap((locale) => concepts.map((concept) => ({ params: { locale, slug: concept.slug }, props: { concept } })));
+  const concepts = getPublishedConcepts(publishedCases);
+  return locales.flatMap((locale) => concepts.map((concept) => ({ params: { locale, slug: concept.slug } })));
 }
 
 const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
 const copy = getSiteCopy(locale);
-const { concept } = Astro.props;
+const concept = getConceptBySlug(await getDiscoveryCases(), Astro.params.slug ?? "");
+if (!concept) return Astro.redirect(localizedPath(locale, "/concepts/"));
 const conceptCases = locale === "zh" ? concept.cases.filter((caseEntry) => hasCaseLocale(locale, caseEntry.id)) : concept.cases;
-const caseCount = locale === "zh" ? `${conceptCases.length} 个公开案例` : conceptCases.length === 1 ? "1 public case" : `${conceptCases.length} public cases`;
-const detail = discoveryContent(locale, concept.name);
+const caseCount = formatConceptCaseCount(locale, conceptCases.length);
+const detail = discoveryContent(locale, concept.slug);
 const relatedTopics = getTaxonomyItems(conceptCases, "topics", locale);
-const conceptNumber = getTaxonomyItems(await getDiscoveryCases(), "concepts").findIndex((item) => item.slug === concept.slug) + 1;
+const conceptNumber = getPublishedConcepts(await getDiscoveryCases()).findIndex((item) => item.slug === concept.slug) + 1;
 ---
 
-<BaseLayout title={concept.name} description={`Published cases about ${concept.name}.`} locale={locale}>
+<BaseLayout title={concept.title[locale]} description={concept.shortDefinition[locale]} locale={locale}>
   <section class="page-shell" aria-labelledby="concept-heading">
     <Breadcrumbs
       label={locale === "zh" ? "页面路径" : "Breadcrumb"}
       items={[
         { label: locale === "zh" ? "首页" : "Home", href: localizedPath(locale) },
         { label: copy.pages.concepts.eyebrow, href: localizedPath(locale, "/concepts/") },
-        { label: concept.name },
+        { label: concept.title[locale] },
       ]}
     />
     <div class="taxonomy-identity taxonomy-identity--concept">
-      <div><p class="discovery-kicker">{locale === "zh" ? "概念" : "Concept"} / {String(conceptNumber).padStart(2, "0")}</p><h1 id="concept-heading">{concept.name}</h1><p>{detail.framing}</p><small>{caseCount}</small></div><ConceptDiagram concept={concept.slug} label={concept.name} />
+      <div><p class="discovery-kicker">{locale === "zh" ? "概念" : "Concept"} / {String(conceptNumber).padStart(2, "0")}</p><h1 id="concept-heading">{concept.title[locale]}</h1><p>{concept.keyQuestion[locale]}</p><small>{caseCount}</small></div><ConceptDiagram concept={concept.slug} label={concept.title[locale]} />
     </div>
-    <section class="understanding"><p class="discovery-kicker">{locale === "zh" ? "用日常语言说" : "In plain language"}</p><p>{conceptDescriptions[locale][concept.name] ?? conceptDescriptions.en[concept.name]}</p></section>
+    <section class="understanding"><p class="discovery-kicker">{locale === "zh" ? "用日常语言说" : "In plain language"}</p><p>{concept.shortDefinition[locale]}</p></section>
     <section class="follow-questions"><p class="discovery-kicker">{locale === "zh" ? "如何识别" : "How to recognize it"}</p><ol>{detail.signals.map((signal, index) => <li><span>{String(index + 1).padStart(2, "0")}</span><p>{signal}</p></li>)}</ol></section>
     <section class="what-not"><p class="discovery-kicker">{locale === "zh" ? "不要急着假设" : "What not to assume"}</p><p>{detail.caution}</p></section>
     <section class="taxonomy-cases"><p class="discovery-kicker">{locale === "zh" ? "真实案例中" : "In real cases"}</p>

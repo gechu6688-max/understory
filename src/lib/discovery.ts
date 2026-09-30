@@ -7,7 +7,7 @@ const normalized: Record<string, DiscoveryKind> = {
   competition: "competition", "竞争": "competition",
   technology: "technology", "技术": "technology",
   strategy: "strategy", "策略": "strategy",
-  "pricing-power": "pricing-power", "定价权": "pricing-power",
+  "pricing-power": "pricing-power", "定价权": "pricing-power", "定价能力": "pricing-power",
   "switching-costs": "switching-costs", "转换成本": "switching-costs",
   "competitive-constraint": "competitive-constraint", "竞争约束": "competitive-constraint",
 };

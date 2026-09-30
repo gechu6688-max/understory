@@ -58,6 +58,7 @@ const cases = defineCollection({
     entities: z.array(z.string()).min(1),
     topics: z.array(z.string()).min(1),
     concepts: z.array(z.string()).min(1),
+    conceptIds: z.array(z.string()).optional(),
     caseType: z.enum(caseTypes),
     presentation: z.enum(["standard", "editorial"]).default("standard"),
     caseNumber: z.string().optional(),
