@@ -30,16 +30,16 @@ const images = {
 } as const;
 const image = (key: keyof typeof images) => ({ src: images[key][0], alt: images[key][1], credit: images[key][2] });
 const copy = zh ? {
-  topic:"主题", pressure:"竞争压力从何而来", watch:"观察什么", lensLabel:"概念作为分析工具", case:"在案例中看见它", open:"未决问题",
-  proposition:"竞争不在于竞争者的数量，而在于真正可用的替代选择。", intro:"企业会受到约束，是因为客户拥有真正的选择：其他产品、其他平台，或满足同一需求的其他路径。重要的不是名单有多长，而是这些选择是否真实可用。",
-  pressureTitle:"真正的替代选择，会约束企业行为。", pressureText:"竞争压力可能来自直接竞争者，也可能来自相邻的选择、新进入者，或人们满足同一需求的方式变化。关键在于：这些替代方案是否足够接近、足够可用，并且是否容易转向。",
-  sources:[["现有竞争者","客户可以实际使用的相似产品或服务。"],["相邻替代方案","满足同一需求的不同产品或路径。"],["潜在进入者","可能改变既有格局的新提供者。"],["需求变化","技术、规则或行为带来的新选择。"]],
+  topic:"研究主题", pressure:"竞争压力从何而来", watch:"值得观察的信号", lensLabel:"分析工具 / 相关概念", case:"在案例中观察", open:"尚未解决的问题",
+  proposition:"竞争不只是对手的数量。真正重要的是，有意义的替代选择能否形成约束。", intro:"当客户有真正可行的替代选择时，企业就会受到约束：它们可能是其他产品、其他平台，或满足相同需求的不同方式。理解竞争的关键，在于这些选择是否足够接近、可获得，并且容易转向。",
+  pressureTitle:"真正的替代选择，会约束企业的行为。", pressureText:"竞争压力可能来自现有对手、相邻产品、新进入者，或需求被满足方式的变化。关键在于：这些替代方案是否足够接近、足够可获得，以及是否容易转向。",
+  sources:[["现有竞争者","提供相似产品或服务的直接竞争者。"],["相邻替代选择","满足相同需求的不同产品或平台。"],["潜在进入者","可能在未来带来竞争压力的新提供者。"],["需求变化","技术、规则或行为带来的新选择。"]],
   watchTitle:"信号帮助我们看见压力是强还是弱。", watchText:"单个信号不能下结论；它们只是帮助我们判断，有意义的替代选择是否仍然存在。", signals:[["客户流动","客户是否正在转向其他提供者？这种转向有多容易？"],["价格与条款反应","企业是否需要调整价格、质量或条款来留住客户？"],["替代方案的可得性","可行的替代方案有多少？它们与原选择有多接近？"],["转换摩擦","什么让离开更容易，或更困难？"]],
-  lensTitle:"用三个镜头，更近地看竞争。", lensText:"这些概念把竞争在实践中呈现的压力拆开来看。每一个都提示我们：替代选择会如何约束企业的行动空间。", lenses:[["竞争约束","外部选择是否足够有力，能约束企业行为？"],["定价能力","企业有多大的空间可以改变价格或条款？"],["转换成本","什么让一个看似存在的替代方案难以使用？"]],
-  caseTitle:"亚马逊与竞争格局。", caseText:"亚马逊在许多市场都与替代选择并存，但这些替代选择的强度并不相同。这个案例追踪：当一项重要竞争约束变弱时，企业的行为空间可能如何变化。", read:"阅读亚马逊案例", openTitle:"还有什么仍未解决？", openText:"竞争从来不是固定的。新技术、规则变化和行为转变都会创造或移除替代选择。哪些替代方案在特定市场真正重要？它们又将如何发展？", back:"返回主题", related:"相关概念", sourceLabel:"图片来源"
+  lensTitle:"三个分析视角，帮助我们更深入地观察竞争。", lensText:"这三个概念从不同角度拆解竞争在实践中呈现的压力。它们共同帮助我们理解，替代选择如何约束企业的行为，以及这种约束在不同情境下可能有多强。", lenses:[["竞争约束","外部选择是否足够有力，能约束企业的行为？"],["定价权","企业在多大程度上能够改变价格或条款？"],["转换成本","是什么让一个看似可行的替代选择变得难以使用？"]],
+  caseTitle:"亚马逊与竞争格局。", caseText:"亚马逊在多个市场与不同替代选择并存，而真正的竞争压力强弱也因此不同。通过观察这些选择是否紧密、可获得、且容易转换，我们可以更具体地理解竞争如何约束企业的行为。", read:"阅读亚马逊案例", openTitle:"还有哪些问题有待继续追问？", openText:"竞争从来不是固定的。新技术、规则变化和行为转变都会创造或移除替代选择。哪些替代方案在特定市场真正重要？它们又将如何发展？", back:"返回研究主题", related:"相关概念", sourceLabel:"图片来源"
 } : {
   topic:"Topics", pressure:"Where competitive pressure comes from", watch:"What to watch", lensLabel:"Concepts as analytical instruments", case:"See it in a case", open:"Open questions",
-  proposition:"Competition is not the number of rivals. It is the pressure created by meaningful alternatives.", intro:"Firms face constraints when customers have real options — other products, other platforms, or other ways to meet the same need. The point is not how many names appear on a list, but whether those alternatives can actually be used.",
+  proposition:"Competition is not simply the number of rivals. What matters is the pressure created by meaningful alternatives.", intro:"Firms face constraints when customers have real options — other products, other platforms, or other ways to meet the same need. What matters is whether these alternatives are close enough, usable enough, and easy enough to access.",
   pressureTitle:"Real alternatives constrain behaviour.", pressureText:"Competitive pressure can come from existing rivals, adjacent products, new entrants, or changes in how needs are met. What matters is whether those alternatives are close enough, usable enough, and easy enough to reach.",
   sources:[["Existing rivals","Similar products or services customers can actually use."],["Adjacent alternatives","Different products or paths that meet the same need."],["Potential entrants","New providers that could alter the existing field."],["Changing needs","Technology, rules, or behaviour opening new options."]],
   watchTitle:"Signals help us see whether pressure is strong or weak.", watchText:"No signal settles the question alone. Together they help us judge whether meaningful alternatives remain available in practice.", signals:[["Customer movement","Are customers moving to other providers, and how easily can they do so?"],["Price and terms response","Does a firm need to adjust price, quality, or terms to retain customers?"],["Availability of substitutes","How many viable alternatives exist, and how close are they to the same need?"],["Switching friction","What makes leaving easier — or harder — in practice?"]],
