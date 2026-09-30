@@ -4,8 +4,11 @@ import { join } from "node:path";
 const dist = new URL("../dist/", import.meta.url);
 const client = new URL("./client/", dist);
 const server = new URL("./server/", dist);
+const hosting = new URL("./.openai/", dist);
 
 await mkdir(client, { recursive: true });
+await mkdir(hosting, { recursive: true });
+await copyFile(new URL("../.openai/hosting.json", import.meta.url), new URL("./hosting.json", hosting));
 
 for (const entry of await readdir(dist)) {
   if (entry === "client" || entry === "server" || entry === ".openai") continue;
