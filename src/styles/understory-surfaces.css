@@ -3274,3 +3274,17 @@
     min-height: 0;
   }
 }
+
+/* Chinese Concepts uses the same three-column photo row as English, with its own type rhythm. */
+.concepts-r9--zh .concepts-r9__featured-list{border-top-color:rgba(24,32,28,.24)}
+.concepts-r9--zh .concepts-r9__row{grid-template-columns:minmax(15rem,.9fr) minmax(17rem,1.15fr) minmax(16rem,.9fr);min-height:14.5rem;gap:1.25rem}
+.concepts-r9--zh .concepts-r9__identity{display:flex;flex-direction:column;align-items:flex-start}
+.concepts-r9--zh .concepts-r9__identity>span,.concepts-r9--zh .concepts-r9__row>aside>p{letter-spacing:.04em;text-transform:none}
+.concepts-r9--zh .concepts-r9__identity h3{font-family:var(--font-body);font-weight:650;line-height:1.04;letter-spacing:-.035em}
+.concepts-r9--zh .concepts-r9__identity>p:last-of-type{font-size:.96rem;line-height:1.6}
+.concepts-r9--zh .concepts-r9__identity a{margin-top:auto;padding-top:.8rem}
+.concepts-r9--zh .concepts-r9__row figure,.concepts-r9--zh .concepts-r9__row figure img{min-height:13.5rem}
+.concepts-r9--zh .concepts-r9__row>aside{display:flex;flex-direction:column;justify-content:flex-start;padding:1.25rem 1.35rem}
+.concepts-r9--zh .concepts-r9__row>aside strong{font-family:var(--font-body);font-weight:600;line-height:1.45}
+.concepts-r9--zh .concepts-r9__row>aside small{margin-top:auto;padding-top:1.2rem}
+@media(max-width:760px){.concepts-r9--zh .concepts-r9__row{grid-template-columns:1fr;min-height:0}.concepts-r9--zh .concepts-r9__identity a{margin-top:1rem}.concepts-r9--zh .concepts-r9__row figure,.concepts-r9--zh .concepts-r9__row figure img{min-height:16rem}.concepts-r9--zh .concepts-r9__row>aside small{margin-top:1.2rem;padding-top:0}}
