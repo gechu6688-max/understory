@@ -3,11 +3,24 @@
   if (!root || root.dataset.cmsCaseSlug !== "amazon-convenience-market-power") return;
   const escape = (value = "") => String(value).replace(/[&<>\"']/g, (character) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#39;" })[character]);
   const text = (value = "") => escape(value).replace(/\n/g, "<br>");
-  const image = (block) => `<figure class="case-editorial-image case-editorial-image--${escape(block.variant || "body")}"><div class="case-editorial-image__frame"><img src="${escape(block.src)}" alt="${escape(block.alt)}" loading="lazy"></div><figcaption><span class="case-editorial-image__label">${escape(block.label || "System View")}</span>${block.caption ? `<span class="case-editorial-image__caption">${text(block.caption)}</span>` : ""}</figcaption></figure>`;
+  const number = (value, min, max, fallback) => typeof value === "number" && Number.isFinite(value) ? Math.max(min, Math.min(max, value)) : fallback;
+  const align = (value) => ["left", "center", "right"].includes(value) ? value : "left";
+  const vars = (presentation = {}, kind = "text") => {
+    const value = kind === "image" ? presentation.image || {} : presentation.text || {};
+    const prefix = kind === "image" ? "--cms-image" : "--cms-text";
+    const pieces = [
+      `${prefix}-x:${number(value.xOffset, -96, 96, 0)}px`, `${prefix}-y:${number(value.yOffset, -64, 96, 0)}px`,
+      `${prefix}-align:${align(value.align)}`,
+    ];
+    if (kind === "image") pieces.push(`${prefix}-width:${number(value.width, 40, 100, 100)}%`);
+    else pieces.push(`${prefix}-size:${number(value.fontSize, 16, 96, 18)}px`, `${prefix}-max-width:${number(value.maxWidth, 280, 1100, 760)}px`, `${prefix}-weight:${[400,500,600,700].includes(value.fontWeight) ? value.fontWeight : 600}`, `${prefix}-line-height:${number(value.lineHeight, .95, 1.8, 1.35)}`);
+    return ` style="${pieces.join(";")}"`;
+  };
+  const image = (block) => `<figure class="case-editorial-image case-editorial-image--${escape(block.variant || "body")} cms-adjustable-image"${vars(block.presentation, "image")}><div class="case-editorial-image__frame"><img src="${escape(block.src)}" alt="${escape(block.alt)}" loading="lazy"></div><figcaption><span class="case-editorial-image__label">${escape(block.label || "System View")}</span>${block.caption ? `<span class="case-editorial-image__caption">${text(block.caption)}</span>` : ""}</figcaption></figure>`;
   const renderers = {
     prose: (b) => `<section><h2>${escape(b.heading)}</h2><p>${text(b.body)}</p></section>`,
     image,
-    evidence: (b) => `<aside class="evidence-highlight editorial-evidence-highlight"><header class="editorial-evidence-highlight__header"><p class="evidence-highlight__eyebrow">Evidence Highlight</p><h3>${escape(b.title)}</h3></header><div class="editorial-evidence-highlight__finding"><p class="editorial-evidence-highlight__term">Finding</p><div>${b.metric ? `<p class="editorial-evidence-highlight__metric">${escape(b.metric)}</p>` : ""}<p class="editorial-evidence-highlight__statement">${text(b.finding)}</p></div></div><div class="editorial-evidence-highlight__support"><div><p class="editorial-evidence-highlight__term">Comparison</p><p>${text(b.comparison)}</p></div><div><p class="editorial-evidence-highlight__term">Caveat</p><p>${text(b.caveat)}</p></div></div><footer class="editorial-evidence-highlight__source"><span>Source</span><cite>${escape(b.source)}</cite></footer></aside>`,
+    evidence: (b) => `<aside class="evidence-highlight editorial-evidence-highlight cms-adjustable-text"${vars(b.presentation)}><header class="editorial-evidence-highlight__header"><p class="evidence-highlight__eyebrow">Evidence Highlight</p><h3>${escape(b.title)}</h3></header><div class="editorial-evidence-highlight__finding"><p class="editorial-evidence-highlight__term">Finding</p><div>${b.metric ? `<p class="editorial-evidence-highlight__metric">${escape(b.metric)}</p>` : ""}<p class="editorial-evidence-highlight__statement">${text(b.finding)}</p></div></div><div class="editorial-evidence-highlight__support"><div><p class="editorial-evidence-highlight__term">Comparison</p><p>${text(b.comparison)}</p></div><div><p class="editorial-evidence-highlight__term">Caveat</p><p>${text(b.caveat)}</p></div></div><footer class="editorial-evidence-highlight__source"><span>Source</span><cite>${escape(b.source)}</cite></footer></aside>`,
     timeline: (b) => `<section class="case-timeline"><header class="case-timeline__header"><p>Chronology</p><h3>${escape(b.title)}</h3></header><ol class="case-timeline__list">${b.events.map((e) => `<li class="case-timeline__event case-timeline__event--${escape(e.type)}"><p class="case-timeline__year">${escape(e.year)}</p><div class="case-timeline__content"><h4>${escape(e.title)}</h4><p class="case-timeline__description">${text(e.description)}</p></div></li>`).join("")}</ol></section>`,
     "causal-chain": (b) => `<section class="case-causal-chain"><header><p>Causal Path</p><h3>${escape(b.title)}</h3></header><ol>${b.steps.map((s, i) => `<li><span>${String(i + 1).padStart(2, "0")}</span><div><strong>${escape(s.label)}</strong><p>${text(s.detail)}</p></div></li>`).join("")}</ol></section>`,
     debate: (b) => `<section class="case-editorial-split case-debate-field case-editorial-split--right"><div class="case-editorial-split__text"><p>${escape(b.label || "Context")}</p><h3>${escape(b.title)}</h3><p>${text(b.body)}</p></div><figure class="case-editorial-split__visual"><figcaption><span>${escape(b.visualTitle)}</span></figcaption></figure></section>`,
@@ -20,9 +33,10 @@
   const replaceHero = (content) => {
     const hero = content.meta.hero; const header = root.querySelector(".case-header");
     if (!header || !hero) return;
-    const title = header.querySelector("h1"); if (title) title.textContent = root.closest("main")?.dataset.cmsDocumentTitle || title.textContent;
+    const title = header.querySelector("h1"); if (title) { title.textContent = root.closest("main")?.dataset.cmsDocumentTitle || title.textContent; title.classList.add("cms-adjustable-title"); title.setAttribute("style", vars({ text: hero.presentation })); }
     const summary = header.querySelector(".case-header__deck"); if (summary) summary.textContent = content.meta.summary;
     const question = root.querySelector(".case-question-block__question"); if (question) question.textContent = content.meta.centralQuestion;
+    const heroFigure = header.querySelector(".case-editorial-image--hero"); if (heroFigure) { heroFigure.classList.add("cms-adjustable-image"); heroFigure.setAttribute("style", vars({ image: hero.imagePresentation }, "image")); }
     const heroImage = header.querySelector(".case-editorial-image--hero img"); if (heroImage) { heroImage.src = hero.image; heroImage.alt = hero.alt; }
     const caption = header.querySelector(".case-editorial-image--hero .case-editorial-image__caption"); if (caption) caption.textContent = hero.caption || "";
   };

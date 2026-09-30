@@ -4,6 +4,29 @@ const state = { documents: [], current: null };
 const blank = (kind) => ({ kind, slug: "", locale: "en", title: "", status: "draft", content: kind === "case" ? { blocks: [{ type: "prose", heading: "Opening", body: "" }] } : { fields: {} } });
 const types = ["prose", "image", "evidence", "timeline", "causal-chain", "debate", "trade-off", "boundary", "insight", "ecosystem", "question"];
 const defaults = { prose:{heading:"New section",body:""}, image:{src:"",alt:"",caption:""}, evidence:{title:"Evidence",metric:"",finding:"",comparison:"",caveat:"",source:""}, timeline:{title:"Timeline",events:[{year:"",title:"",description:"",type:"market"}]}, "causal-chain":{title:"Causal chain",steps:[{label:"",detail:""}]}, debate:{title:"Debate",body:"",visualTitle:"Evidence / Counter-evidence / Interpretation"}, "trade-off":{leftLabel:"",rightLabel:"",leftItems:[""],rightItems:[""]}, boundary:{title:"Boundary",items:[{label:"",detail:""}]}, insight:{title:"Insight",statement:""}, ecosystem:{title:"System map",nodes:[{label:"",title:"",detail:""}]}, question:{question:""} };
+const esc = (value = "") => String(value).replace(/[&<>"']/g, (character) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" })[character]);
+const textLayoutDefaults = { fontSize: 18, maxWidth: 760, xOffset: 0, yOffset: 0, fontWeight: 600, lineHeight: 1.35, align: "left" };
+const heroLayoutDefaults = { fontSize: 74, maxWidth: 900, xOffset: 0, yOffset: 0, fontWeight: 600, lineHeight: 1.04, align: "left" };
+const imageLayoutDefaults = { width: 100, xOffset: 0, yOffset: 0, align: "left" };
+const numeric = (value, fallback) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+function ensurePresentation(content) {
+  content.meta ??= {}; content.meta.hero ??= {}; content.blocks ??= [];
+  content.meta.hero.presentation = { ...heroLayoutDefaults, ...(content.meta.hero.presentation || {}) };
+  content.meta.hero.imagePresentation = { ...imageLayoutDefaults, ...(content.meta.hero.imagePresentation || {}) };
+  content.blocks.forEach((block) => { block.presentation = { text: { ...textLayoutDefaults, ...(block.presentation?.text || {}) }, image: { ...imageLayoutDefaults, ...(block.presentation?.image || {}) } }; });
+}
+function positionControls(layout, attribute) {
+  return `<div class="studio__position"><strong>Drag position</strong><label>Left / right <input ${attribute}="xOffset" type="range" min="-96" max="96" value="${numeric(layout.xOffset, 0)}"></label><label>Up / down <input ${attribute}="yOffset" type="range" min="-64" max="96" value="${numeric(layout.yOffset, 0)}"></label></div>`;
+}
+function textLayoutControls(value, attribute, isHero = false) {
+  const layout = { ...(isHero ? heroLayoutDefaults : textLayoutDefaults), ...value };
+  const sizeMax = isHero ? 96 : 32;
+  return `<fieldset class="studio__layout-controls"><legend>${isHero ? "Hero title layout" : "Evidence text layout"}</legend><p class="studio__hint">Desktop only. Mobile keeps Understory’s default reading layout.</p><div class="studio__control-grid"><label>Size <input ${attribute}="fontSize" type="range" min="16" max="${sizeMax}" value="${numeric(layout.fontSize, isHero ? 74 : 18)}"></label><label>Text box width <input ${attribute}="maxWidth" type="range" min="280" max="1100" step="10" value="${numeric(layout.maxWidth, isHero ? 900 : 760)}"></label><label>Weight <select ${attribute}="fontWeight">${[400,500,600,700].map((weight) => `<option value="${weight}" ${Number(layout.fontWeight) === weight ? "selected" : ""}>${weight}</option>`).join("")}</select></label><label>Line height <input ${attribute}="lineHeight" type="range" min="0.95" max="1.8" step="0.05" value="${numeric(layout.lineHeight, isHero ? 1.04 : 1.35)}"></label><label>Alignment <select ${attribute}="align">${["left","center","right"].map((alignment) => `<option value="${alignment}" ${layout.align === alignment ? "selected" : ""}>${alignment}</option>`).join("")}</select></label></div>${positionControls(layout, attribute)}</fieldset>`;
+}
+function imageLayoutControls(value, attribute, label = "Image layout") {
+  const layout = { ...imageLayoutDefaults, ...value };
+  return `<fieldset class="studio__layout-controls"><legend>${label}</legend><p class="studio__hint">Desktop only. Mobile keeps the image’s existing responsive layout.</p><div class="studio__control-grid"><label>Image size <input ${attribute}="width" type="range" min="40" max="100" value="${numeric(layout.width, 100)}"></label><label>Alignment <select ${attribute}="align">${["left","center","right"].map((alignment) => `<option value="${alignment}" ${layout.align === alignment ? "selected" : ""}>${alignment}</option>`).join("")}</select></label></div>${positionControls(layout, attribute)}</fieldset>`;
+}
 const asJson = async (response) => {
   const raw = await response.text();
   try { return raw ? JSON.parse(raw) : {}; } catch { throw new Error("Studio sign-in expired. Please refresh this page and sign in again."); }
@@ -49,22 +72,28 @@ function setEditor(document) {
 }
 const field = (label, value, key, multiline = false) => `<label>${label}${multiline ? `<textarea data-block-field="${key}" rows="3">${String(value ?? "")}</textarea>` : `<input data-block-field="${key}" value="${String(value ?? "").replace(/\"/g, "&quot;")}">`}</label>`;
 function renderCaseFields(content) {
-  content.meta ??= {}; content.meta.hero ??= {}; content.blocks ??= [];
+  ensurePresentation(content);
+  document.querySelector("[data-hero=title]").value = state.current.title || "";
   document.querySelector("[data-meta=summary]").value = content.meta.summary || "";
   document.querySelector("[data-meta=centralQuestion]").value = content.meta.centralQuestion || "";
   for (const key of ["image", "alt", "caption"]) document.querySelector(`[data-hero=${key}]`).value = content.meta.hero[key] || "";
+  $("[data-hero-layouts]").innerHTML = `${textLayoutControls(content.meta.hero.presentation, "data-hero-layout", true)}${imageLayoutControls(content.meta.hero.imagePresentation, "data-hero-image-layout", "Hero image layout")}`;
   const host = $("[data-blocks]");
-  host.innerHTML = content.blocks.map((block, index) => `<article class="studio__block" data-block-index="${index}"><header><strong>${block.type}</strong><label><input type="checkbox" data-visible ${block.visible !== false ? "checked" : ""}> Visible</label><button type="button" data-move="up">↑</button><button type="button" data-move="down">↓</button><button type="button" data-duplicate>Duplicate</button><button type="button" data-remove>Delete</button></header><div class="studio__block-fields">${Object.entries(block).filter(([key]) => !["id","type","visible"].includes(key)).map(([key,value]) => Array.isArray(value) || (value && typeof value === "object") ? `<label>${key}<textarea data-block-json="${key}" rows="5">${JSON.stringify(value, null, 2)}</textarea></label>` : field(key, value, key, key === "body" || key === "finding" || key === "comparison" || key === "caveat" || key === "statement")).join("")}</div></article>`).join("");
+  host.innerHTML = content.blocks.map((block, index) => `<article class="studio__block" data-block-index="${index}"><header><strong>${block.type}</strong><label><input type="checkbox" data-visible ${block.visible !== false ? "checked" : ""}> Visible</label><button type="button" data-move="up">Move up</button><button type="button" data-move="down">Move down</button><button type="button" data-duplicate>Duplicate</button><button type="button" data-remove>Delete</button></header><div class="studio__block-fields">${Object.entries(block).filter(([key]) => !["id","type","visible","presentation"].includes(key)).map(([key,value]) => Array.isArray(value) || (value && typeof value === "object") ? `<label>${esc(key)}<textarea data-block-json="${esc(key)}" rows="5">${esc(JSON.stringify(value, null, 2))}</textarea></label>` : field(key, value, key, key === "body" || key === "finding" || key === "comparison" || key === "caveat" || key === "statement")).join("")}</div>${block.type === "evidence" ? textLayoutControls(block.presentation.text, "data-block-text-layout") : ""}${block.type === "image" ? imageLayoutControls(block.presentation.image, "data-block-image-layout") : ""}</article>`).join("");
   host.querySelectorAll("[data-move]").forEach((button) => button.addEventListener("click", () => { const index = Number(button.closest("[data-block-index]").dataset.blockIndex); const destination = button.dataset.move === "up" ? index - 1 : index + 1; if (destination >= 0 && destination < content.blocks.length) { [content.blocks[index], content.blocks[destination]] = [content.blocks[destination], content.blocks[index]]; renderCaseFields(content); } }));
   host.querySelectorAll("[data-duplicate]").forEach((button) => button.addEventListener("click", () => { const index = Number(button.closest("[data-block-index]").dataset.blockIndex); content.blocks.splice(index + 1, 0, { ...structuredClone(content.blocks[index]), id: crypto.randomUUID() }); renderCaseFields(content); }));
   host.querySelectorAll("[data-remove]").forEach((button) => button.addEventListener("click", () => { const index = Number(button.closest("[data-block-index]").dataset.blockIndex); if (window.confirm("Delete this editorial section?")) { content.blocks.splice(index, 1); renderCaseFields(content); } }));
 }
 function collectCase() {
-  const content = state.current.content; content.meta ??= {}; content.meta.hero ??= {};
+  const content = state.current.content; ensurePresentation(content);
+  state.current.title = document.querySelector("[data-hero=title]").value.trim();
+  document.querySelector("[data-editor]").elements.title.value = state.current.title;
   content.meta.summary = document.querySelector("[data-meta=summary]").value;
   content.meta.centralQuestion = document.querySelector("[data-meta=centralQuestion]").value;
   for (const key of ["image", "alt", "caption"]) content.meta.hero[key] = document.querySelector(`[data-hero=${key}]`).value;
-  document.querySelectorAll("[data-block-index]").forEach((node) => { const block = content.blocks[Number(node.dataset.blockIndex)]; block.visible = node.querySelector("[data-visible]").checked; node.querySelectorAll("[data-block-field]").forEach((input) => { block[input.dataset.blockField] = input.value; }); node.querySelectorAll("[data-block-json]").forEach((input) => { try { block[input.dataset.blockJson] = JSON.parse(input.value); } catch { throw new Error(`${input.dataset.blockJson} must be valid structured data.`); } }); });
+  document.querySelectorAll("[data-hero-layout]").forEach((input) => { const key = input.dataset.heroLayout; content.meta.hero.presentation[key] = key === "align" ? input.value : numeric(input.value, content.meta.hero.presentation[key]); });
+  document.querySelectorAll("[data-hero-image-layout]").forEach((input) => { const key = input.dataset.heroImageLayout; content.meta.hero.imagePresentation[key] = key === "align" ? input.value : numeric(input.value, content.meta.hero.imagePresentation[key]); });
+  document.querySelectorAll("[data-block-index]").forEach((node) => { const block = content.blocks[Number(node.dataset.blockIndex)]; block.visible = node.querySelector("[data-visible]").checked; node.querySelectorAll("[data-block-field]").forEach((input) => { block[input.dataset.blockField] = input.value; }); node.querySelectorAll("[data-block-json]").forEach((input) => { try { block[input.dataset.blockJson] = JSON.parse(input.value); } catch { throw new Error(`${input.dataset.blockJson} must be valid structured data.`); } }); node.querySelectorAll("[data-block-text-layout]").forEach((input) => { const key = input.dataset.blockTextLayout; block.presentation.text[key] = key === "align" ? input.value : numeric(input.value, block.presentation.text[key]); }); node.querySelectorAll("[data-block-image-layout]").forEach((input) => { const key = input.dataset.blockImageLayout; block.presentation.image[key] = key === "align" ? input.value : numeric(input.value, block.presentation.image[key]); }); });
   return content;
 }
 async function openDocument(id) { const data = await request(`/documents/${id}`); setEditor(data.document); }
