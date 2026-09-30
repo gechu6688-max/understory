@@ -6,6 +6,7 @@
     <meta name="robots" content="noindex,nofollow" />
     <title>Creator Studio · Understory</title>
     <link rel="stylesheet" href="/studio.css" />
+    <link rel="stylesheet" href="/studio-visual.css" />
   </head>
   <body>
     <main class="studio" data-studio>
@@ -16,6 +17,14 @@
           <div class="studio__toolbar"><h1 data-heading>Content</h1><span data-status></span></div>
           <div class="studio__notice" data-notice hidden></div>
           <div class="studio__documents" data-documents></div>
+          <section class="studio__visual" data-visual-editor hidden>
+            <header class="studio__visual-header"><div><p>Amazon Case</p><h2>Direct editor</h2></div><div><button type="button" data-visual-save>Save draft</button><button type="button" data-visual-preview>Preview</button><button type="button" data-visual-publish>Publish</button><button type="button" data-visual-close>Close</button></div></header>
+            <div class="studio__visual-layout">
+              <nav class="studio__navigator" data-visual-navigator></nav>
+              <div class="studio__canvas"><p class="studio__canvas-hint">Click an editable element. Drag the thin handle to move it; use the edge or corner handles to resize.</p><iframe title="Amazon case draft canvas" data-visual-frame></iframe></div>
+              <aside class="studio__inspector" data-visual-inspector><p>Select a title, evidence finding, or image in the page.</p></aside>
+            </div>
+          </section>
           <form class="studio__editor" data-editor hidden>
             <div class="studio__editor-heading"><h2 data-editor-title>New document</h2><button type="button" data-close>Close</button></div>
             <label>Title <input name="title" required /></label><label>Slug <input name="slug" required /></label>
