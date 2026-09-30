@@ -187,7 +187,6 @@ function bindVisualCanvas() {
     node.contentEditable = "true"; node.classList.add("studio-direct-editable");
     node.addEventListener("pointerdown", (event) => { if (event.detail > 1) return; selectVisual(kind, blockId); beginDirectGesture(event, "move"); });
     node.addEventListener("dblclick", () => { node.focus(); });
-    node.addEventListener("keydown", (event) => { if (event.key === "Enter" && doc.activeElement !== node) { event.preventDefault(); node.focus(); } });
     node.addEventListener("input", sync);
   };
   const title = doc.querySelector('[data-cms-visual="hero-title"]');
@@ -198,6 +197,11 @@ function bindVisualCanvas() {
   const hero = doc.querySelector('[data-cms-visual="hero-image"]'); if (hero) directImage(hero, "hero-image");
   doc.querySelectorAll('[data-cms-visual="evidence-text"]').forEach((node) => { const blockId = node.closest("[data-cms-block-id]")?.dataset.cmsBlockId; directText(node, "evidence-text", blockId, () => { const block = visualBlock(blockId); if (block) block.finding = node.innerText; }); });
   doc.querySelectorAll('[data-cms-visual="evidence-image"]').forEach((node) => directImage(node, "evidence-image", node.dataset.cmsBlockId));
+  doc.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || !visual.selected || visual.selected.kind.includes("image") || doc.activeElement?.isContentEditable) return;
+    const selected = selectedElement(); const editable = visual.selected.kind === "evidence-text" ? selected?.querySelector('[data-cms-visual="evidence-text"]') : selected;
+    if (editable) { event.preventDefault(); editable.focus(); }
+  });
   doc.defaultView.addEventListener("scroll", renderVisualOverlay); doc.defaultView.addEventListener("resize", renderVisualOverlay);
 }
 function renderVisualNavigator() {
