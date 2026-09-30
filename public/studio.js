@@ -63,7 +63,7 @@ function setEditor(document) {
   for (const name of ["title", "slug", "locale", "status"]) form.elements[name].value = document[name] || "";
   form.elements.content.value = serialize(document);
   const isCase = document.kind === "case";
-  const isAmazon = isCase && document.slug === "amazon-convenience-market-power";
+  const isAmazon = isCase && /amazon/i.test(`${document.slug || ""} ${document.title || ""}`);
   if (isAmazon) { form.hidden = true; openVisualEditor(); return; }
   $("[data-visual-editor]").hidden = true;
   $("[data-case-fields]").hidden = !isCase;
