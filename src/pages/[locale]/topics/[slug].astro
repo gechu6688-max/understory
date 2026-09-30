@@ -1,58 +1,63 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import Breadcrumbs from "../../../components/Breadcrumbs.astro";
-import { getCaseDisplayData, getDiscoveryCases, getTaxonomyItems } from "../../../lib/cases";
-import { getSiteCopy, hasCaseLocale, isLocale, locales, localizedPath, topicDescriptions } from "../../../lib/siteCopy";
-import ResearchSymbol from "../../../components/discovery/ResearchSymbol.astro";
-import ConceptDiagram from "../../../components/discovery/ConceptDiagram.astro";
+import { getDiscoveryCases, getTaxonomyItems } from "../../../lib/cases";
+import { hasCaseLocale, isLocale, locales, localizedPath } from "../../../lib/siteCopy";
 import { discoveryContent } from "../../../lib/discovery";
 
 export async function getStaticPaths() {
-  const publishedCases = await getDiscoveryCases();
-  const topics = getTaxonomyItems(publishedCases, "topics");
+  const cases = await getDiscoveryCases();
+  const topics = getTaxonomyItems(cases, "topics");
   return locales.flatMap((locale) => topics.map((topic) => ({ params: { locale, slug: topic.slug }, props: { topic } })));
 }
-
 const locale = isLocale(Astro.params.locale) ? Astro.params.locale : "en";
-const copy = getSiteCopy(locale);
+const zh = locale === "zh";
 const { topic } = Astro.props;
-const topicCases = locale === "zh" ? topic.cases.filter((caseEntry) => hasCaseLocale(locale, caseEntry.id)) : topic.cases;
-const caseCount = locale === "zh" ? `${topicCases.length} 个公开案例` : topicCases.length === 1 ? "1 public case" : `${topicCases.length} public cases`;
-const detail = discoveryContent(locale, topic.name);
-const relatedConcepts = getTaxonomyItems(topicCases, "concepts", locale);
-const topicNumber = getTaxonomyItems(await getDiscoveryCases(), "topics").findIndex((item) => item.slug === topic.slug) + 1;
+const allCases = zh ? topic.cases.filter((entry) => hasCaseLocale(locale, entry.id)) : topic.cases;
+const caseEntry = allCases[0];
+const concepts = getTaxonomyItems(allCases, "concepts", locale);
+const generic = discoveryContent(locale, topic.name);
+const I = (id: string, width = 1200) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=85`;
+const images = {
+  hero: [I("photo-1542838132-92c53300491e", 1800), zh ? "超市货架上的不同商品选择" : "Several competing choices on a grocery shelf", "Unsplash · photo-1542838132-92c53300491e"],
+  routes: [I("photo-1449824913935-59a10b8d2000", 1400), zh ? "从高处俯瞰的城市道路与多条路径" : "An elevated view of city roads and alternative routes", "Unsplash · photo-1449824913935-59a10b8d2000"],
+  movement: [I("photo-1485217988980-11786ced9454", 900), zh ? "移动设备上的数字服务选择" : "Digital services presented on a mobile device", "Unsplash · photo-1485217988980-11786ced9454"],
+  price: [I("photo-1555529771-835f59fc5efe", 900), zh ? "商店里的产品与可见价格" : "Products and visible prices in a store", "Unsplash · photo-1555529771-835f59fc5efe"],
+  substitute: [I("photo-1785411007575-3f85e71a2adf", 900), zh ? "并列展示的商家选择" : "Multiple businesses listed alongside one another", "Unsplash · Heng Chiu · wQUJzhhJXuk"],
+  friction: [I("photo-1750262727446-759032bf283f", 900), zh ? "零售柜台上的支付终端" : "A payment terminal on a retail counter", "Unsplash · SumUp · 5RVD3VVNWeI"],
+  constraint: [I("photo-1477959858617-67f85cf4f1df", 900), zh ? "城市商业环境中的不同去向" : "Different directions in a commercial city environment", "Unsplash · photo-1477959858617-67f85cf4f1df"],
+  pricing: [I("photo-1554224155-6726b3ff858f", 900), zh ? "桌面上的账单与计算工具" : "A bill and calculation tools on a desk", "Unsplash · photo-1554224155-6726b3ff858f"],
+  switching: [I("photo-1586528116311-ad8dd3c8310d", 900), zh ? "履约基础设施中的成排货物" : "Rows of goods in fulfillment infrastructure", "Unsplash · photo-1586528116311-ad8dd3c8310d"],
+} as const;
+const image = (key: keyof typeof images) => ({ src: images[key][0], alt: images[key][1], credit: images[key][2] });
+const copy = zh ? {
+  topic:"主题", pressure:"竞争压力从何而来", watch:"观察什么", lensLabel:"概念作为分析工具", case:"在案例中看见它", open:"未决问题",
+  proposition:"竞争不在于竞争者的数量，而在于真正可用的替代选择。", intro:"企业会受到约束，是因为客户拥有真正的选择：其他产品、其他平台，或满足同一需求的其他路径。重要的不是名单有多长，而是这些选择是否真实可用。",
+  pressureTitle:"真正的替代选择，会约束企业行为。", pressureText:"竞争压力可能来自直接竞争者，也可能来自相邻的选择、新进入者，或人们满足同一需求的方式变化。关键在于：这些替代方案是否足够接近、足够可用，并且是否容易转向。",
+  sources:[["现有竞争者","客户可以实际使用的相似产品或服务。"],["相邻替代方案","满足同一需求的不同产品或路径。"],["潜在进入者","可能改变既有格局的新提供者。"],["需求变化","技术、规则或行为带来的新选择。"]],
+  watchTitle:"信号帮助我们看见压力是强还是弱。", watchText:"单个信号不能下结论；它们只是帮助我们判断，有意义的替代选择是否仍然存在。", signals:[["客户流动","客户是否正在转向其他提供者？这种转向有多容易？"],["价格与条款反应","企业是否需要调整价格、质量或条款来留住客户？"],["替代方案的可得性","可行的替代方案有多少？它们与原选择有多接近？"],["转换摩擦","什么让离开更容易，或更困难？"]],
+  lensTitle:"用三个镜头，更近地看竞争。", lensText:"这些概念把竞争在实践中呈现的压力拆开来看。每一个都提示我们：替代选择会如何约束企业的行动空间。", lenses:[["竞争约束","外部选择是否足够有力，能约束企业行为？"],["定价权","企业有多大的空间可以改变价格或条款？"],["转换成本","什么让一个看似存在的替代方案难以使用？"]],
+  caseTitle:"亚马逊与竞争格局。", caseText:"亚马逊在许多市场都与替代选择并存，但这些替代选择的强度并不相同。这个案例追踪：当一项重要竞争约束变弱时，企业的行为空间可能如何变化。", read:"阅读亚马逊案例", openTitle:"还有什么仍未解决？", openText:"竞争从来不是固定的。新技术、规则变化和行为转变都会创造或移除替代选择。哪些替代方案在特定市场真正重要？它们又将如何发展？", back:"返回主题", related:"相关概念", sourceLabel:"图片来源"
+} : {
+  topic:"Topics", pressure:"Where competitive pressure comes from", watch:"What to watch", lensLabel:"Concepts as analytical instruments", case:"See it in a case", open:"Open questions",
+  proposition:"Competition is not the number of rivals. It is the pressure created by meaningful alternatives.", intro:"Firms face constraints when customers have real options — other products, other platforms, or other ways to meet the same need. The point is not how many names appear on a list, but whether those alternatives can actually be used.",
+  pressureTitle:"Real alternatives constrain behaviour.", pressureText:"Competitive pressure can come from existing rivals, adjacent products, new entrants, or changes in how needs are met. What matters is whether those alternatives are close enough, usable enough, and easy enough to reach.",
+  sources:[["Existing rivals","Similar products or services customers can actually use."],["Adjacent alternatives","Different products or paths that meet the same need."],["Potential entrants","New providers that could alter the existing field."],["Changing needs","Technology, rules, or behaviour opening new options."]],
+  watchTitle:"Signals help us see whether pressure is strong or weak.", watchText:"No signal settles the question alone. Together they help us judge whether meaningful alternatives remain available in practice.", signals:[["Customer movement","Are customers moving to other providers, and how easily can they do so?"],["Price and terms response","Does a firm need to adjust price, quality, or terms to retain customers?"],["Availability of substitutes","How many viable alternatives exist, and how close are they to the same need?"],["Switching friction","What makes leaving easier — or harder — in practice?"]],
+  lensTitle:"Three lenses to look closer at competition.", lensText:"These concepts help break down what competition looks like in practice. Each names a different part of the pressure alternatives place on a firm's room to act.", lenses:[["Competitive Constraint","Are outside options strong enough to discipline behaviour?"],["Pricing Power","How much room does the firm have to change price or terms?"],["Switching Costs","What makes an apparent alternative difficult to use?"]],
+  caseTitle:"Amazon and the competitive landscape.", caseText:"Amazon operates in markets where alternatives exist, but their strength varies. The case examines how a meaningful competitive constraint may shape a firm's room to act when it weakens.", read:"Read the Amazon case", openTitle:"What remains unresolved?", openText:"Competition is never fixed. New technologies, changing rules, and shifts in behaviour can create or remove alternatives. Which alternatives matter in particular markets, and how will they develop?", back:"Back to topics", related:"Related concepts", sourceLabel:"Image sources"
+};
+const signalImages = [image("movement"), image("price"), image("substitute"), image("friction")];
+const lensImages = [image("constraint"), image("pricing"), image("switching")];
 ---
 
-<BaseLayout title={topic.name} description={`Published cases about ${topic.name}.`} locale={locale}>
-  <section class="page-shell" aria-labelledby="topic-heading">
-    <Breadcrumbs
-      label={locale === "zh" ? "页面路径" : "Breadcrumb"}
-      items={[
-        { label: locale === "zh" ? "首页" : "Home", href: localizedPath(locale) },
-        { label: copy.pages.topics.eyebrow, href: localizedPath(locale, "/topics/") },
-        { label: topic.name },
-      ]}
-    />
-    <div class="taxonomy-identity taxonomy-identity--topic">
-      <div><p class="discovery-kicker">{locale === "zh" ? "主题" : "Topic"} / {String(topicNumber).padStart(2, "0")}</p><h1 id="topic-heading">{topic.name}</h1><p>{detail.framing}</p><small>{caseCount} · {relatedConcepts.length} {locale === "zh" ? "个相关概念" : "related concepts"}</small></div><ResearchSymbol kind={topic.slug} label={topic.name} />
-    </div>
-    <section class="understanding"><p class="discovery-kicker">{locale === "zh" ? "理解这个主题" : "Understanding the topic"}</p><p>{topicDescriptions[locale][topic.name] ?? topicDescriptions.en[topic.name]}</p></section>
-    <section class="follow-questions"><p class="discovery-kicker">{locale === "zh" ? "我们正在追问" : "Questions we follow"}</p><ol>{[detail.question, ...detail.signals].map((question, index) => <li><span>{String(index + 1).padStart(2, "0")}</span><p>{question}</p></li>)}</ol></section>
-    <section class="taxonomy-cases"><p class="discovery-kicker">{locale === "zh" ? "这个主题中的研究" : "Cases in this topic"}</p>
-      {topicCases.map((caseEntry) => {
-        const displayData = getCaseDisplayData(caseEntry, locale);
-
-        return (
-          <article><img src={caseEntry.data.heroImage} alt=""/><div><span>{locale === "zh" ? "案例" : "Case"} {caseEntry.data.caseNumber ?? "001"}</span><h2><a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{displayData.title}</a></h2><p>{displayData.centralQuestion}</p></div></article>
-        );
-      })}
-    </section>
-    <section class="related-concepts"><p class="discovery-kicker">{locale === "zh" ? "帮助理解的概念" : "Concepts that help explain it"}</p><div>{relatedConcepts.map((concept) => <a href={localizedPath(locale, `/concepts/${concept.slug}/`)}><ConceptDiagram concept={concept.slug} label={concept.name}/><span>{concept.name}</span></a>)}</div></section>
-    <section class="discovery-closing"><p>{locale === "zh" ? "继续沿着问题探索。" : "Continue following the question."}</p><div><a href={localizedPath(locale, "/topics/")}>{locale === "zh" ? "所有主题 →" : "All topics →"}</a><a href={localizedPath(locale, "/concepts/")}>{locale === "zh" ? "浏览概念 →" : "Browse concepts →"}</a></div></section>
-    {topicCases.length === 0 && locale === "zh" && (
-      <p class="library-empty">
-        {copy.pages.topics.empty} <a class="cta-link" href={localizedPath("en", `/topics/${topic.slug}/`)}>阅读英文主题 -></a>
-      </p>
-    )}
-  </section>
-</BaseLayout>
+{topic.slug === "competition" ? <BaseLayout title={topic.name} description={copy.intro} locale={locale}>
+  <article class="competition-detail" aria-labelledby="competition-heading">
+    <header class="competition-hero"><div class="competition-hero__copy"><p class="competition-kicker">{copy.topic} <span>›</span> {topic.name}</p><h1 id="competition-heading">{topic.name}</h1><p class="competition-hero__proposition">{copy.proposition}</p><p class="competition-hero__intro">{copy.intro}</p></div><figure><img src={images.hero[0]} alt={images.hero[1]} fetchpriority="high"/><figcaption>{images.hero[2]}</figcaption></figure></header>
+    <section class="competition-pressure" aria-labelledby="pressure-heading"><figure><img src={images.routes[0]} alt={images.routes[1]} loading="eager"/><figcaption>{images.routes[2]}</figcaption></figure><div><p class="competition-kicker">01&nbsp;&nbsp; {copy.pressure}</p><h2 id="pressure-heading">{copy.pressureTitle}</h2><p>{copy.pressureText}</p></div><ol>{copy.sources.map(([name, description]) => <li><span>→</span><div><strong>{name}</strong><p>{description}</p></div></li>)}</ol></section>
+    <section class="competition-watch" aria-labelledby="watch-heading"><header><p class="competition-kicker">02&nbsp;&nbsp; {copy.watch}</p><h2 id="watch-heading">{copy.watchTitle}</h2><p>{copy.watchText}</p></header><div>{copy.signals.map(([name, question], index) => <article><img src={signalImages[index].src} alt={signalImages[index].alt} loading="lazy"/><span>{String(index+1).padStart(2,"0")}</span><h3>{name}</h3><p>{question}</p><small>{signalImages[index].credit}</small></article>)}</div></section>
+    <section class="competition-lenses" aria-labelledby="lenses-heading"><header><p class="competition-kicker">03&nbsp;&nbsp; {copy.lensLabel}</p><h2 id="lenses-heading">{copy.lensTitle}</h2></header><p class="competition-lenses__intro">{copy.lensText}</p><div>{copy.lenses.map(([name, question], index) => { const slug = ["competitive-constraint","pricing-power","switching-costs"][index]; const concept = concepts.find((entry) => entry.slug === slug); return <a href={localizedPath(locale, `/concepts/${concept?.slug ?? slug}/`)}><img src={lensImages[index].src} alt={lensImages[index].alt} loading="lazy"/><section><h3>{name}</h3><p>{question}</p></section><span aria-hidden="true">↗</span></a>; })}</div></section>
+    {caseEntry && <section class="competition-case" aria-labelledby="case-heading"><figure><img src={caseEntry.data.heroImage} alt={caseEntry.data.heroImageAlt} loading="lazy"/><figcaption>{caseEntry.data.heroImageCredit} · {caseEntry.data.heroImageCaption}</figcaption></figure><div><p class="competition-kicker">04&nbsp;&nbsp; {copy.case}</p><h2 id="case-heading">{copy.caseTitle}</h2><p>{copy.caseText}</p><a class="competition-route" href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.read} <span aria-hidden="true">↗</span></a></div></section>}
+    <footer class="competition-closing"><div><p class="competition-kicker">05&nbsp;&nbsp; {copy.open}</p><h2>{copy.openTitle}</h2></div><p>{copy.openText}</p><nav aria-label={copy.open}><a href={localizedPath(locale,"/topics/")}>← {copy.back}</a><a href={localizedPath(locale,"/concepts/")}>{copy.related} <span>↗</span></a>{caseEntry && <a href={localizedPath(locale, `/cases/${caseEntry.id}/`)}>{copy.read} <span>↗</span></a>}</nav></footer>
+    <aside class="competition-sources"><strong>{copy.sourceLabel}</strong><p>{Object.values(images).map((entry) => entry[2]).join(" · ")}. Amazon image: {caseEntry?.data.heroImageCredit} / public domain.</p></aside>
+  </article>
+</BaseLayout> : <BaseLayout title={topic.name} description={generic.framing} locale={locale}><section class="page-shell"><h1>{topic.name}</h1><p>{generic.framing}</p></section></BaseLayout>}
